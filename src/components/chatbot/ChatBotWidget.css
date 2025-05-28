@@ -1,0 +1,100 @@
+/* src/components/chatbot/ChatBotWidget.css */
+
+/* Style cho nút mở chat widget */
+.chat-toggle-button {
+    position: fixed; /* Cố định vị trí */
+    bottom: 20px; /* Cách đáy 20px */
+    right: 20px; /* Cách lề phải 20px */
+    z-index: 1060; /* Đảm bảo hiển thị trên mọi thứ */
+    border-radius: 50px; /* Nút hình tròn */
+    width: 60px; /* Kích thước nút */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Bỏ padding mặc định của button */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ */
+}
+
+/* Ẩn chữ "Chat" trên nút */
+.chat-toggle-button span {
+    display: none;
+}
+
+/* Hiển thị chữ "Chat" khi hover */
+.chat-toggle-button:hover {
+     width: 120px; /* Mở rộng chiều rộng khi hover */
+     padding: 0 10px; /* Thêm padding để chữ hiển thị */
+     justify-content: flex-start; /* Căn lề trái */
+}
+ .chat-toggle-button:hover span {
+    display: inline; /* Hiện chữ */
+    margin-left: 8px; /* Khoảng cách giữa icon và chữ */
+    font-weight: bold;
+ }
+
+
+/* Style cho vùng hiển thị tin nhắn trong Offcanvas */
+.chat-messages-container {
+    height: calc(100% - 80px); /* Chiều cao tính toán: 100% body trừ chiều cao input + padding */
+    /* overflow-y: auto; <- Đã có inline style */
+    display: flex; /* Dùng flexbox để tin nhắn xếp dọc */
+    flex-direction: column;
+    /* border: 1px solid #ccc; <- Đã có inline style */
+    /* margin-bottom: 1rem; <- Đã có inline style */
+    padding: 1rem; /* Padding bên trong */
+    background-color: #e9ecef; /* Nền nhạt cho khung chat */
+}
+
+/* Style cho từng tin nhắn */
+.chat-message {
+    display: flex; /* Dùng flexbox để căn chỉnh bubble */
+    margin-bottom: 10px; /* Khoảng cách giữa các tin nhắn */
+}
+
+/* Tin nhắn của người dùng (căn phải) */
+.chat-message.user {
+    justify-content: flex-end;
+}
+
+/* Tin nhắn của bot (căn trái) */
+.chat-message.bot {
+    justify-content: flex-start;
+}
+
+/* Style cho bubble tin nhắn */
+.message-bubble {
+    max-width: 80%; /* Giới hạn chiều rộng bubble */
+    padding: 8px 12px; /* Padding bên trong bubble */
+    border-radius: 10px; /* Bo tròn góc */
+    word-break: break-word; /* Ngắt chữ dài */
+    /* border: 1px solid #ccc; <- Đã có inline style */
+    /* background-color và color sẽ thay đổi tùy sender */
+}
+
+/* Style bubble người dùng */
+.chat-message.user .message-bubble {
+    background-color: var(--bs-primary); /* Màu primary */
+    color: white;
+}
+
+/* Style bubble bot */
+.chat-message.bot .message-bubble {
+    background-color: #f8f9fa; /* Màu nền nhạt */
+    color: #333;
+}
+
+/* Style cho Offcanvas header */
+.offcanvas-header {
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+}
+.offcanvas-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* Style cho Offcanvas body */
+.offcanvas-body {
+     padding: 0; /* Điều chỉnh padding Offcanvas body nếu cần */
+}

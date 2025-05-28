@@ -1,0 +1,39 @@
+@import './styles/theme.css';
+@import './styles/hover-effects.css';
+
+/* Font và nền cơ bản */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  font-family: 'Montserrat', system-ui, Avenir, Helvetica, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Liên kết cơ bản */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease-in-out;
+}
+
+a:hover {
+  color: var(--bs-primary);
+}
+
+/* Căn chỉnh layout gốc nếu cần */
+.container, .container-fluid {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (max-width: 768px) {
+  df-messenger {
+    --df-messenger-chat-height: 300px !important;
+  }
+}

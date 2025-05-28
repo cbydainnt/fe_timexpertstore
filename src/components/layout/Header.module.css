@@ -1,0 +1,75 @@
+/* Ví dụ hiệu ứng hover cho NavLink trong Header */
+/* Sử dụng class 'custom-nav-link' đã thêm vào NavLink */
+
+.custom-nav-link {
+    padding-bottom: 0.3rem; /* Thêm chút padding dưới để có chỗ cho gạch chân */
+    position: relative; /* Cần thiết cho pseudo-element */
+    text-decoration: none !important; /* Bỏ gạch chân mặc định */
+    transition: color 0.2s ease-in-out; /* Thêm transition cho màu chữ nếu muốn */
+  }
+  
+  /* Tạo pseudo-element ::after để làm gạch chân */
+  .custom-nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0; /* Ban đầu ẩn đi */
+    height: 2px; /* Độ dày gạch chân */
+    bottom: 0;
+    left: 50%; /* Bắt đầu từ giữa */
+    transform: translateX(-50%); /* Căn giữa ban đầu */
+    background-color: var(--bs-primary); /* Màu gạch chân (dùng biến màu primary của Bootstrap) */
+    visibility: hidden; /* Ẩn ban đầu */
+    transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển động */
+  }
+  
+  /* Khi hover hoặc khi link active */
+  .custom-nav-link:hover::after,
+  .custom-nav-link.active::after { /* .active là class Bootstrap tự thêm cho NavLink active */
+    visibility: visible;
+    width: 80%; /* Chiều rộng gạch chân khi hover/active (tùy chỉnh) */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Có thể thêm style hover cho màu chữ nếu muốn */
+  .custom-nav-link:hover {
+     color: var(--bs-primary) !important; /* Đổi màu chữ khi hover */
+  }
+  
+  /* CSS cho Dropdown (nếu muốn hiệu ứng tương tự cho title) */
+  .custom-nav-link .nav-link { /* Áp dụng cho title của Dropdown */
+     padding-bottom: 0.3rem;
+     position: relative;
+     transition: color 0.2s ease-in-out;
+  }
+  .custom-nav-link .nav-link::after {
+     content: '';
+     position: absolute;
+     width: 0;
+     height: 2px;
+     bottom: 0;
+     left: 50%;
+     transform: translateX(-50%);
+     background-color: var(--bs-primary);
+     visibility: hidden;
+     transition: all 0.3s ease-in-out;
+  }
+  .custom-nav-link:hover .nav-link::after { /* Hover vào cả cái dropdown */
+      visibility: visible;
+      width: 80%;
+      left: 50%;
+      transform: translateX(-50%);
+  }
+  .custom-nav-link:hover .nav-link {
+       color: var(--bs-primary) !important;
+  }
+  
+  
+  /* --- Đảm bảo các NavLink mặc định của Bootstrap không có border bottom --- */
+  .navbar-nav .nav-link {
+      border-bottom: none !important;
+  }
+  .navbar-nav .nav-link.active {
+      border-bottom: none !important;
+       /* color: var(--bs-primary) !important; */ /* Màu active mặc định của Bootstrap có thể đẹp hơn */
+  }

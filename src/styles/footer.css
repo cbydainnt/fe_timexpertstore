@@ -1,0 +1,37 @@
+
+footer {
+  background-color: #2c2c2c;
+  color: #f1f1f1;
+  padding: 2rem 0;
+  transition: all 0.3s ease-in-out;
+}
+
+footer button {
+  background-color: var(--bs-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+}
+
+footer button:hover {
+  background-color: var(--bs-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+footer p {
+  margin: 0.5rem 0;
+  color: #cccccc;
+}
+
+footer .text-color-500 {
+  color: var(--bs-primary);
+}
+
+footer .watch-icon {
+  color: white;
+  margin-right: 0.5rem;
+}

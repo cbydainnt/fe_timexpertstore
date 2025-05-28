@@ -1,0 +1,111 @@
+/* === Hero Banner CSS === */
+
+.hero-banner-container {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+.hero-banner-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-align: center;
+  max-width: 800px;
+  padding: 1rem;
+}
+
+.hero-banner-content h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-banner-content p {
+  font-size: 1.2rem;
+  color: #f0f0f0;
+  margin-bottom: 1.5rem;
+}
+
+.hero-banner-content .btn {
+  background-color: var(--color-primary);
+  border: none;
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.hero-banner-content .btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+@media (max-width: 768px) {
+  .hero-banner-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-banner-content p {
+    font-size: 1rem;
+  }
+
+  .hero-banner-container {
+    height: 70vh;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero-banner-container {
+    min-height: 500px;
+  }
+}
+
+/* --- Slide mô tả tab --- */
+.slide-description-tabs {
+  display: flex;
+  width: 100%;
+}
+
+.slide-description-tabs .slide-tab {
+  background: #f9f9f9;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  white-space: normal;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.slide-description-tabs .slide-tab:hover {
+  background: #eee;
+}
+
+.slide-description-tabs .slide-tab.active {
+  border-bottom: 3px solid var(--color-primary);
+  background: #fff;
+  font-weight: 600;
+}
+
+/* Bỏ bo góc cho hero */
+.hero-banner-container.no-radius {
+  border-radius: 0;
+}
+
+/* Object fit helper */
+.object-fit-cover {
+  object-fit: cover;
+}

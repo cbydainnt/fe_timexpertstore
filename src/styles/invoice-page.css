@@ -1,0 +1,76 @@
+.invoice-page-container {
+    max-width: 850px; /* Hoặc kích thước phù hợp với khổ A4 */
+    margin: auto;
+}
+
+.invoice-card {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #dee2e6;
+    font-family: 'Arial', sans-serif;
+    font-size: 12pt;
+}
+
+.invoice-card h2, .invoice-card h4, .invoice-card h5, .invoice-card h6 {
+    color: #333;
+}
+.invoice-card h2 { font-size: 1.8em; }
+.invoice-card h4 { font-size: 1.3em; }
+.invoice-card h5 { font-size: 1.1em; }
+.invoice-card h6 { font-size: 1em; font-weight: bold; }
+
+
+.invoice-card address {
+    line-height: 1.4;
+    margin-bottom: 0;
+}
+.invoice-table {
+    font-size: 1rem;
+}
+
+
+.invoice-table th, .invoice-table td {
+    vertical-align: middle;
+    padding: 0.4rem 0.5rem; /* Giảm padding cho bảng */
+}
+.invoice-table thead th {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-bottom-width: 2px;
+}
+.invoice-table tfoot td {
+    font-size: 1.1em;
+}
+
+@media print {
+    body, .invoice-page-container {
+        margin: 0;
+        padding: 0;
+       background-color: #ffffff !important;
+        color: #000000 !important;
+        -webkit-print-color-adjust: exact; /* Đảm bảo màu nền được in (Chrome/Safari) */
+        color-adjust: exact; /* Tiêu chuẩn */
+    }
+    .invoice-page-container {
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    .invoice-card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    .no-print, .no-print * {
+        display: none !important;
+    }
+    /* Đảm bảo bảng không bị tràn trang */
+    .table-responsive {
+        overflow-x: visible !important; /* Hoặc hidden tùy thuộc vào bạn muốn cắt hay không */
+    }
+    /* Căn chỉnh layout cho khổ A4 nếu cần */
+    @page {
+        size: A4;
+        margin: 1cm; /* Hoặc margin tùy chỉnh */
+    }
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + React</title>
+  
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- 👉 Nhúng Dialogflow Messenger -->
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+ <df-messenger
+  intent="WELCOME"
+  chat-title="Hỗ trợ"
+  agent-id="3204f908-9f1f-412a-9af3-b3eff0a0f82e"
+  language-code="vi"
+  style="position: fixed; bottom: 16px; right: 16px; --df-messenger-chat-height: 400px; z-index: 9999;"
+></df-messenger>
+
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+.favorite-icon-btn {
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.favorite-icon {
+  color: #000; /* Màu icon mặc định: đen */
+  transition: color 0.3s ease;
+}
+
+.favorite-icon.active {
+  color: var(--color-btn-bg); /* Khi đã thích: màu xanh chủ đạo */
+}

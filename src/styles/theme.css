@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+:root {
+  --color-bg: #faf9f6;               /* Nền trang */
+  --color-text: #2b2b2b;             /* Chữ chính */
+  --color-primary: #0675b1;          /* Màu chủ đạo mới: xanh biển mát mẻ */
+  --color-primary-hover: #005f86;    /* Hover màu xanh đậm */
+  --color-secondary: #555555;        /* Màu phụ */
+  --color-header-bg: #ffffff;        /* Nền header */
+  --color-header-text: #2b2b2b;      /* Chữ header */
+  --color-btn-bg: var(--color-primary);
+  --color-btn-bg-hover: var(--color-primary-hover);
+  --color-btn-text: #fff;
+  --color-link-hover: var(--color-primary-hover);
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: var(--color-link-hover);
+  text-decoration: none;
+}
+
+/* button, .btn {
+  background-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+  box-shadow: 0 3px 6px rgba(0, 119, 182, 0.3);
+} */
+/* button:hover, .btn:hover {
+  background-color: var(--color-btn-bg-hover);
+  box-shadow: 0 6px 12px rgba(0, 95, 134, 0.5);
+  transform: translateY(-2px);
+} */
+
+.site-icon-link {
+  color: var(--color-secondary);
+  transition: color 0.3s ease;
+}
+.site-icon-link:hover {
+  color: var(--color-primary);
+}
+
+
+/* ==== Admin Dashboard: Card tóm tắt ==== */
+.card.border-left-primary {
+  border-left: 0.35rem solid var(--color-primary) !important;
+}
+.card.border-left-success {
+  border-left: 0.35rem solid #28a745 !important;
+}
+.card.border-left-warning {
+  border-left: 0.35rem solid #ffc107 !important;
+}
+.card.border-left-info {
+  border-left: 0.35rem solid #17a2b8 !important;
+}
+.card.border-left-secondary {
+  border-left: 0.35rem solid #6c757d !important;
+}
+
+/* ==== Dashboard Chart === */
+.chart-area {
+  position: relative;
+  height: 320px;
+}
+
+/* ==== Quick Action Buttons ==== */
+.btn-custom-add-product {
+  background-color: #20c997; /* xanh ngọc */
+  color: #fff;
+}
+.btn-custom-add-product:hover {
+  background-color: #1aa179;
+}
+
+.btn-custom-add-category {
+  background-color: #6f42c1; /* tím */
+  color: #fff;
+}
+.btn-custom-add-category:hover {
+  background-color: #5936a2;
+}
+
+.btn-custom-view-orders {
+  background-color: #fd7e14; /* cam */
+  color: #fff;
+}
+.btn-custom-view-orders:hover {
+  background-color: #e96904;
+}

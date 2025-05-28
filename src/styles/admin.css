@@ -1,0 +1,64 @@
+.btn-custom-add-product,
+.btn-custom-add-category,
+.btn-custom-view-orders {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Thêm sản phẩm */
+.btn-custom-add-product {
+  background-color: #43aa8b;
+  color: #fff;
+}
+.btn-custom-add-product:hover {
+  background-color: #2f7862;
+  color: #fff;
+}
+
+/* Thêm danh mục */
+.btn-custom-add-category {
+  background-color: #577590;
+  color: #fff;
+}
+.btn-custom-add-category:hover {
+  background-color: #26445b;
+  color: #fff;
+}
+
+/* Xem đơn hàng */
+.btn-custom-view-orders {
+  background-color: #f9c74f;
+  color: #2b2b2b;
+}
+.btn-custom-view-orders:hover {
+  background-color: #b28212;
+  color: #2b2b2b;
+}
+
+
+.btn-toggle-sidebar {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  color: #6c757d; /* màu xám giống text-secondary */
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-toggle-sidebar:hover,
+.btn-toggle-sidebar:focus {
+  background: none; /* không có nền khi hover */
+  color: #343a40;   /* đậm hơn chút khi hover, tùy chọn */
+  outline: none;
+  box-shadow: none;
+}
+
