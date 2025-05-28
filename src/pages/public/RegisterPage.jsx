@@ -8,6 +8,8 @@ import { registerUser } from '../../services/authService'; // Import API service
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 
+import { useTranslation } from 'react-i18next';
+
 const pageVariants = {
   initial: { opacity: 0 },
   in: { opacity: 1 },
@@ -16,6 +18,9 @@ const pageVariants = {
 const pageTransition = { duration: 0.4 };
 
 function RegisterPage() {
+
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const [error, setError] = useState(''); // State lưu lỗi chung
   const [success, setSuccess] = useState(''); // State lưu thông báo thành công
@@ -23,52 +28,34 @@ function RegisterPage() {
 
   // Setup react-hook-form
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
-      defaultValues: { // Giá trị mặc định
-          username: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          firstName: '',
-          lastName: '',
-          // Thêm các trường khác nếu form đăng ký yêu cầu
-          // phone: '',
-          // address: '',
-          // dateOfBirth: '',
-      }
+    defaultValues: { // Giá trị mặc định
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      firstName: '',
+      lastName: '',
+    }
   });
 
   // Theo dõi giá trị password để validate confirm password
   const passwordValue = watch('password');
 
   // Hàm xử lý khi submit form đăng ký
-  const onSubmit = async (data) => {
+const onSubmit = async (data) => {
     setLoading(true);
     setError('');
     setSuccess('');
-
-    // Dữ liệu gửi đi backend (không cần confirmPassword)
     const registrationData = {
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-         // Thêm các trường khác nếu có trong form và RegisterUserDTO
-        // phone: data.phone,
-        // address: data.address,
-        // dateOfBirth: data.dateOfBirth || null,
+        username: data.username, email: data.email, password: data.password,
+        firstName: data.firstName, lastName: data.lastName,
     };
-
     try {
-      const response = await registerUser(registrationData); // Gọi API đăng ký
-      console.log("Đăng ký thành công:", response.data);
-      setSuccess('Đăng ký thành công! Bây giờ bạn có thể đăng nhập.');
-      // Có thể redirect về trang login sau vài giây
-       setTimeout(() => navigate('/login'), 3000);
-      // Hoặc hiển thị thông báo thành công và nút bấm về trang login
+      await registerUser(registrationData);
+      setSuccess(t('registerPage.successMessage', 'Đăng ký thành công! Bây giờ bạn có thể đăng nhập.'));
+      setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
-      console.error("Registration failed:", err);
-      setError(err.response?.data?.message || err.message || 'Đăng ký không thành công. Vui lòng thử lại.');
+      setError(err.response?.data?.message || err.message || t('registerPage.errorMessage', 'Đăng ký không thành công. Vui lòng thử lại.'));
     } finally {
       setLoading(false);
     }
@@ -82,111 +69,100 @@ function RegisterPage() {
       variants={pageVariants}
       transition={pageTransition}
     >
-    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: 'calc(100vh - 120px)' }}>
-      <Row className="justify-content-center w-100">
-        <Col md={8} lg={7} xl={6}> {/* Cho form rộng hơn chút */}
-          <Card className="p-4 p-sm-5 shadow-lg border-0 rounded-3">
-            <Card.Body>
-              <h2 className="text-center mb-4 fw-bold">Đăng ký</h2>
-
-              {/* Hiển thị thông báo */}
+      <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: 'calc(100vh - 120px)' }}>
+        <Row className="justify-content-center w-100">
+          <Col md={8} lg={7} xl={6}> {/* Cho form rộng hơn chút */}
+            <Card className="p-4 p-sm-5 shadow-lg border-0 rounded-3">
+              <Card.Body>
+                  <h2 className="text-center mb-4 fw-bold">{t('registerPage.title', 'Đăng ký')}</h2>
               {success && <Alert variant="success">{success}</Alert>}
               {error && <Alert variant="danger">{error}</Alert>}
 
-              {/* Chỉ hiển thị form nếu chưa đăng ký thành công */}
               {!success && (
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                   {/* Username */}
                   <Form.Group className="mb-3" controlId="regUsername">
-                    <Form.Label>Tên đăng nhập</Form.Label>
+                    <Form.Label>{t('registerPage.usernameLabel', 'Tên đăng nhập')}</Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="Nhập tên đăng nhập"
+                      placeholder={t('registerPage.usernamePlaceholder', 'Nhập tên đăng nhập')}
                       isInvalid={!!errors.username}
                       {...register("username", {
-                          required: "Tên đăng nhập là bắt buộc",
-                          minLength: { value: 3, message: "Tên đăng nhập phải có ít nhất 3 ký tự" },
-                          maxLength: { value: 50, message: "Tên đăng nhập không được vượt quá 50 ký tự" }
+                          required: t('registerPage.validation.usernameRequired', "Tên đăng nhập là bắt buộc"),
+                          minLength: { value: 3, message: t('registerPage.validation.usernameMinLength', "Tên đăng nhập phải có ít nhất 3 ký tự") },
+                          maxLength: { value: 50, message: t('registerPage.validation.usernameMaxLength', "Tên đăng nhập không được vượt quá 50 ký tự") }
                       })}
                     />
                     <Form.Control.Feedback type="invalid">{errors.username?.message}</Form.Control.Feedback>
                   </Form.Group>
 
-                   {/* Email */}
                   <Form.Group className="mb-3" controlId="regEmail">
-                    <Form.Label>Email</Form.Label>
+                    <Form.Label>{t('registerPage.emailLabel', 'Email')}</Form.Label>
                     <Form.Control
                       type="email"
-                      placeholder="Nhập email của bạn"
+                      placeholder={t('registerPage.emailPlaceholder', 'Nhập email của bạn')}
                       isInvalid={!!errors.email}
                       {...register("email", {
-                          required: "Email là bắt buộc",
-                          pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Địa chỉ email không hợp lệ" }
+                          required: t('registerPage.validation.emailRequired', "Email là bắt buộc"),
+                          pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: t('registerPage.validation.emailInvalid', "Địa chỉ email không hợp lệ") }
                       })}
                     />
                      <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
                   </Form.Group>
 
-                   {/* Password */}
                   <Form.Group className="mb-3" controlId="regPassword">
-                    <Form.Label>Mật khẩu</Form.Label>
+                    <Form.Label>{t('registerPage.passwordLabel', 'Mật khẩu')}</Form.Label>
                     <Form.Control
                       type="password"
-                      placeholder="Tạo mật khẩu"
+                      placeholder={t('registerPage.passwordPlaceholder', 'Tạo mật khẩu')}
                       isInvalid={!!errors.password}
                       {...register("password", {
-                          required: "Mật khẩu là bắt buộc",
-                          minLength: { value: 6, message: "Mật khẩu phải có ít nhất 6 ký tự" }
+                          required: t('registerPage.validation.passwordRequired', "Mật khẩu là bắt buộc"),
+                          minLength: { value: 6, message: t('registerPage.validation.passwordMinLength', "Mật khẩu phải có ít nhất 6 ký tự") }
                       })}
                     />
                      <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
                   </Form.Group>
 
-                    {/* Confirm Password */}
                    <Form.Group className="mb-3" controlId="regConfirmPassword">
-                    <Form.Label>Xác nhận mật khẩu</Form.Label>
+                    <Form.Label>{t('registerPage.confirmPasswordLabel', 'Xác nhận mật khẩu')}</Form.Label>
                     <Form.Control
                       type="password"
-                      placeholder="Xác nhận mật khẩu của bạn"
+                      placeholder={t('registerPage.confirmPasswordPlaceholder', 'Xác nhận mật khẩu của bạn')}
                       isInvalid={!!errors.confirmPassword}
                       {...register("confirmPassword", {
-                          required: "Vui lòng xác nhận mật khẩu của bạn",
-                          validate: value => value === passwordValue || "Mật khẩu không khớp"
+                          required: t('registerPage.validation.confirmPasswordRequired', "Vui lòng xác nhận mật khẩu của bạn"),
+                          validate: value => value === passwordValue || t('registerPage.validation.passwordMismatch', "Mật khẩu không khớp")
                       })}
                     />
                      <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
                   </Form.Group>
 
-                  {/* Optional Fields: First Name, Last Name etc. */}
                    <Row>
                         <Form.Group as={Col} md={6} className="mb-3" controlId="regFirstName">
-                          <Form.Label>Tên</Form.Label>
-                          <Form.Control type="text" {...register("firstName")} />
+                          <Form.Label>{t('registerPage.firstNameLabel', 'Tên')}</Form.Label>
+                          <Form.Control type="text" placeholder={t('registerPage.firstNamePlaceholder', 'Tên của bạn')} {...register("firstName")} />
                         </Form.Group>
                          <Form.Group as={Col} md={6} className="mb-3" controlId="regLastName">
-                           <Form.Label>Họ</Form.Label>
-                           <Form.Control type="text" {...register("lastName")} />
+                           <Form.Label>{t('registerPage.lastNameLabel', 'Họ')}</Form.Label>
+                           <Form.Control type="text" placeholder={t('registerPage.lastNamePlaceholder', 'Họ của bạn')} {...register("lastName")} />
                          </Form.Group>
                    </Row>
-                    {/* Thêm các trường khác nếu cần */}
 
-
-                  {/* Submit Button */}
                   <Button variant="primary" type="submit" className="w-100 mt-3" disabled={loading}>
-                    {loading ? <Spinner animation="border" size="sm" /> : 'Tạo tài khoản'}
+                    {loading ? <Spinner animation="border" size="sm" /> : t('registerPage.submitButton', 'Tạo tài khoản')}
                   </Button>
                 </Form>
               )}
 
-              {/* Link quay lại Login */}
-              <div className="text-center mt-4" style={{ fontSize: '0.9em' }}>
-              Đã có tài khoản? <Link to="/login" className="fw-bold fs-6">Đăng nhập</Link>
+                {/* Link quay lại Login */}
+                 <div className="text-center mt-4" style={{ fontSize: '0.9em' }}>
+              {t('registerPage.hasAccount', 'Đã có tài khoản?')} <Link to="/login" className="fw-bold fs-6">{t('registerPage.loginNow', 'Đăng nhập')}</Link>
               </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </motion.div>
   );
 }

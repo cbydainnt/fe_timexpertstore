@@ -5,8 +5,10 @@ import { getAllCategories } from '../../services/categoryService';
 import { useSearchParams } from 'react-router-dom';
 import { FunnelFill } from 'react-bootstrap-icons'; // Đổi icon nếu muốn
 import '../../styles/product-filter.css';
-
+import { useTranslation } from 'react-i18next'; 
 function ProductFilter() {
+
+    const { t } = useTranslation();
     // Hook để đọc và cập nhật URL search params
     const [searchParams, setSearchParams] = useSearchParams();
 

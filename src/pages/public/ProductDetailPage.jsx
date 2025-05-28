@@ -10,12 +10,18 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import StockBadge from '../../components/common/StockBadge';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
+
+import { useTranslation } from 'react-i18next';
+
 import '../../styles/products-detail.css';
 
 const pageVariants = { initial: { opacity: 0 }, in: { opacity: 1 }, out: { opacity: 0 } };
 const pageTransition = { duration: 0.4 };
 
 function ProductDetailPage() {
+
+  const { t } = useTranslation();
+
   const { productId } = useParams();
   const navigate = useNavigate();
   const { addItem: addItemToCart } = useCartStore();
@@ -41,7 +47,7 @@ function ProductDetailPage() {
       const primaryImage = response.data.primaryImageUrl
         ? (response.data.primaryImageUrl.startsWith('http')
           ? response.data.primaryImageUrl
-          : `${BASE_IMAGE_URL}${response.data.primaryImageUrl}`)
+          : `<span class="math-inline">\{BASE\_IMAGE\_URL\}</span>{response.data.primaryImageUrl}`)
         : '';
       setSelectedImage(primaryImage);
     } catch (err) {
@@ -75,7 +81,7 @@ function ProductDetailPage() {
     const numValue = parseInt(value, 10);
     if (!isNaN(numValue) && numValue >= 1) {
       if (product && numValue > product.stock) {
-        setStockWarning(`Chỉ còn ${product.stock} sản phẩm.`);
+        setStockWarning(t('productDetailPage.stockWarning', 'Chỉ còn {{stock}} sản phẩm.', { stock: product.stock }));
         setQuantity(product.stock);
       } else { setQuantity(numValue); }
     } else if (numValue < 1) { setQuantity(1); }
@@ -87,12 +93,12 @@ function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (!product || product.stock <= 0) {
-      toast.warning("Sản phẩm đã hết hàng.");
-      return;
+      toast.warning(t('productDetailPage.outOfStockToast', "Sản phẩm đã hết hàng."));
+      return; //
     }
     const finalQuantity = quantity <= 0 ? 1 : parseInt(quantity);
     if (finalQuantity > product.stock) {
-      toast.warning(`Chỉ còn ${product.stock} sản phẩm.`);
+      toast.warning(t('productDetailPage.stockWarningToast', 'Chỉ còn {{stock}} sản phẩm.', { stock: product.stock }));
       setQuantity(product.stock);
       return;
     }
@@ -104,28 +110,28 @@ function ProductDetailPage() {
       stock: product.stock
     };
     addItemToCart(productToAdd, finalQuantity);
-    toast.success(`${finalQuantity} x ${product.name} đã được thêm vào giỏ hàng!`);
+    toast.success(t('toastMessages.itemAddedToCart', 'Đã thêm "{{itemName}}" vào giỏ hàng!', { itemName: product.name }));
     setQuantity(1);
   };
 
   const handleToggleFavorite = async () => {
     if (!isAuthenticated) {
-      toast.info("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
+      toast.info(t('productDetailPage.loginForFavorite', "Vui lòng đăng nhập để sử dụng chức năng yêu thích."));
       navigate('/login');
       return;
     }
     try {
       if (isFavorite) {
         await removeFavoriteByProductId(product.productId);
-        toast.success("Đã xoá khỏi sản phẩm yêu thích.");
+        toast.success(t('productDetailPage.removedFromFavorites', "Đã xoá khỏi sản phẩm yêu thích."));
         setIsFavorite(false);
       } else {
         await addFavorite(product.productId);
-        toast.success("Đã thêm vào sản phẩm yêu thích!");
+        toast.success(t('productDetailPage.addedToFavorites', "Đã thêm vào sản phẩm yêu thích!"));
         setIsFavorite(true);
       }
     } catch (error) {
-      toast.error("Thao tác yêu thích thất bại.");
+      toast.error(t('productDetailPage.favoriteActionFailed', "Thao tác yêu thích thất bại."));
     }
   };
 
@@ -135,15 +141,15 @@ function ProductDetailPage() {
   const primaryImageUrl = getFullImageUrl(product?.primaryImageUrl);
   const allImages = primaryImageUrl ? [primaryImageUrl, ...processedImages.filter(url => url !== primaryImageUrl)] : processedImages;
 
-  if (loading) return <Container className="text-center py-5"><LoadingSpinner text="Đang tải Sản phẩm..." /></Container>;
-  if (error) return <Container className="py-5"><Alert variant="danger">{error}</Alert><div className="text-center mt-3"><Link to="/products" className="btn btn-sm btn-outline-secondary"><ArrowLeft /> Quay lại</Link></div></Container>;
-  if (!product) return <Container className="text-center py-5"><Alert variant="warning">Không tìm thấy sản phẩm.</Alert><div className="text-center mt-3"><Link to="/products" className="btn btn-sm btn-outline-secondary"><ArrowLeft /> Quay lại</Link></div></Container>;
+  if (loading) return <Container className="text-center py-5"><LoadingSpinner text={t('common.loading', "Đang tải...")} /></Container>; //
+  if (error) return <Container className="py-5"><Alert variant="danger">{error}</Alert><div className="text-center mt-3"><Link to="/products" className="btn btn-sm btn-outline-secondary"><ArrowLeft /> {t('productDetailPage.backToList', 'Quay lại danh sách')}</Link></div></Container>; //
+  if (!product) return <Container className="text-center py-5"><Alert variant="warning">{t('productDetailPage.notFound', 'Không tìm thấy sản phẩm.')}</Alert><div className="text-center mt-3"><Link to="/products" className="btn btn-sm btn-outline-secondary"><ArrowLeft /> {t('productDetailPage.backToList', 'Quay lại danh sách')}</Link></div></Container>; //
 
   return (
     <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
       <Container className="py-4">
         <Link to="/products" className="btn btn-outline-secondary btn-sm mb-3">
-          <ArrowLeft className="me-1" /> Quay lại
+          <ArrowLeft className="me-1" /> {t('productDetailPage.backToList', 'Quay lại danh sách')}
         </Link>
 
         <Row className="g-4 g-lg-5">
@@ -193,20 +199,20 @@ function ProductDetailPage() {
             <h1 className="h3 fw-semibold mb-2 text-dark">{product.name}</h1>
             <p className="h4 mb-3 fw-bold text-primary">{formatPrice(product.price)}</p>
             <div className="mb-3"><StockBadge stock={product.stock} /></div>
-            <p className="text-muted mb-4" style={{ lineHeight: '1.6', textAlign: 'justify' }}>{product.description || 'No description available.'}</p>
+            <p className="text-muted mb-4" style={{ lineHeight: '1.6', textAlign: 'justify' }}>{product.description || t('productDetailPage.noDescription', 'No description available.')}</p>
 
             {product.stock > 0 ? (
               <Form onSubmit={(e) => { e.preventDefault(); handleAddToCart(); }} className="mb-3">
                 <Row className="g-2 align-items-end">
                   <Col xs="auto" style={{ flexBasis: '100px' }}>
                     <Form.Group controlId="quantityInput">
-                      <Form.Label className="small mb-1">Số lượng</Form.Label>
+                      <Form.Label className="small mb-1">{t('productDetailPage.quantityLabel', 'Số lượng')}</Form.Label>
                       <Form.Control type="number" value={quantity} onChange={handleQuantityChange} onBlur={handleQuantityBlur} min="1" max={product.stock} size="sm" />
                     </Form.Group>
                   </Col>
                   <Col xs="auto" className="flex-grow-1">
                     <Button variant="primary" type="submit" className="w-100 rounded-pill" disabled={quantity <= 0}>
-                      <CartPlus size={20} className="me-1" /> Thêm vào giỏ
+                      <CartPlus size={20} className="me-1" /> {t('productDetailPage.addToCart', 'Thêm vào giỏ')}
                     </Button>
                   </Col>
                   <Col xs="auto">
@@ -214,7 +220,7 @@ function ProductDetailPage() {
                       variant="link"
                       className="favorite-icon-btn p-0"
                       onClick={handleToggleFavorite}
-                      title="Thêm vào yêu thích"
+                      title={t('productDetailPage.toggleFavorite', 'Thêm vào yêu thích')}
                     >
                       {isFavorite ? (
                         <HeartFill className="favorite-icon active" size={22} />
@@ -222,28 +228,27 @@ function ProductDetailPage() {
                         <Heart className="favorite-icon" size={22} />
                       )}
                     </Button>
-
                   </Col>
                 </Row>
                 {stockWarning && <Alert variant="warning" className="mt-2 py-1 px-2 small">{stockWarning}</Alert>}
               </Form>
             ) : (
-              <Alert variant="danger" className="mt-3">Sản phẩm này hiện đang hết hàng.</Alert>
+              <Alert variant="danger" className="mt-3">{t('productDetailPage.outOfStockAlert', 'Sản phẩm này hiện đang hết hàng.')}</Alert>
             )}
 
             {product && (
               <div className="mt-4 pt-3 border-top">
-                <h5 className="mb-3">Thông số kỹ thuật</h5>
+                <h5 className="mb-3">{t('productDetailPage.specsTitle', 'Thông số kỹ thuật')}</h5>
                 <Table striped bordered size="sm">
                   <tbody>
-                    {product.brand && <tr><td><strong>Thương hiệu</strong></td><td>{product.brand}</td></tr>}
-                    {product.model && <tr><td><strong>Mẫu mã</strong></td><td>{product.model}</td></tr>}
-                    {product.movement && <tr><td><strong>Loại máy</strong></td><td>{product.movement}</td></tr>}
-                    {product.caseMaterial && <tr><td><strong>Chất liệu vỏ</strong></td><td>{product.caseMaterial}</td></tr>}
-                    {product.strapMaterial && <tr><td><strong>Chất liệu dây đeo</strong></td><td>{product.strapMaterial}</td></tr>}
-                    {product.dialColor && <tr><td><strong>Màu mặt số</strong></td><td>{product.dialColor}</td></tr>}
-                    {product.waterResistance && <tr><td><strong>Khả năng chống nước</strong></td><td>{product.waterResistance}</td></tr>}
-                    {product.barcode && <tr><td><strong>Barcode</strong></td><td>{product.barcode}</td></tr>}
+                    {product.brand && <tr><td><strong>{t('productDetailPage.brand', 'Thương hiệu')}</strong></td><td>{product.brand}</td></tr>}
+                    {product.model && <tr><td><strong>{t('productDetailPage.model', 'Mẫu mã')}</strong></td><td>{product.model}</td></tr>}
+                    {product.movement && <tr><td><strong>{t('productDetailPage.movement', 'Loại máy')}</strong></td><td>{product.movement}</td></tr>}
+                    {product.caseMaterial && <tr><td><strong>{t('productDetailPage.caseMaterial', 'Chất liệu vỏ')}</strong></td><td>{product.caseMaterial}</td></tr>}
+                    {product.strapMaterial && <tr><td><strong>{t('productDetailPage.strapMaterial', 'Chất liệu dây đeo')}</strong></td><td>{product.strapMaterial}</td></tr>}
+                    {product.dialColor && <tr><td><strong>{t('productDetailPage.dialColor', 'Màu mặt số')}</strong></td><td>{product.dialColor}</td></tr>}
+                    {product.waterResistance && <tr><td><strong>{t('productDetailPage.waterResistance', 'Khả năng chống nước')}</strong></td><td>{product.waterResistance}</td></tr>}
+                    {product.barcode && <tr><td><strong>{t('productDetailPage.barcode', 'Barcode')}</strong></td><td>{product.barcode}</td></tr>}
                   </tbody>
                 </Table>
               </div>

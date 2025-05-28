@@ -28,6 +28,8 @@
     "favorites": "Yêu Thích",
     "cart": "Giỏ Hàng",
     "adminDashboard": "Trang Quản Trị",
+    "loggedInAs": "Đã đăng nhập với tư cách",
+    "myOrders": "Đơn hàng của tôi",
     "language": "Ngôn ngữ"
   },
   "footer": {
@@ -51,14 +53,33 @@
   "registerPage": {
     "title": "Đăng Ký",
     "usernameLabel": "Tên đăng nhập",
+    "usernamePlaceholder": "Nhập tên đăng nhập",
     "emailLabel": "Email",
+    "emailPlaceholder": "Nhập email của bạn",
     "passwordLabel": "Mật khẩu",
+    "passwordPlaceholder": "Tạo mật khẩu",
     "confirmPasswordLabel": "Xác nhận mật khẩu",
+    "confirmPasswordPlaceholder": "Xác nhận mật khẩu của bạn",
     "firstNameLabel": "Tên",
+    "firstNamePlaceholder": "Tên của bạn",
     "lastNameLabel": "Họ",
-    "registerButton": "Đăng Ký",
+    "lastNamePlaceholder": "Họ của bạn",
+    "submitButton": "Tạo tài khoản",
     "hasAccount": "Đã có tài khoản?",
-    "loginNow": "Đăng nhập ngay"
+    "loginNow": "Đăng nhập",
+    "successMessage": "Đăng ký thành công! Bây giờ bạn có thể đăng nhập.",
+    "errorMessage": "Đăng ký không thành công. Vui lòng thử lại.",
+    "validation": {
+      "usernameRequired": "Tên đăng nhập là bắt buộc",
+      "usernameMinLength": "Tên đăng nhập phải có ít nhất 3 ký tự",
+      "usernameMaxLength": "Tên đăng nhập không được vượt quá 50 ký tự",
+      "emailRequired": "Email là bắt buộc",
+      "emailInvalid": "Địa chỉ email không hợp lệ",
+      "passwordRequired": "Mật khẩu là bắt buộc",
+      "passwordMinLength": "Mật khẩu phải có ít nhất 6 ký tự",
+      "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu của bạn",
+      "passwordMismatch": "Mật khẩu không khớp"
+    }
   },
   "productsPage": {
     "title": "Tất Cả Sản Phẩm",
@@ -79,57 +100,140 @@
     "model": "Mẫu mã",
     "movement": "Bộ máy",
     "caseMaterial": "Chất liệu vỏ",
-    "strapMaterial": "Chất liệu dây",
+    "strapMaterial": "Chất liệu dây đeo",
     "dialColor": "Màu mặt số",
-    "waterResistance": "Chống nước",
+    "waterResistance": "Khả năng chống nước",
     "description": "Mô tả sản phẩm",
     "price": "Giá",
     "stock": "Còn lại: {{count}} sản phẩm",
+    "barcode": "Barcode",
     "outOfStock": "Hết hàng",
-    "addToCart": "Thêm vào giỏ hàng",
+    "outOfStockAlert": "Sản phẩm này hiện đang hết hàng.",
+    "addToCart": "Thêm vào giỏ",
     "buyNow": "Mua ngay",
     "addedToCart": "Đã thêm vào giỏ hàng!",
-    "errorAddingToCart": "Lỗi khi thêm vào giỏ hàng."
+    "errorAddingToCart": "Lỗi khi thêm vào giỏ hàng.",
+    "backToList": "Quay lại danh sách",
+    "notFound": "Không tìm thấy sản phẩm.",
+    "noDescription": "Không có mô tả.",
+    "quantityLabel": "Số lượng",
+    "toggleFavorite": "Thêm vào yêu thích",
+    "specsTitle": "Thông số kỹ thuật",
+    "loginForFavorite": "Vui lòng đăng nhập để sử dụng chức năng yêu thích.",
+    "removedFromFavorites": "Đã xoá khỏi sản phẩm yêu thích.",
+    "addedToFavorites": "Đã thêm vào sản phẩm yêu thích!",
+    "favoriteActionFailed": "Thao tác yêu thích thất bại."
   },
   "cartPage": {
-    "title": "Giỏ Hàng Của Bạn",
-    "emptyCart": "Giỏ hàng của bạn đang trống.",
-    "product": "Sản phẩm",
-    "price": "Đơn giá",
-    "quantity": "Số lượng",
-    "total": "Thành tiền",
-    "subtotal": "Tổng phụ",
-    "proceedToCheckout": "Tiến hành thanh toán",
+    "title": "Giỏ Hàng",
+    "emptyCartTitle": "Giỏ hàng của bạn đang trống",
+    "emptyCartMessage": "Có vẻ như bạn chưa thêm bất cứ thứ gì vào giỏ hàng của mình.",
     "continueShopping": "Tiếp tục mua sắm",
-    "itemRemoved": "Đã xóa sản phẩm khỏi giỏ hàng."
+    "confirmRemoveItem": "Xóa \"{{productName}}\" khỏi giỏ hàng của bạn?",
+    "confirmDeleteSelected": "Bạn có chắc chắn muốn xóa {{count}} mục đã chọn?",
+    "selectedItemsRemoved": "Đã xóa các mục đã chọn.",
+    "errorRemovingSelected": "Không thể xóa tất cả các mục đã chọn. Vui lòng thử lại.",
+    "table": {
+      "product": "Sản Phẩm",
+      "quantity": "Số Lượng",
+      "amount": "Số Tiền",
+      "actions": "Thao Tác"
+    },
+    "summary": {
+      "selectAll": "Chọn Tất Cả ({{count}})",
+      "deleteSelected": "Xóa",
+      "saveToFavorites": "Lưu vào mục Đã thích",
+      "totalForItems": "Tổng cộng ({{count}} Sản phẩm):",
+      "proceedToCheckout": "Tiến hành đặt hàng",
+      "unitPrice": "Đơn giá"
+    }
   },
   "checkoutPage": {
-      "title": "Thanh Toán",
-      "shippingAddress": "Địa chỉ giao hàng",
-      "fullName": "Họ và tên",
-      "phoneNumber": "Số điện thoại",
-      "address": "Địa chỉ chi tiết",
-      "paymentMethod": "Phương thức thanh toán",
-      "cashOnDelivery": "Thanh toán khi nhận hàng (COD)",
-      "vnpay": "Thanh toán qua VNPAY",
-      "orderSummary": "Tóm tắt đơn hàng",
-      "totalItems": "Tổng số sản phẩm",
-      "totalAmount": "Tổng cộng",
-      "placeOrder": "Đặt Hàng"
+    "title": "Thanh toán",
+    "shippingInfo": {
+      "title": "Thông tin giao hàng",
+      "nameLabel": "Tên khách hàng",
+      "phoneLabel": "Số điện thoại",
+      "addressLabel": "Địa chỉ",
+      "notesLabel": "Ghi chú (tùy chọn)"
+    },
+    "paymentMethod": {
+      "title": "Phương thức thanh toán",
+      "cod": "Thanh toán khi nhận hàng (COD)",
+      "vnpay": "Thanh toán qua VNPay"
+    },
+    "orderSummary": {
+      "title": "Tóm tắt đơn hàng",
+      "quantity": "Số lượng",
+      "noItemsSelected": "Không có sản phẩm nào được chọn",
+      "subtotal": "Tổng sản phẩm",
+      "shippingFee": "Phí giao hàng",
+      "grandTotal": "Tổng cộng",
+      "placeOrderButton": "Đặt hàng",
+      "backToCartLink": "Quay lại giỏ hàng"
+    },
+    "validation": {
+      "nameRequired": "Tên khách hàng là bắt buộc",
+      "phoneRequired": "Số điện thoại là bắt buộc",
+      "addressRequired": "Địa chỉ là bắt buộc"
+    },
+    "toasts": {
+      "noItemsToCheckout": "Không có sản phẩm nào để thanh toán. Vui lòng thêm sản phẩm vào giỏ hàng.",
+      "orderSuccess": "Đặt hàng thành công! Cảm ơn bạn đã mua sắm.",
+      "orderError": "Đặt hàng thất bại. Vui lòng thử lại."
+    }
+  },
+  "orderHistoryPage": {
+    "title": "Lịch sử đơn hàng",
+    "errorFetching": "Không thể tải lịch sử đơn hàng.",
+    "noOrders": "Bạn chưa có đơn hàng nào.",
+    "startShopping": "Bắt đầu mua sắm!",
+    "ordersList": "Danh sách đơn hàng",
+    "table": {
+      "stt": "STT",
+      "orderDate": "Thời gian đặt hàng",
+      "totalAmount": "Tổng tiền",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    }
+  },
+  "orderStatus": {
+    "PENDING": "Chờ xử lý",
+    "PAID": "Đã thanh toán",
+    "PROCESSING": "Đang xử lý",
+    "SHIPPED": "Đã giao hàng",
+    "COMPLETED": "Hoàn thành",
+    "CANCELED": "Đã hủy"
   },
   "profilePage": {
     "title": "Hồ Sơ Của Tôi",
-    "updateProfile": "Cập nhật hồ sơ",
-    "changePassword": "Đổi mật khẩu",
-    "firstName": "Tên",
-    "lastName": "Họ",
-    "email": "Email",
-    "username": "Tên đăng nhập",
-    "phone": "Số điện thoại",
-    "address": "Địa chỉ",
-    "dateOfBirth": "Ngày sinh",
-    "profileUpdatedSuccess": "Hồ sơ đã được cập nhật thành công.",
-    "profileUpdatedError": "Lỗi khi cập nhật hồ sơ."
+    "errorLoadingProfile": "Không thể tải dữ liệu hồ sơ.",
+    "errorLoadingProfileRetry": "Không thể tải hồ sơ người dùng. Vui lòng thử đăng nhập lại.",
+    "updateSuccess": "Cập nhật thông tin thành công!",
+    "updateError": "Cập nhật thông tin thất bại.",
+    "usernameLabel": "Tên đăng nhập",
+    "emailLabel": "Email",
+    "firstNameLabel": "Tên",
+    "lastNameLabel": "Họ",
+    "phoneLabel": "Số điện thoại",
+    "addressLabel": "Địa chỉ",
+    "dobLabel": "Ngày sinh",
+    "updateButton": "Cập nhật thông tin",
+    "changePasswordButton": "Đổi mật khẩu"
+  },
+  "changePasswordModal": {
+    "title": "Đổi mật khẩu",
+    "currentPasswordLabel": "Mật khẩu hiện tại",
+    "currentPasswordRequired": "Mật khẩu hiện tại là bắt buộc",
+    "newPasswordLabel": "Mật khẩu mới",
+    "newPasswordRequired": "Mật khẩu mới là bắt buộc",
+    "newPasswordMinLength": "Mật khẩu phải có ít nhất 6 ký tự",
+    "confirmPasswordLabel": "Xác nhận mật khẩu mới",
+    "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu mới",
+    "passwordMismatch": "Mật khẩu mới không khớp",
+    "submitButton": "Xác nhận",
+    "successMessage": "Đổi mật khẩu thành công!",
+    "errorMessage": "Đổi mật khẩu thất bại. Vui lòng thử lại."
   },
   "toastMessages": {
     "loginSuccess": "Đăng nhập thành công!",
@@ -147,5 +251,132 @@
     "errorFetchingProductDetail": "Lỗi tải chi tiết sản phẩm!",
     "errorFetchingCart": "Lỗi tải giỏ hàng!",
     "errorFetchingOrders": "Lỗi tải lịch sử đơn hàng!"
+  },
+  "homePage": {
+    "featuredProducts": "SẢN PHẨM NỔI BẬT",
+    "noFeaturedProducts": "Hiện chưa có sản phẩm nổi bật.",
+    "viewAllProducts": "Xem tất cả sản phẩm",
+    "whyChooseUs": {
+      "title": "TẠI SAO CHỌN CHÚNG TÔI",
+      "item1": {
+        "title": "Chính Hãng",
+        "text": "Cam kết 100% sản phẩm chính hãng, nguồn gốc rõ ràng."
+      },
+      "item2": {
+        "title": "Bảo Hành 2 Năm",
+        "text": "An tâm sử dụng với chính sách bảo hành dài hạn, uy tín."
+      },
+      "item3": {
+        "title": "Miễn Phí Vận Chuyển",
+        "text": "Giao hàng nhanh chóng, miễn phí trên toàn quốc."
+      }
+    },
+    "luxuryPromo": {
+      "title": "ĐẶC QUYỀN SANG TRỌNG",
+      "subtitle": "Những ưu đãi đặc biệt và bộ sưu tập giới hạn dành riêng cho khách hàng thân thiết của TimeXpert.",
+      "button": "Xem Ngay",
+      "alt": "Bộ sưu tập Sang trọng"
+    },
+    "banner1": {
+      "title": "TINH HOA THỜI GIAN",
+      "subtitle": "Khám phá những mẫu đồng hồ đẳng cấp và tinh xảo",
+      "button": "Khám Phá Bộ Sưu Tập"
+    },
+    "banner2": {
+      "title": "BỘ SƯU TẬP MỚI",
+      "subtitle": "Phong cách hiện đại, đẳng cấp vượt thời gian",
+      "button": "Xem Bộ Sưu Tập"
+    },
+    "banner3": {
+      "title": "SALE CUỐI NĂM",
+      "subtitle": "Thời gian tạo nên đẳng cấp – Định hình phong cách với từng chiếc đồng hồ",
+      "button": "Mua Ngay"
+    },
+    "contactPage": {
+      "title": "Liên hệ với chúng tôi",
+      "intro": "Nếu bạn có bất kỳ thắc mắc hay cần hỗ trợ, hãy điền thông tin bên dưới hoặc liên hệ trực tiếp qua:",
+      "addressLabel": "Địa chỉ",
+      "addressValue": "39 Phố Thi Sách, P. Phạm Đình Hổ, Q. Hai Bà Trưng, TP Hà Nội",
+      "phoneLabel": "Điện thoại",
+      "phoneValue": "028 3456 8899",
+      "emailLabel": "Email",
+      "emailValue": "support@timexpert.vn",
+      "form": {
+        "nameLabel": "Họ và tên",
+        "namePlaceholder": "Nhập họ và tên",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Nhập email",
+        "messageLabel": "Nội dung",
+        "messagePlaceholder": "Nhập nội dung liên hệ",
+        "submitButton": "Gửi"
+      },
+      "imageAlt": "Đồng hồ sang trọng"
+    }
+  },
+  "forgotPasswordPage": {
+    "title": "Quên mật khẩu",
+    "emailLabel": "Nhập Email đã đăng ký của bạn.",
+    "emailPlaceholder": "Địa chỉ Email",
+    "submitButton": "Gửi mã OTP",
+    "backToLogin": "Quay lại Đăng nhập",
+    "errorMessage": "Gửi OTP thất bại. Vui lòng kiểm tra lại địa chỉ email.",
+    "validation": {
+      "emailRequired": "Email là bắt buộc",
+      "emailInvalid": "Địa chỉ email không hợp lệ"
+    }
+  },
+  "resetPasswordPage": {
+    "title": "Đặt lại mật khẩu",
+    "invalidAccess": "Truy cập không hợp lệ. Vui lòng yêu cầu đặt lại mật khẩu.",
+    "emailLabel": "Email",
+    "otpLabel": "Mã OTP",
+    "otpPlaceholder": "Nhập OTP 6 chữ số",
+    "newPasswordLabel": "Mật khẩu mới",
+    "newPasswordPlaceholder": "Nhập mật khẩu mới",
+    "confirmPasswordLabel": "Xác nhận mật khẩu mới",
+    "confirmPasswordPlaceholder": "Nhập lại mật khẩu mới",
+    "submitButton": "Đặt lại mật khẩu",
+    "backToLogin": "Quay lại Đăng nhập",
+    "goToLogin": "Đi tới Đăng nhập",
+    "successMessage": "Mật khẩu của bạn đã được đặt lại thành công! Đang chuyển hướng đến đăng nhập...",
+    "errorMessage": "Không đặt lại được mật khẩu. OTP có thể không hợp lệ hoặc đã hết hạn.",
+    "invalidAccessWarning": "Truy cập không hợp lệ. Vui lòng yêu cầu đặt lại mật khẩu trước.",
+    "validation": {
+      "otpRequired": "Mã OTP là bắt buộc",
+      "otpLength": "OTP phải có 6 chữ số",
+      "otpPattern": "OTP phải là 6 chữ số",
+      "newPasswordRequired": "Mật khẩu mới là bắt buộc",
+      "newPasswordMinLength": "Mật khẩu phải có ít nhất 6 ký tự",
+      "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu của bạn",
+      "passwordMismatch": "Mật khẩu không khớp"
+    }
+  },
+  "stockBadge": {
+    "checking": "Đang kiểm tra...",
+    "inStock": "Còn hàng",
+    "outOfStock": "Hết hàng"
+  },
+  "sortOptionsBar": {
+    "sortByLabel": "Sắp xếp theo:",
+    "relevance": "Phù hợp",
+    "newest": "Mới nhất",
+    "bestSelling": "Bán chạy",
+    "price": "Giá",
+    "priceLowToHigh": "Giá: Thấp đến Cao",
+    "priceHighToLow": "Giá: Cao đến Thấp",
+    "lowToHigh": "Thấp đến Cao",
+    "highToLow": "Cao đến Thấp",
+    "comingSoon": "Sắp có"
+  },
+   "chatWidget": {
+    "toggleButton": "Chat",
+    "title": "Hỗ trợ trực tuyến",
+    "botTyping": "Bot đang trả lời...",
+    "inputPlaceholder": "Nhập tin nhắn của bạn..."
+  },
+    "notFoundPage": {
+    "title": "Trang không tồn tại",
+    "message": "Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Trang có thể đã bị xóa, đổi tên hoặc tạm thời không có sẵn.",
+    "backToHome": "Quay về Trang chủ"
   }
 }

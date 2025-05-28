@@ -10,8 +10,12 @@ import {
 } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { changePassword } from '../../services/authService';
+import { useTranslation } from 'react-i18next'; 
 
 function ChangePasswordModal({ show, onHide }) {
+
+    const { t } = useTranslation();
+    
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');

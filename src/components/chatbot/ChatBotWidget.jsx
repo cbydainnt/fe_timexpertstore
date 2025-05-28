@@ -4,8 +4,9 @@ import { Button, Offcanvas, Form, InputGroup, Spinner } from 'react-bootstrap'; 
 import { ChatLeftText, Send } from 'react-bootstrap-icons'; // Icons
 import './ChatBotWidget.css'; // Tạo file CSS riêng cho widget này
 import { sendChatMessage } from '../../services/chatBotService'; // Sẽ tạo service này sau
-
+import { useTranslation } from 'react-i18next';
 function ChatBotWidget() {
+  const { t } = useTranslation();
   const [show, setShow] = useState(false); // State để mở/đóng Offcanvas
   const [message, setMessage] = useState(''); // State cho nội dung input
   const [conversation, setConversation] = useState([]); // State lưu lịch sử hội thoại [{ sender: 'user' | 'bot', text: '...' }]
@@ -54,48 +55,42 @@ function ChatBotWidget() {
   return (
     <>
       {/* Nút mở Chat Widget */}
-      <Button
-        variant="primary" // Màu nút
-        onClick={handleShow}
-        className="chat-toggle-button" // Class CSS để style vị trí cố định
-      >
-        <ChatLeftText size={24} /> Chat
+      <Button variant="primary" onClick={handleShow} className="chat-toggle-button">
+        <ChatLeftText size={24} /> <span className="ms-2">{t('chatWidget.toggleButton', 'Chat')}</span>
       </Button>
 
-      {/* Offcanvas (Popup Chat) */}
-      <Offcanvas show={show} onHide={handleClose} placement="end"> {/* Hiện từ bên phải */}
+      <Offcanvas show={show} onHide={handleClose} placement="end" backdrop={false} scroll={true} className="chat-offcanvas">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Chat với Bot hỗ trợ</Offcanvas.Title>
+          <Offcanvas.Title>{t('chatWidget.title', 'Hỗ trợ trực tuyến')}</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body className="d-flex flex-column">
-          {/* Vùng hiển thị tin nhắn */}
-          <div className="chat-messages-container flex-grow-1 overflow-auto p-2 border mb-3">
+        <Offcanvas.Body className="d-flex flex-column p-0">
+          <div className="chat-messages flex-grow-1 p-3 overflow-auto mb-3">
             {conversation.map((msg, index) => (
-              <div key={index} className={`chat-message ${msg.sender}`}>
+              <div className="chat-message bot">
                 <div className="message-bubble border rounded p-2 mb-2">
-                  {msg.text}
+                  <Spinner animation="border" size="sm" className="me-1" /> {t('chatWidget.botTyping', 'Bot đang trả lời...')}
                 </div>
               </div>
             ))}
-             {loading && ( // Hiển thị loading khi bot đang gõ
-                <div className="chat-message bot">
-                    <div className="message-bubble border rounded p-2 mb-2">
-                        <Spinner animation="border" size="sm" className="me-1"/> Bot đang trả lời...
-                    </div>
+            {loading && ( // Hiển thị loading khi bot đang gõ
+              <div className="chat-message bot">
+                <div className="message-bubble border rounded p-2 mb-2">
+                  <Spinner animation="border" size="sm" className="me-1" /> Bot đang trả lời...
                 </div>
-             )}
+              </div>
+            )}
             <div ref={messagesEndRef} /> {/* Element dùng để cuộn xuống */}
           </div>
 
           {/* Input và nút gửi */}
-          <Form onSubmit={handleSendMessage}>
+          <Form onSubmit={handleSendMessage} className="p-3 border-top">
             <InputGroup>
               <Form.Control
                 type="text"
-                placeholder="Nhập tin nhắn của bạn..."
+                placeholder={t('chatWidget.inputPlaceholder', 'Nhập tin nhắn của bạn...')}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                disabled={loading} // Disable input khi đang chờ bot
+                disabled={loading}
               />
               <Button variant="primary" type="submit" disabled={loading}>
                 {loading ? <Spinner as="span" animation="border" size="sm" /> : <Send />}

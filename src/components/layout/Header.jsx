@@ -9,9 +9,6 @@ import {
   Form,
   FormControl,
   Button,
-  // Row, // Không được sử dụng trong code bạn gửi
-  // Col, // Không được sử dụng trong code bạn gửi
-  // Spinner, // Không được sử dụng trong code bạn gửi
 } from 'react-bootstrap';
 import {
   Cart4,
@@ -25,13 +22,10 @@ import {
 import '../../styles/header.css'; // Giữ lại CSS của bạn
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
-// import { getAllCategories } from '../../services/categoryService'; // Bỏ qua nếu không dùng mega menu categories nữa
 import x from '../../assets/images/x.png'; // Giữ lại logo của bạn
-// import y1 from '../../assets/images/lgg.png'; // Không thấy sử dụng trong code bạn gửi
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const navLinkBaseClass = 'nav-link position-relative site-nav-link';
-// const categoryLinkClassName = 'd-block p-1 text-truncate text-decoration-none category-menu-link'; // Bỏ qua nếu không dùng mega menu
 const iconNavLinkClass = 'nav-link d-inline-flex align-items-center p-2 site-icon-link';
 
 const Header = () => {
@@ -40,27 +34,8 @@ const Header = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
   const distinctItemCount = useCartStore((s) => s.getDistinctItemCount());
   const [searchTerm, setSearchTerm] = useState('');
-  // const [categories, setCategories] = useState([]); // Bỏ qua nếu không dùng mega menu
-  // const [loadingCategories, setLoadingCategories] = useState(false); // Bỏ qua
-  // const [isCategoryMenuVisible, setIsCategoryMenuVisible] = useState(false); // Bỏ qua
-  // const categoryTimeoutRef = useRef(null); // Bỏ qua
 
-  // useEffect(() => { // Bỏ qua fetch categories nếu không dùng mega menu
-  //   const fetchCategories = async () => {
-  //     setLoadingCategories(true);
-  //     try {
-  //       const resp = await getAllCategories();
-  //       setCategories(resp.data || []);
-  //     } catch {
-  //       setCategories([]);
-  //     } finally {
-  //       setLoadingCategories(false);
-  //     }
-  //   };
-  //   fetchCategories();
-  // }, []);
-
-  const handleLogout = () => { // Thêm hàm này nếu chưa có
+  const handleLogout = () => { 
     logout();
     navigate('/login');
   };
@@ -75,19 +50,6 @@ const Header = () => {
 
   const getNavLinkClass = ({ isActive }) =>
     `${navLinkBaseClass} ${isActive ? 'active' : ''}`;
-
-  // const handleCategoryMouseEnter = () => { // Bỏ qua
-  //   clearTimeout(categoryTimeoutRef.current);
-  //   setIsCategoryMenuVisible(true);
-  // };
-
-  // const handleCategoryMouseLeave = () => { // Bỏ qua
-  //   categoryTimeoutRef.current = setTimeout(() => {
-  //     setIsCategoryMenuVisible(false);
-  //   }, 200);
-  // };
-
-  // const megaMenuStyle = { ... }; // Bỏ qua
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -131,11 +93,6 @@ const Header = () => {
               <NavLink to="/contact" className={getNavLinkClass}>
                 {t('header.contact', 'LIÊN HỆ')}
               </NavLink>
-              {/* Thêm link About Us nếu có trong translation.json
-              <NavLink to="/about" className={getNavLinkClass}>
-                {t('header.about', 'VỀ CHÚNG TÔI')}
-              </NavLink>
-              */}
             </Nav>
 
             <Form
@@ -157,12 +114,12 @@ const Header = () => {
             </Form>
 
             <Nav className="align-items-center right-nav">
-              {/* Language Switcher - Đặt ở vị trí phù hợp hơn nếu muốn */}
+              
               <NavDropdown 
                 title={<Translate size={18} color="#0675b1" title={t('header.language', 'Ngôn ngữ')}/>} 
                 id="language-switcher-dropdown" 
                 align="end"
-                className="site-icon-link p-2" // Thêm class để giống các icon khác nếu cần
+                className="site-icon-link p-2" 
               >
                 <NavDropdown.Item onClick={() => changeLanguage('vi')} active={i18n.language === 'vi'}>
                   Tiếng Việt

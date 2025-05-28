@@ -1,21 +1,25 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
-import './StockBadge.css'; // nếu chưa có thì tạo file này để tách CSS
+import './StockBadge.css'; 
+
+import { useTranslation } from 'react-i18next'; 
 
 function StockBadge({ stock, className = '' }) {
+
+  const { t } = useTranslation();
+
   let badgeClass = 'stock-checking';
-  let text = 'Đang kiểm tra...';
+   let text = t('stockBadge.checking', 'Đang kiểm tra...');
 
   if (stock !== undefined && stock !== null && !isNaN(stock)) {
     if (stock > 0) {
       badgeClass = 'stock-in';
-      text = 'Còn hàng';
+      text = t('stockBadge.inStock', 'Còn hàng');
     } else {
       badgeClass = 'stock-out';
-      text = 'Hết hàng';
+      text = t('stockBadge.outOfStock', 'Hết hàng');
     }
   }
-
   return (
     <Badge className={`stock-badge ${badgeClass} ${className}`} pill>
       {text}

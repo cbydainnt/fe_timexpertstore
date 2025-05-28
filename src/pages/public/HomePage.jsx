@@ -12,6 +12,8 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { ShieldCheck, Truck, Award } from 'react-bootstrap-icons';
 import { motion } from 'framer-motion';
 
+import { useTranslation } from 'react-i18next';
+
 import '../../styles/banner.css';
 import banner1 from '../../assets/images/banner1.png';
 import banner2 from '../../assets/images/banner2.png';
@@ -28,6 +30,9 @@ const pageVariants = {
 const pageTransition = { duration: 0.4 };
 
 function HomePage() {
+
+  const { t } = useTranslation();
+
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -47,27 +52,28 @@ function HomePage() {
     } finally { setLoading(false); }
   }, []);
 
-  const bannerSlides = [
+     const bannerSlides = [ 
     {
-      image: banner,
-      title: 'TINH HOA THỜI GIAN',
-      subtitle: 'Khám phá những mẫu đồng hồ đẳng cấp và tinh xảo',
-      link: '/products',
-      buttonText: 'Khám Phá Bộ Sưu Tập'
+      image: banner, 
+      // Dịch các title và subtitle nếu cần
+      title: t('homePage.banner1.title', 'TINH HOA THỜI GIAN'),
+      subtitle: t('homePage.banner1.subtitle', 'Khám phá những mẫu đồng hồ đẳng cấp và tinh xảo'),
+      link: '/products', //
+      buttonText: t('homePage.banner1.button', 'Khám Phá Bộ Sưu Tập') 
     },
     {
-      image: banner2,
-      title: 'BỘ SƯU TẬP MỚI',
-      subtitle: 'Phong cách hiện đại, đẳng cấp vượt thời gian',
-      link: '/collections/new',
-      buttonText: 'Xem Bộ Sưu Tập'
+      image: banner2, 
+      title: t('homePage.banner2.title', 'BỘ SƯU TẬP MỚI'),
+      subtitle: t('homePage.banner2.subtitle', 'Phong cách hiện đại, đẳng cấp vượt thời gian'),
+      link: '/collections/new', 
+      buttonText: t('homePage.banner2.button', 'Xem Bộ Sưu Tập') 
     },
     {
-      image: banner3,
-      title: 'SALE CUỐI NĂM',
-      subtitle: 'Thời gian tạo nên đẳng cấp – Định hình phong cách với từng chiếc đồng hồ',
-      link: '/products',
-      buttonText: 'Mua Ngay'
+      image: banner3, 
+      title: t('homePage.banner3.title', 'SALE CUỐI NĂM'),
+      subtitle: t('homePage.banner3.subtitle', 'Thời gian tạo nên đẳng cấp – Định hình phong cách với từng chiếc đồng hồ'),
+      link: '/products', 
+      buttonText: t('homePage.banner3.button', 'Mua Ngay') 
     }
   ];
 
@@ -151,12 +157,12 @@ function HomePage() {
       <Container className="py-4">
 
         {/* --- Phần Sản phẩm nổi bật / Mới nhất --- */}
-        <section className="featured-products-section mb-5 pb-3">
-          <h2 className="text-center fw-bold mb-4 section-title">SẢN PHẨM NỔI BẬT</h2>
-          {/* Hiển thị Loading hoặc Lỗi */}
+         <section className="featured-products-section mb-5 pb-3">
+          <h2 className="text-center fw-bold mb-4 section-title">
+            {t('homePage.featuredProducts', 'SẢN PHẨM NỔI BẬT')}
+          </h2>
           {loading && <LoadingSpinner />}
           {error && <Alert variant="warning" className="text-center">{error}</Alert>}
-          {/* Hiển thị danh sách sản phẩm */}
           {!loading && !error && (
             <>
               {featuredProducts.length > 0 ? (
@@ -167,10 +173,11 @@ function HomePage() {
                     </Col>
                   ))}
                 </Row>
-              ) : (<p className="text-center text-muted">Hiện chưa có sản phẩm nổi bật.</p>)}
-              {/* Nút xem thêm sản phẩm */}
+              ) : (<p className="text-center text-muted">{t('homePage.noFeaturedProducts', 'Hiện chưa có sản phẩm nổi bật.')}</p>)}
               <div className="text-center mt-5">
-                <Link to="/products"> <Button variant="outline-dark">Xem tất cả sản phẩm</Button> </Link>
+                <Link to="/products">
+                  <Button variant="outline-dark">{t('homePage.viewAllProducts', 'Xem tất cả sản phẩm')}</Button>
+                </Link>
               </div>
             </>
           )}
@@ -179,17 +186,19 @@ function HomePage() {
 
 
         {/* --- Phần Tại sao chọn chúng tôi --- */}
-        <section className="why-choose-us-section mb-5 py-5 bg-light rounded"> {/* Thêm nền nhạt và bo góc */}
-          <Container> {/* Container con để căn giữa nội dung */}
-            <h2 className="text-center fw-bold mb-5 section-title">TẠI SAO CHỌN CHÚNG TÔI</h2>
+          <section className="why-choose-us-section mb-5 py-5 bg-light rounded">
+          <Container>
+            <h2 className="text-center fw-bold mb-5 section-title">
+              {t('homePage.whyChooseUs.title', 'TẠI SAO CHỌN CHÚNG TÔI')}
+            </h2>
             <Row className="text-center g-4">
               <Col md={4}>
-                <Card className="border-0 bg-transparent"> {/* Bỏ viền và nền Card */}
+                <Card className="border-0 bg-transparent">
                   <Card.Body>
                     <ShieldCheck size={40} className="text-primary mb-3" />
-                    <Card.Title as="h5" className="fw-semibold mb-2">Chính Hãng</Card.Title>
+                    <Card.Title as="h5" className="fw-semibold mb-2">{t('homePage.whyChooseUs.item1.title', 'Chính Hãng')}</Card.Title>
                     <Card.Text className="small text-muted">
-                      Cam kết 100% sản phẩm chính hãng, nguồn gốc rõ ràng.
+                      {t('homePage.whyChooseUs.item1.text', 'Cam kết 100% sản phẩm chính hãng, nguồn gốc rõ ràng.')}
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -198,9 +207,9 @@ function HomePage() {
                 <Card className="border-0 bg-transparent">
                   <Card.Body>
                     <Award size={40} className="text-primary mb-3" />
-                    <Card.Title as="h5" className="fw-semibold mb-2">Bảo Hành 2 Năm</Card.Title>
+                    <Card.Title as="h5" className="fw-semibold mb-2">{t('homePage.whyChooseUs.item2.title', 'Bảo Hành 2 Năm')}</Card.Title>
                     <Card.Text className="small text-muted">
-                      An tâm sử dụng với chính sách bảo hành dài hạn, uy tín.
+                      {t('homePage.whyChooseUs.item2.text', 'An tâm sử dụng với chính sách bảo hành dài hạn, uy tín.')}
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -209,9 +218,9 @@ function HomePage() {
                 <Card className="border-0 bg-transparent">
                   <Card.Body>
                     <Truck size={40} className="text-primary mb-3" />
-                    <Card.Title as="h5" className="fw-semibold mb-2">Miễn Phí Vận Chuyển</Card.Title>
+                    <Card.Title as="h5" className="fw-semibold mb-2">{t('homePage.whyChooseUs.item3.title', 'Miễn Phí Vận Chuyển')}</Card.Title>
                     <Card.Text className="small text-muted">
-                      Giao hàng nhanh chóng, miễn phí trên toàn quốc.
+                      {t('homePage.whyChooseUs.item3.text', 'Giao hàng nhanh chóng, miễn phí trên toàn quốc.')}
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -223,19 +232,19 @@ function HomePage() {
 
 
         {/* --- Phần Quảng cáo khác (Ví dụ) --- */}
-        <section className="promo-section mb-5">
-          <Row className="align-items-center g-4 bg-white p-4 p-md-5 rounded shadow-sm"> {/* Thêm nền trắng, padding, shadow */}
+       <section className="promo-section mb-5">
+          <Row className="align-items-center g-4 bg-white p-4 p-md-5 rounded shadow-sm">
             <Col md={6}>
-              <h2 className="h1 fw-bold mb-3">ĐẶC QUYỀN SANG TRỌNG</h2>
+              <h2 className="h1 fw-bold mb-3">{t('homePage.luxuryPromo.title', 'ĐẶC QUYỀN SANG TRỌNG')}</h2>
               <p className="text-muted mb-4">
-                Những ưu đãi đặc biệt và bộ sưu tập giới hạn dành riêng cho khách hàng thân thiết của TimeXpert.
+                {t('homePage.luxuryPromo.subtitle', 'Những ưu đãi đặc biệt và bộ sưu tập giới hạn dành riêng cho khách hàng thân thiết của TimeXpert.')}
               </p>
-              <Link to="/collections/special"> {/* Đường dẫn ví dụ */}
-                <Button variant="dark">Xem Ngay</Button>
+              <Link to="/collections/special">
+                <Button variant="dark">{t('homePage.luxuryPromo.button', 'Xem Ngay')}</Button>
               </Link>
             </Col>
             <Col md={6} className="text-center">
-              <Image src="https://via.placeholder.com/500x350?text=Luxury+Promo" fluid rounded alt="Luxury Collection" />
+              <Image src="https://via.placeholder.com/500x350?text=Luxury+Promo" fluid rounded alt={t('homePage.luxuryPromo.alt', 'Luxury Collection')} />
             </Col>
           </Row>
         </section>

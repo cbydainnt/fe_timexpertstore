@@ -8,8 +8,11 @@ import { addFavorite, removeFavoriteByProductId } from '../../services/favoriteS
 import { useAuthStore } from '../../store/authStore';
 import { toast } from 'react-toastify';
 import '../../styles/product-card.css';
-
+import { useTranslation } from 'react-i18next'; 
 function ProductCard({ product, isFavoritePage = false, onRemoveFavorite, favoriteProductIds = [] }) {
+
+  const { t } = useTranslation();
+
   const { addItem: addItemToCart } = useCartStore();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
@@ -25,12 +28,12 @@ function ProductCard({ product, isFavoritePage = false, onRemoveFavorite, favori
   const handleAddToCart = (e) => {
     e.preventDefault();
     if (!isAuthenticated) {
-      toast.info('Vui lòng đăng nhập để thêm vào giỏ hàng.');
+      toast.info(t('productCard.toasts.loginToAddCart', 'Vui lòng đăng nhập để thêm vào giỏ hàng.'));
       navigate('/login');
       return;
     }
     if (product.stock <= 0) {
-      toast.warn('Sản phẩm hiện đã hết hàng.');
+      toast.warn(t('productCard.toasts.outOfStock', 'Sản phẩm hiện đã hết hàng.'));
       return;
     }
     addItemToCart({
@@ -40,15 +43,16 @@ function ProductCard({ product, isFavoritePage = false, onRemoveFavorite, favori
       imageUrl: product.primaryImageUrl || product.imageUrls?.[0],
       stock: product.stock
     }, 1);
-    toast.success(`Đã thêm ${product.name} vào giỏ hàng!`);
+    toast.success(t('toastMessages.itemAddedToCart', 'Đã thêm "{{itemName}}" vào giỏ hàng!', { itemName: product.name }));
   };
 
-  const handleToggleFavorite = async (e) => {
+
+   const handleToggleFavorite = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (!isAuthenticated) {
-      toast.info('Vui lòng đăng nhập để sử dụng chức năng yêu thích.');
+      toast.info(t('productCard.toasts.loginToFavorite', 'Vui lòng đăng nhập để sử dụng chức năng yêu thích.'));
       navigate('/login');
       return;
     }
@@ -58,14 +62,18 @@ function ProductCard({ product, isFavoritePage = false, onRemoveFavorite, favori
       if (isFavoriteLocal) {
         await removeFavoriteByProductId(product.productId);
         setIsFavoriteLocal(false);
-        toast.success(`${product.name} đã được xoá khỏi yêu thích.`);
+        toast.success(t('productCard.toasts.removedFromFavorites', '"{{productName}}" đã được xoá khỏi yêu thích.', { productName: product.name }));
+        if (isFavoritePage && onRemoveFavorite) { // Gọi callback để cập nhật UI trang Favorites
+            onRemoveFavorite(product.productId, product.name);
+        }
       } else {
         await addFavorite(product.productId);
         setIsFavoriteLocal(true);
-        toast.success(`${product.name} đã được thêm vào yêu thích!`);
+        toast.success(t('productCard.toasts.addedToFavorites', '"{{productName}}" đã được thêm vào yêu thích!', { productName: product.name }));
       }
-    } catch {
-      toast.error('Thao tác yêu thích thất bại.');
+    } catch (err) {
+      console.error("Favorite action failed:", err);
+      toast.error(t('productCard.toasts.favoriteActionFailed', 'Thao tác yêu thích thất bại.'));
     } finally {
       setIsFavoriteLoading(false);
     }
@@ -137,7 +145,7 @@ function ProductCard({ product, isFavoritePage = false, onRemoveFavorite, favori
             e.stopPropagation();
             onRemoveFavorite?.(product.productId, product.name);
           }}
-          title="Remove from Favorites"
+           title={t('productCard.buttons.removeFromFavoritesTitle', "Xóa khỏi Yêu thích")}
         >
           ✕
         </Button>
@@ -148,6 +156,7 @@ function ProductCard({ product, isFavoritePage = false, onRemoveFavorite, favori
           onClick={handleToggleFavorite}
           className="btn-heart position-absolute top-0 end-0 m-2 rounded-circle"
           disabled={isFavoriteLoading}
+          title={isFavoriteLocal ? t('productCard.buttons.unfavoriteTitle', "Bỏ yêu thích") : t('productCard.buttons.favoriteTitle', "Yêu thích")}
         >
           {isFavoriteLocal ? (
             <HeartFill size={20} color="#0675b1" />

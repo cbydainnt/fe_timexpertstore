@@ -1,5 +1,3 @@
-// src/pages/user/ProfilePage.jsx
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuthStore } from '../../store/authStore'; // Import store Zustand
@@ -12,6 +10,8 @@ import { Person, GeoAlt, Telephone, PencilSquare, Lock } from 'react-bootstrap-i
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { motion } from 'framer-motion';
 
+import { useTranslation } from 'react-i18next';
+
 const pageVariants = {
   initial: { opacity: 0 },
   in: { opacity: 1 },
@@ -20,6 +20,9 @@ const pageVariants = {
 const pageTransition = { duration: 0.4 };
 
 function ProfilePage() {
+
+  const { t } = useTranslation();
+
   // Lấy user hiện tại và action updateUser từ store
   // updateUserInStore dùng để cập nhật lại thông tin user trong store sau khi API thành công
   const { user: currentUser, updateUser: updateUserInStore } = useAuthStore();
@@ -45,30 +48,25 @@ function ProfilePage() {
   const fetchProfile = useCallback(() => {
     setLoadingProfile(true);
     setError('');
-    setSuccess(''); // Xóa thông báo cũ
+    setSuccess('');
     getUserProfile()
       .then(response => {
-        const profileData = response.data; // UserDTO từ backend
-        // Reset form với dữ liệu mới nhất từ API
+        const profileData = response.data;
         reset({
           firstName: profileData.firstName || '',
           lastName: profileData.lastName || '',
           phone: profileData.phone || '',
           address: profileData.address || '',
-          // API trả về dateOfBirth dạng string YYYY-MM-DD hoặc null
           dateOfBirth: profileData.dateOfBirth || '',
         });
-        // Cập nhật lại user trong store nếu cần (đảm bảo store luôn mới nhất)
-        // Không gọi updateUserInStore ở đây để tránh vòng lặp vô hạn nếu nó là dependency của useEffect
-        // Chỉ gọi updateUserInStore sau khi cập nhật thành công
         setLoadingProfile(false);
       })
       .catch(err => {
         console.error("Error fetching profile:", err);
-        setError("Failed to load profile data.");
+        setError(t('profilePage.errorLoadingProfile', "Không thể tải dữ liệu hồ sơ."));
         setLoadingProfile(false);
       });
-  }, [reset]); // Dependency là reset (từ useForm)
+  }, [reset, t]);
 
   // Load profile khi component mount
   useEffect(() => {
@@ -89,23 +87,22 @@ function ProfilePage() {
         address: data.address,
         dateOfBirth: data.dateOfBirth || null, // Gửi null nếu date rỗng
       };
-      const response = await updateUserProfile(updateData); // Gọi API cập nhật
-      updateUserInStore(response.data); // Cập nhật user trong store với dữ liệu mới trả về
-      setSuccess('Cập nhật thông tin thành công!');
-      setIsEditing(false); // Tắt chế độ sửa sau khi thành công
-      // Reset form với dữ liệu MỚI NHẤT vừa cập nhật để isDirty=false
-      reset({
-        firstName: response.data.firstName || '',
-        lastName: response.data.lastName || '',
-        phone: response.data.phone || '',
-        address: response.data.address || '',
-        dateOfBirth: response.data.dateOfBirth || '',
+      const response = await updateUserProfile(updateData); //
+      updateUserInStore(response.data); //
+      setSuccess(t('profilePage.updateSuccess', 'Cập nhật thông tin thành công!')); //
+      setIsEditing(false); //
+      reset({ //
+        firstName: response.data.firstName || '', //
+        lastName: response.data.lastName || '', //
+        phone: response.data.phone || '', //
+        address: response.data.address || '', //
+        dateOfBirth: response.data.dateOfBirth || '', //
       });
     } catch (err) {
-      console.error("Error updating profile:", err);
-      setError(err.response?.data?.message || 'Failed to update profile.');
+      console.error("Error updating profile:", err); //
+      setError(err.response?.data?.message || t('profilePage.updateError', 'Cập nhật thông tin thất bại.')); //
     } finally {
-      setLoading(false);
+      setLoading(false); //
     }
   };
 
@@ -131,25 +128,17 @@ function ProfilePage() {
 
 
   // Render UI
-  if (loadingProfile) {
-    return (
-      <Container className="text-center py-5">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Đang tải hồ sơ người dùng...</span>
-        </Spinner>
-      </Container>
-    );
-  }
+  if (loadingProfile)
+    return <Container className="text-center py-5">
+      <LoadingSpinner text={t('common.loading', "Đang tải...")} />
+    </Container>;
+  if (!currentUser && !loadingProfile)
+    return <Container className="py-5">
+      <Alert variant="warning" className="text-center">
+        {t('profilePage.errorLoadingProfileRetry', 'Không thể tải hồ sơ người dùng. Vui lòng thử đăng nhập lại.')}
+      </Alert>
+    </Container>;
 
-  // Trường hợp không load được profile ban đầu (ngoài lỗi server)
-  // Lấy user từ store thay vì state riêng để đảm bảo đồng bộ
-  if (!currentUser && !loadingProfile) {
-    return (
-      <Container className="py-5">
-        <Alert variant="warning" className="text-center">Không thể tải hồ sơ người dùng. Vui lòng thử đăng nhập lại.</Alert>
-      </Container>
-    );
-  }
 
   // Lấy dữ liệu hiển thị từ form state (đã được reset bằng data API) hoặc từ currentUser nếu form chưa load kịp
   const displayUser = {
@@ -172,47 +161,20 @@ function ProfilePage() {
     >
       {/* <LoadingSpinner loading={loadingProfile} message="Loading profile..." /> Hiển thị loading nếu cần */}
       <Container className="py-1" style={{ maxWidth: '800px' }}>
-        <h1 className="mb-4 h3">Hồ sơ của tôi</h1>
-
-        {/* Hiển thị thông báo */}
+        <h1 className="mb-4 h3">{t('profilePage.title', 'Hồ sơ của tôi')}</h1>
         {error && <Alert variant="danger" className="text-center mb-3">{error}</Alert>}
         {success && <Alert variant="success" className="text-center mb-3">{success}</Alert>}
-
         <Card className="shadow-sm">
           <Card.Body className="p-4">
             {!isEditing ? (
-              // --- Chế độ xem ---
               <div className="profile-view">
-                {/* Lấy trực tiếp từ currentUser để đảm bảo dữ liệu hiển thị là mới nhất trong store */}
-                <Row className="mb-3">
-                  <Col sm={4} className="text-muted fw-medium">Tên đăng nhập:</Col>
-                  <Col sm={8}>{currentUser?.username}</Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col sm={4} className="text-muted fw-medium">Email:</Col>
-                  <Col sm={8}>{currentUser?.email}</Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col sm={4} className="text-muted fw-medium">Tên:</Col>
-                  <Col sm={8}>{currentUser?.firstName || 'N/A'}</Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col sm={4} className="text-muted fw-medium">Họ:</Col>
-                  <Col sm={8}>{currentUser?.lastName || 'N/A'}</Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col sm={4} className="text-muted fw-medium">Số điện thoại:</Col>
-                  <Col sm={8}>{currentUser?.phone || 'N/A'}</Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col sm={4} className="text-muted fw-medium">Địa chỉ:</Col>
-                  <Col sm={8}>{currentUser?.address || 'N/A'}</Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col sm={4} className="text-muted fw-medium">Ngày sinh:</Col>
-                  <Col sm={8}>{formatDate(currentUser?.dateOfBirth)}</Col>
-                </Row>
-
+                <Row className="mb-3"><Col sm={4} className="text-muted fw-medium">{t('profilePage.usernameLabel', 'Tên đăng nhập')}:</Col><Col sm={8}>{currentUser?.username}</Col></Row>
+                <Row className="mb-3"><Col sm={4} className="text-muted fw-medium">{t('profilePage.emailLabel', 'Email')}:</Col><Col sm={8}>{currentUser?.email}</Col></Row>
+                <Row className="mb-3"><Col sm={4} className="text-muted fw-medium">{t('profilePage.firstNameLabel', 'Tên')}:</Col><Col sm={8}>{currentUser?.firstName || 'N/A'}</Col></Row>
+                <Row className="mb-3"><Col sm={4} className="text-muted fw-medium">{t('profilePage.lastNameLabel', 'Họ')}:</Col><Col sm={8}>{currentUser?.lastName || 'N/A'}</Col></Row>
+                <Row className="mb-3"><Col sm={4} className="text-muted fw-medium">{t('profilePage.phoneLabel', 'Số điện thoại')}:</Col><Col sm={8}>{currentUser?.phone || 'N/A'}</Col></Row>
+                <Row className="mb-3"><Col sm={4} className="text-muted fw-medium">{t('profilePage.addressLabel', 'Địa chỉ')}:</Col><Col sm={8}>{currentUser?.address || 'N/A'}</Col></Row>
+                <Row className="mb-3"><Col sm={4} className="text-muted fw-medium">{t('profilePage.dobLabel', 'Ngày sinh')}:</Col><Col sm={8}>{formatDate(currentUser?.dateOfBirth)}</Col></Row>
                 <div className="mt-2 pt-4 border-top d-flex gap-3">
                   <Button variant="outline-success" onClick={() => {
                     // Reset form về giá trị hiện tại trước khi bật edit
@@ -227,62 +189,42 @@ function ProfilePage() {
                     setError(''); // Xóa lỗi cũ khi bắt đầu edit
                     setSuccess('');// Xóa success cũ
                   }} className="custom-password-button">
-                    Cập nhật thông tin
+                    <PencilSquare className="me-1" /> {t('profilePage.updateButton', 'Cập nhật thông tin')}
                   </Button>
                   <Button
                     variant="outline-primary"
                     className="custom-password-button"
                     onClick={() => setShowChangePasswordModal(true)}
                   >
-                    <Lock className="me-1" /> Đổi mật khẩu
+                    <Lock className="me-1" /> {t('profilePage.changePasswordButton', 'Đổi mật khẩu')}
                   </Button>
                 </div>
               </div>
             ) : (
               // --- Chế độ sửa ---
               <Form onSubmit={handleSubmit(onSubmit)}>
-                {/* Username và Email không cho sửa */}
-                <p><strong className="text-muted fw-medium">Tên đăng nhập:</strong> {currentUser?.username}</p>
-                <p><strong className="text-muted fw-medium">Email:</strong> {currentUser?.email}</p>
+                <p><strong className="text-muted fw-medium">{t('profilePage.usernameLabel', 'Tên đăng nhập')}:</strong> {currentUser?.username}</p>
+                <p><strong className="text-muted fw-medium">{t('profilePage.emailLabel', 'Email')}:</strong> {currentUser?.email}</p>
                 <hr className="my-3" />
-
                 <Row>
                   <Form.Group as={Col} md={6} className="mb-3" controlId="profileFirstName">
-                    <Form.Label>Tên</Form.Label>
+                    <Form.Label>{t('profilePage.firstNameLabel', 'Tên')}</Form.Label>
                     <Form.Control type="text" {...register("firstName")} isInvalid={!!errors.firstName} />
                     <Form.Control.Feedback type="invalid">{errors.firstName?.message}</Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group as={Col} md={6} className="mb-3" controlId="profileLastName">
-                    <Form.Label>Họ</Form.Label>
+                    <Form.Label>{t('profilePage.lastNameLabel', 'Họ')}</Form.Label>
                     <Form.Control type="text" {...register("lastName")} isInvalid={!!errors.lastName} />
                     <Form.Control.Feedback type="invalid">{errors.lastName?.message}</Form.Control.Feedback>
                   </Form.Group>
                 </Row>
-
-                <Form.Group className="mb-3" controlId="profilePhone">
-                  <Form.Label>Số điện thoại</Form.Label>
-                  <Form.Control type="tel" {...register("phone")} isInvalid={!!errors.phone} />
-                  <Form.Control.Feedback type="invalid">{errors.phone?.message}</Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="profileAddress">
-                  <Form.Label>Địa chỉ</Form.Label>
-                  <Form.Control type="text" {...register("address")} isInvalid={!!errors.address} />
-                  <Form.Control.Feedback type="invalid">{errors.address?.message}</Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="profileDateOfBirth">
-                  <Form.Label>Ngày sinh</Form.Label>
-                  <Form.Control type="date" {...register("dateOfBirth")} isInvalid={!!errors.dateOfBirth} />
-                  <Form.Control.Feedback type="invalid">{errors.dateOfBirth?.message}</Form.Control.Feedback>
-                </Form.Group>
-
+                <Form.Group className="mb-3" controlId="profilePhone"><Form.Label>{t('profilePage.phoneLabel', 'Số điện thoại')}</Form.Label><Form.Control type="tel" {...register("phone")} isInvalid={!!errors.phone} /></Form.Group>
+                <Form.Group className="mb-3" controlId="profileAddress"><Form.Label>{t('profilePage.addressLabel', 'Địa chỉ')}</Form.Label><Form.Control type="text" {...register("address")} isInvalid={!!errors.address} /></Form.Group>
+                <Form.Group className="mb-3" controlId="profileDateOfBirth"><Form.Label>{t('profilePage.dobLabel', 'Ngày sinh')}</Form.Label><Form.Control type="date" {...register("dateOfBirth")} isInvalid={!!errors.dateOfBirth} /></Form.Group>
                 <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-                  <Button variant="secondary" type="button" onClick={() => { setIsEditing(false); setError(''); setSuccess(''); fetchProfile(); /* Fetch lại để hủy thay đổi */ }}>
-                    Hủy
-                  </Button>
+                  <Button variant="secondary" type="button" onClick={() => { setIsEditing(false); setError(''); setSuccess(''); fetchProfile(); }}>{t('common.cancel', 'Hủy')}</Button>
                   <Button variant="success" type="submit" disabled={loading || !isDirty}>
-                    {loading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Lưu'}
+                    {loading ? <Spinner as="span" animation="border" size="sm" /> : t('common.save', 'Lưu')}
                   </Button>
                 </div>
               </Form>

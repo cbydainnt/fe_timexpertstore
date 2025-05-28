@@ -9,11 +9,14 @@ import { ArrowLeft, StarFill, Upload, Trash } from 'react-bootstrap-icons';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
+import { useTranslation } from 'react-i18next';
+
 // Animation variants
 const pageVariants = { initial: { opacity: 0, y: 20 }, in: { opacity: 1, y: 0 }, out: { opacity: 0, y: -20 } };
 const pageTransition = { duration: 0.3 };
 
 function AdminProductFormPage() {
+    const { t } = useTranslation();
     const { productId } = useParams();
     const navigate = useNavigate();
     const isEditMode = Boolean(productId);

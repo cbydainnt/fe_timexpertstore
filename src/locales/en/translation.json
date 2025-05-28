@@ -16,10 +16,10 @@
   },
   "header": {
     "searchPlaceholder": "Search products...",
-    "home": "Home",
-    "products": "Products",
-    "categories": "Categories",
-    "contact": "Contact",
+    "home": "HOME",
+    "products": "PRODUCTS",
+    "categories": "CATEGORIES",
+    "contact": "CONTACT",
     "about": "About Us",
     "login": "Login",
     "register": "Register",
@@ -28,7 +28,9 @@
     "favorites": "Favorites",
     "cart": "Cart",
     "adminDashboard": "Admin Dashboard",
-    "language": "Language"
+    "language": "Language",
+    "loggedInAs": "Logged in as",
+    "myOrders": "My orders"
   },
   "footer": {
     "companyName": "Your Company Name",
@@ -51,14 +53,33 @@
   "registerPage": {
     "title": "Register",
     "usernameLabel": "Username",
+    "usernamePlaceholder": "Enter your username",
     "emailLabel": "Email",
+    "emailPlaceholder": "Enter your email",
     "passwordLabel": "Password",
-    "confirmPasswordLabel": "Confirm Password",
-    "firstNameLabel": "First Name",
-    "lastNameLabel": "Last Name",
-    "registerButton": "Register",
+    "passwordPlaceholder": "Create a password",
+    "confirmPasswordLabel": "Confirm password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "firstNameLabel": "First name",
+    "firstNamePlaceholder": "Your first name",
+    "lastNameLabel": "Surname",
+    "lastNamePlaceholder": "Your surname",
+    "submitButton": "Create account",
     "hasAccount": "Already have an account?",
-    "loginNow": "Login now"
+    "loginNow": "Login",
+    "successMessage": "Registration successful! You can now log in.",
+    "errorMessage": "Registration failed. Please try again..",
+    "validation": {
+      "usernameRequired": "Username is required",
+      "usernameMinLength": "Username must be at least 3 characters",
+      "usernameMaxLength": "Username cannot exceed 50 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match"
+    }
   },
   "productsPage": {
     "title": "All Products",
@@ -75,6 +96,8 @@
     "noProductsFound": "No products found."
   },
   "productDetailPage": {
+    "backToList": "Back to List",
+    "specsTitle": "Technical Specifications",
     "brand": "Brand",
     "model": "Model",
     "movement": "Movement",
@@ -85,51 +108,112 @@
     "description": "Product Description",
     "price": "Price",
     "stock": "{{count}} items in stock",
+    "barcode": "Barcode",
     "outOfStock": "Out of Stock",
     "addToCart": "Add to Cart",
+    "notFound": "Product not found.",
+    "noDescription": "No description available.",
+    "quantityLabel": "Quantity",
     "buyNow": "Buy Now",
     "addedToCart": "Added to cart!",
-    "errorAddingToCart": "Error adding to cart."
+    "errorAddingToCart": "Error adding to cart.",
+    "outOfStockAlert": "This product is currently out of stock.",
+    "stockWarning": "Only {{stock}} products left.",
+    "stockWarningToast": "Only {{stock}} products left.",
+    "outOfStockToast": "Product is out of stock.",
+    "loginForFavorite": "Please login to use the wishlist feature.",
+    "removedFromFavorites": "Removed from favorites.",
+    "addedToFavorites": "Added to favorites!",
+    "favoriteActionFailed": "Favorite action failed."
   },
   "cartPage": {
-    "title": "Your Shopping Cart",
-    "emptyCart": "Your cart is currently empty.",
-    "product": "Product",
-    "price": "Price",
-    "quantity": "Quantity",
-    "total": "Total",
-    "subtotal": "Subtotal",
-    "proceedToCheckout": "Proceed to Checkout",
-    "continueShopping": "Continue Shopping",
-    "itemRemoved": "Item removed from cart."
+    "title": "Cart",
+    "emptyCartTitle": "Your cart is empty",
+    "emptyCartMessage": "Looks like you haven't added anything to your cart yet..",
+    "continueShopping": "Continue shopping",
+    "confirmRemoveItem": "Remove \"{{productName}}\" from your cart?",
+    "confirmDeleteSelected": "Are you sure you want to delete the selected {{count}} items?",
+    "selectedItemsRemoved": "Selected items deleted.",
+    "errorRemovingSelected": "Could not delete all selected items. Please try again..",
+    "table": {
+      "product": "Product",
+      "quantity": "Quantity",
+      "amount": "Amount",
+      "actions": "Operation"
+    },
+    "summary": {
+      "selectAll": "Select All ({{count}})",
+      "deleteSelected": "Delete",
+      "saveToFavorites": "Save to Favorites",
+      "totalForItems": "Total ({{count}} Products):",
+      "proceedToCheckout": "Proceed to order",
+      "unitPrice": "Unit price"
+    }
   },
   "checkoutPage": {
-      "title": "Checkout",
-      "shippingAddress": "Shipping Address",
-      "fullName": "Full Name",
-      "phoneNumber": "Phone Number",
-      "address": "Detailed Address",
-      "paymentMethod": "Payment Method",
-      "cashOnDelivery": "Cash on Delivery (COD)",
-      "vnpay": "Pay with VNPAY",
-      "orderSummary": "Order Summary",
-      "totalItems": "Total Items",
-      "totalAmount": "Total Amount",
-      "placeOrder": "Place Order"
+    "title": "Checkout",
+    "shippingInfo": {
+      "title": "Delivery information",
+      "nameLabel": "Recipient name",
+      "phoneLabel": "Phone number",
+      "addressLabel": "Address",
+      "notesLabel": "Notes (optional)"
+    },
+    "paymentMethod": {
+      "title": "Payment method",
+      "cod": "Cash on Delivery (COD)",
+      "vnpay": "Payment via VNPay"
+    },
+    "orderSummary": {
+      "title": "Order summary",
+      "quantity": "Quantity",
+      "noItemsSelected": "No products selected",
+      "subtotal": "Total product",
+      "shippingFee": "Shipping fee",
+      "grandTotal": "Total",
+      "placeOrderButton": "Place Order",
+      "backToCartLink": "Back to cart"
+    },
+    "validation": {
+      "nameRequired": "Recipient name is required",
+      "phoneRequired": "Phone number is required",
+      "addressRequired": "Address is required"
+    },
+    "toasts": {
+      "noItemsToCheckout": "There are no products to checkout. Please add products to cart.",
+      "orderSuccess": "Order successful! Thank you for shopping!.",
+      "orderError": "Order failed. Please try again.."
+    }
   },
   "profilePage": {
     "title": "My Profile",
-    "updateProfile": "Update Profile",
-    "changePassword": "Change Password",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "username": "Username",
-    "phone": "Phone",
-    "address": "Address",
-    "dateOfBirth": "Date of Birth",
-    "profileUpdatedSuccess": "Profile updated successfully.",
-    "profileUpdatedError": "Error updating profile."
+    "errorLoadingProfile": "Unable to load profile data.",
+    "errorLoadingProfileRetry": "Unable to load user profile. Please try logging in again.",
+    "updateSuccess": "Information updated successfully!",
+    "updateError": "Update information failed.",
+    "usernameLabel": "Username",
+    "emailLabel": "Email",
+    "firstNameLabel": "First name",
+    "lastNameLabel": "Surname",
+    "phoneLabel": "Phone number",
+    "addressLabel": "Address",
+    "dobLabel": "Date of birth",
+    "updateButton": "Update Profile",
+    "changePasswordButton": "Change password"
+  },
+  "changePasswordModal": {
+    "title": "Change password",
+    "currentPasswordLabel": "Current password",
+    "currentPasswordRequired": "Current password is required",
+    "newPasswordLabel": "New password",
+    "newPasswordRequired": "New password is required",
+    "newPasswordMinLength": "Password must be at least 6 characters",
+    "confirmPasswordLabel": "Confirm new password",
+    "confirmPasswordRequired": "Please confirm new password",
+    "passwordMismatch": "New password does not match",
+    "submitButton": "Confirm",
+    "successMessage": "Password changed successfully!",
+    "errorMessage": "Password change failed. Please try again."
   },
   "toastMessages": {
     "loginSuccess": "Login successful!",
@@ -147,5 +231,154 @@
     "errorFetchingProductDetail": "Error fetching product details!",
     "errorFetchingCart": "Error fetching cart!",
     "errorFetchingOrders": "Error fetching order history!"
+  },
+  "homePage": {
+    "featuredProducts": "FEATURED PRODUCTS",
+    "noFeaturedProducts": "There are currently no featured products.",
+    "viewAllProducts": "View All Products",
+    "whyChooseUs": {
+      "title": "WHY CHOOSE US",
+      "item1": {
+        "title": "Genuine",
+        "text": "100% genuine product commitment, clear origin."
+      },
+      "item2": {
+        "title": "2 Year Warranty",
+        "text": "Peace of mind with long-term, reputable warranty policy."
+      },
+      "item3": {
+        "title": "Free Shipping",
+        "text": "Fast, free shipping nationwide."
+      }
+    },
+    "luxuryPromo": {
+      "title": "LUXURY PRIVILEGES",
+      "subtitle": "Special offers and limited collections exclusively for TimeXpert's loyal customers.",
+      "button": "View",
+      "alt": "Luxury Collection"
+    },
+    "banner1": {
+      "title": "THE ESSENCE OF TIME",
+      "subtitle": "Discover classy and sophisticated watches",
+      "button": "Explore Collection"
+    },
+    "banner2": {
+      "title": "NEW COLLECTION",
+      "subtitle": "Modern style, timeless class",
+      "button": "View Collection"
+    },
+    "banner3": {
+      "title": "YEAR END SALE",
+      "subtitle": "Time makes class – Define your style with each watch",
+      "button": "Buy Now"
+    }
+  },
+  "contactPage": {
+    "title": "Contact Us",
+    "intro": "If you have any questions or need assistance, please fill out the form below or contact us directly via:",
+    "addressLabel": "Address",
+    "addressValue": "39 Thi Sach Street, Pham Dinh Ho Ward, Hai Ba Trung District, Hanoi City",
+    "phoneLabel": "Phone",
+    "phoneValue": "028 3456 8899",
+    "emailLabel": "Email",
+    "emailValue": "support@timexpert.vn",
+    "form": {
+      "nameLabel": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Enter your message",
+      "submitButton": "Send"
+    },
+    "imageAlt": "Luxury Watch"
+  },
+  "forgotPasswordPage": {
+    "title": "Forgot password",
+    "emailLabel": "Enter your registered Email.",
+    "emailPlaceholder": "Email address",
+    "submitButton": "Send OTP Code",
+    "backToLogin": "Go back to Login",
+    "errorMessage": "OTP sending failed. Please check your email address again..",
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address"
+    }
+  },
+  "resetPasswordPage": {
+    "title": "Reset password",
+    "invalidAccess": "Invalid access. Please request a password reset..",
+    "emailLabel": "Email",
+    "otpLabel": "OTP Code",
+    "otpPlaceholder": "Enter 6 digit OTP",
+    "newPasswordLabel": "New password",
+    "newPasswordPlaceholder": "Enter a new password",
+    "confirmPasswordLabel": "Confirm new password",
+    "confirmPasswordPlaceholder": "Re-enter new password",
+    "submitButton": "Reset password",
+    "backToLogin": "Go back to Login",
+    "goToLogin": "Go to Login",
+    "successMessage": "Your password has been reset successfully! Redirecting to login...",
+    "errorMessage": "Unable to reset password. OTP may be invalid or expired..",
+    "invalidAccessWarning": "Invalid access. Please request a password reset first.",
+    "validation": {
+      "otpRequired": "OTP code is required",
+      "otpLength": "OTP must have 6 digits",
+      "otpPattern": "OTP must be 6 digits",
+      "newPasswordRequired": "New password is required",
+      "newPasswordMinLength": "Password must be at least 6 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Password do not match"
+    }
+  },
+  "stockBadge": {
+    "checking": "Checking...",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock"
+  },
+  "orderHistoryPage": {
+    "title": "Order history",
+    "errorFetching": "Unable to load order history.",
+    "noOrders": "You have no orders yet.",
+    "startShopping": "Start shopping!",
+    "ordersList": "List of orders",
+    "table": {
+      "stt": "No",
+      "orderDate": "Order time",
+      "totalAmount": "Total amount",
+      "status": "Status",
+      "actions": "Operation"
+    }
+  },
+  "orderStatus": { 
+    "PENDING": "Pending",
+    "PAID": "Paid",
+    "PROCESSING": "Processing",
+    "SHIPPED": "Shiped",
+    "COMPLETED": "Completed",
+    "CANCELED": "Canceled"
+  },
+  "sortOptionsBar": {
+    "sortByLabel": "Sort by:",
+    "relevance": "Fit",
+    "newest": "Latest",
+    "bestSelling": "Best Seller",
+    "price": "Price",
+    "priceLowToHigh": "Price: Low to High",
+    "priceHighToLow": "Price: High to Low",
+    "lowToHigh": "Low to High",
+    "highToLow": "High to Low",
+    "comingSoon": "Coming soon"
+  },
+   "chatWidget": {
+    "toggleButton": "Chat",
+    "title": "Online support",
+    "botTyping": "Bot is responding...",
+    "inputPlaceholder": "Enter your message..."
+  },
+    "notFoundPage": {
+    "title": "The page does not exist",
+    "message": "Sorry, we couldn't find the page you're looking for. The page may have been removed, renamed, or is temporarily unavailable.",
+    "backToHome": " Back to Homepage"
   }
 }
