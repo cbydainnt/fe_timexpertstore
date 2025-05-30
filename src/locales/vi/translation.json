@@ -11,15 +11,16 @@
     "viewDetails": "Xem chi tiết",
     "yes": "Có",
     "no": "Không",
+    "confirm": "Xác nhận",
     "confirmDeletionTitle": "Xác nhận xóa",
     "confirmDeletionMessage": "Bạn có chắc chắn muốn xóa mục này không?"
   },
   "header": {
     "searchPlaceholder": "Tìm kiếm sản phẩm...",
-    "home": "Trang Chủ",
-    "products": "Sản Phẩm",
-    "categories": "Danh Mục",
-    "contact": "Liên Hệ",
+    "home": "TRANG CHỦ",
+    "products": "SẢN PHẨM",
+    "categories": "DANH MỤC",
+    "contact": "LIÊN HỆ",
     "about": "Về Chúng Tôi",
     "login": "Đăng Nhập",
     "register": "Đăng Ký",
@@ -32,23 +33,41 @@
     "myOrders": "Đơn hàng của tôi",
     "language": "Ngôn ngữ"
   },
-  "footer": {
-    "companyName": "Tên Công Ty Của Bạn",
-    "allRightsReserved": "Đã đăng ký bản quyền."
+    "footer": {
+    "aboutUsTitle": "Về chúng tôi",
+    "aboutUsText": "Chúng tôi là cửa hàng đồng hồ uy tín với hơn 10 năm kinh nghiệm, cung cấp đồng hồ chính hãng đa dạng mẫu mã, dịch vụ tận tâm và giá cả hợp lý. Cam kết mang đến trải nghiệm đẳng cấp cho khách hàng.",
+    "storeAddressTitle": "Địa chỉ cửa hàng",
+    "storeMapIframeTitle": "Bản đồ vị trí cửa hàng Tinh Hoa Thời Gian",
+    "scrollToTopButton": "↑ Quay lên đầu",
+    "copyrightText": "© {{currentYear}} TimeXpert. Mọi quyền được bảo lưu.",
+    "projectCreditText": "Đồ án tốt nghiệp của {{Thành}}"
   },
   "loginPage": {
     "title": "Đăng Nhập",
-    "usernameLabel": "Tên đăng nhập hoặc Email",
-    "usernamePlaceholder": "Nhập tên đăng nhập hoặc email",
+    "usernameLabel": "Tên đăng nhập",
+    "usernamePlaceholder": "Nhập tên đăng nhập của bạn",
     "passwordLabel": "Mật khẩu",
-    "passwordPlaceholder": "Nhập mật khẩu",
-    "rememberMe": "Nhớ mật khẩu",
-    "forgotPassword": "Quên mật khẩu?",
-    "loginButton": "Đăng Nhập",
-    "orDivider": "HOẶC",
-    "loginWithGoogle": "Đăng nhập với Google",
-    "noAccount": "Chưa có tài khoản?",
-    "registerNow": "Đăng ký ngay"
+    "passwordPlaceholder": "Nhập mật khẩu của bạn",
+    "rememberMeLabel": "Nhớ mật khẩu",
+    "forgotPasswordLink": "Quên mật khẩu?",
+    "loginButtonText": "Đăng nhập",
+    "loadingButtonText": "Đang xử lý...",
+    "orDividerText": "HOẶC",
+    "loginWithGoogleButtonText": "Đăng nhập với Google",
+    "noAccountPrompt": "Chưa có tài khoản?",
+    "registerLinkText": "Đăng ký ngay!",
+    "tooltips": {
+      "showPassword": "Hiện mật khẩu",
+      "hidePassword": "Ẩn mật khẩu"
+    },
+    "validation": {
+      "usernameRequired": "Tên đăng nhập không được để trống.",
+      "passwordRequired": "Mật khẩu không được để trống."
+    },
+    "toastMessages": {
+      "loginSuccess": "Đăng nhập thành công!",
+      "loginErrorGeneric": "Tên đăng nhập hoặc mật khẩu không chính xác. Vui lòng thử lại."
+    }
   },
   "registerPage": {
     "title": "Đăng Ký",
@@ -80,20 +99,6 @@
       "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu của bạn",
       "passwordMismatch": "Mật khẩu không khớp"
     }
-  },
-  "productsPage": {
-    "title": "Tất Cả Sản Phẩm",
-    "filter": "Bộ lọc",
-    "sortBy": "Sắp xếp theo",
-    "sortOptions": {
-      "default": "Mặc định",
-      "nameAsc": "Tên (A-Z)",
-      "nameDesc": "Tên (Z-A)",
-      "priceAsc": "Giá (Tăng dần)",
-      "priceDesc": "Giá (Giảm dần)",
-      "newest": "Mới nhất"
-    },
-    "noProductsFound": "Không tìm thấy sản phẩm nào."
   },
   "productDetailPage": {
     "brand": "Thương hiệu",
@@ -368,15 +373,196 @@
     "highToLow": "Cao đến Thấp",
     "comingSoon": "Sắp có"
   },
-   "chatWidget": {
+  "chatWidget": {
     "toggleButton": "Chat",
     "title": "Hỗ trợ trực tuyến",
     "botTyping": "Bot đang trả lời...",
     "inputPlaceholder": "Nhập tin nhắn của bạn..."
   },
-    "notFoundPage": {
+  "notFoundPage": {
     "title": "Trang không tồn tại",
     "message": "Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Trang có thể đã bị xóa, đổi tên hoặc tạm thời không có sẵn.",
     "backToHome": "Quay về Trang chủ"
+  },
+  "orderDetailPage": {
+    "title": "Chi tiết đơn hàng #{{orderId}}",
+    "backToHistory": "Lịch sử đặt hàng",
+    "orderTime": "Thời gian đặt hàng: {{time}}",
+    "totalAmount": "Tổng cộng: {{amount}}",
+    "paymentInfoTitle": "Thông tin thanh toán",
+    "paymentMethodLabel": "Phương thức:",
+    "transactionIdLabel": "Mã giao dịch:",
+    "statusLabel": "Trạng thái:",
+    "shippingInfoTitle": "Thông tin người nhận",
+    "receiverNameLabel": "Người nhận:",
+    "phoneLabel": "Điện thoại:",
+    "addressLabel": "Địa chỉ:",
+    "notesLabel": "Ghi chú:",
+    "productsTitle": "Sản phẩm trong đơn",
+    "productColumn": "Sản phẩm",
+    "quantityColumn": "Số lượng",
+    "priceColumn": "Đơn giá",
+    "subtotalColumn": "Thành tiền",
+    "noProducts": "Không tìm thấy sản phẩm trong đơn hàng này.",
+    "shippingFeeTitle": "Phí vận chuyển",
+    "finalTotal": "Tổng cộng thanh toán: {{amount}}",
+    "reorderButton": "Đặt lại đơn",
+    "reorderLoadingButton": "Đang xử lý...",
+    "viewInvoiceButton": "Xem Hóa Đơn",
+    "cancelOrderButton": "Hủy đơn hàng",
+    "alerts": {
+      "invalidOrderId": "Mã đơn hàng không hợp lệ.",
+      "permissionDenied": "Bạn không có quyền xem đơn hàng này.",
+      "loadFailed": "Không thể tải chi tiết đơn hàng.",
+      "notFound": "Đơn hàng không được tìm thấy.",
+      "cancelSuccess": "Đơn hàng đã được hủy thành công.",
+      "cancelFailed": "Hủy đơn hàng thất bại. Vui lòng liên hệ hỗ trợ nếu vấn đề tiếp diễn.",
+      "reorderNoItems": "Không thể đặt lại, không tìm thấy sản phẩm nào trong đơn hàng này.",
+      "reorderSuccess": "{{count}} sản phẩm từ đơn hàng này đã được thêm lại vào giỏ hàng của bạn.",
+      "reorderPartialSuccess": "{{successCount}} sản phẩm đã thêm lại vào giỏ. {{failCount}} sản phẩm thất bại.",
+      "reorderFailed": "Không thể thêm bất kỳ sản phẩm nào trở lại giỏ hàng."
+    }
+  },
+  "cancellationReasonModal": {
+    "prompt": "Vui lòng cho chúng tôi biết lý do bạn muốn hủy đơn hàng này:",
+    "reasons": {
+      "changeMind": "Thay đổi ý định",
+      "betterPrice": "Tìm thấy nơi khác giá tốt hơn",
+      "longDelivery": "Thời gian giao hàng dự kiến quá lâu",
+      "wrongInfo": "Nhập sai thông tin (địa chỉ, SĐT,...)",
+      "wrongProduct": "Đặt nhầm sản phẩm",
+      "other": "Khác (ghi rõ)"
+    },
+    "otherReasonPlaceholder": "Vui lòng nêu rõ lý do của bạn...",
+    "submitButton": "Xác nhận hủy",
+    "submittingButton": "Đang hủy...",
+    "cancelButton": "Không, quay lại",
+    "validation": {
+      "reasonRequired": "Vui lòng chọn hoặc cung cấp lý do hủy."
+    },
+    "back": "Quay lại",
+    "thisProduct": "sản phẩm này",
+    "product": "Sản phẩm"
+  },
+  "categoryPage": {
+    "title": "Khám Phá Danh Mục Sản Phẩm",
+    "loadingError": "Không thể tải danh mục. Vui lòng thử lại sau.",
+    "noCategoriesFound": "Hiện tại không có danh mục nào để hiển thị.",
+    "defaultCategoryDescription": "Mô tả danh mục sản phẩm",
+    "viewProductsButton": "Xem Sản Phẩm"
+  },
+  "favoritesPage": {
+    "title": "Sản Phẩm Yêu Thích Của Tôi",
+    "loadingError": "Không thể tải danh sách sản phẩm yêu thích. Vui lòng thử lại sau.",
+    "confirmRemoveMessage": "Bạn có chắc chắn muốn xóa \"{{productName}}\" khỏi danh sách yêu thích không?",
+    "removedSuccessToast": "\"{{productName}}\" đã được xóa khỏi danh sách yêu thích.",
+    "removeErrorToast": "Lỗi khi xóa \"{{productName}}\" khỏi yêu thích. Vui lòng thử lại.",
+    "noFavoritesMessage": "Bạn chưa có sản phẩm yêu thích nào.",
+    "exploreProductsLinkText": "Khám phá ngay!"
+  },
+  "productsPage": {
+    "titleDefault": "Tất Cả Sản Phẩm",
+    "titleSearchResults": "Kết quả tìm kiếm cho \"{{searchTerm}}\"",
+    "titleByCategory": "Sản phẩm trong Danh mục: {{categoryName}}",
+    "titleByCategoryId": "Sản phẩm theo Mã Danh mục: {{categoryId}}",
+    "loadingCategoryName": "Đang tải tên danh mục...",
+    "errorLoadingProducts": "Không thể tải danh sách sản phẩm. Vui lòng thử lại.",
+    "errorLoadingCategory": "Mã danh mục '{{categoryId}}' không hợp lệ hoặc không tìm thấy.",
+    "errorLoadingFavorites": "Không thể tải danh sách sản phẩm yêu thích.",
+    "noProductsFound": "Không tìm thấy sản phẩm nào phù hợp với tiêu chí của bạn.",
+    "clearFiltersButton": "Xóa bộ lọc",
+    "backToHomeLink": "Về trang chủ",
+    "toggleFilterShowTooltip": "Hiện Bộ lọc",
+    "toggleFilterHideTooltip": "Ẩn Bộ lọc",
+    "filterButtonTextShow": "Bộ lọc",
+    "filterButtonTextHide": "Ẩn Bộ lọc"
+  },
+  "productCard": {
+    "toasts": {
+        "loginToAddCart": "Vui lòng đăng nhập để thêm vào giỏ hàng.",
+        "outOfStock": "Sản phẩm hiện đã hết hàng.",
+        "loginToFavorite": "Vui lòng đăng nhập để sử dụng chức năng yêu thích.",
+        "removedFromFavorites": "\"{{productName}}\" đã được xoá khỏi yêu thích.",
+        "addedToFavorites": "\"{{productName}}\" đã được thêm vào yêu thích!",
+        "favoriteActionFailed": "Thao tác yêu thích thất bại."
+    },
+    "productImageAlt": "Ảnh của {{productName}}" ,
+    "itemAddedToCart": "Đã thêm \"{{itemName}}\" vào giỏ hàng!"
+
+    ,
+    "buttons": {
+        "removeFromFavoritesTitle": "Xóa khỏi Yêu thích",
+        "unfavoriteTitle": "Bỏ yêu thích",
+        "favoriteTitle": "Yêu thích",
+        "addToCart": "Thêm vào giỏ"
+    },
+    "defaultCategoryName": "Chưa phân loại" 
+  },
+  "productFilter": {
+    "title": "Bộ lọc Sản phẩm",
+    "resetButton": "Đặt lại",
+    "applyButton": "Lọc",
+    "allCategoriesOption": "Tất cả Danh mục",
+    "sections": { 
+      "category": "Danh mục",
+      "priceRange": "Khoảng giá (VND)",
+      "brand": "Thương hiệu",
+      "movement": "Loại máy",
+      "caseMaterial": "Chất liệu vỏ",
+      "strapMaterial": "Chất liệu dây",
+      "dialColor": "Màu mặt số",
+      "waterResistance": "Khả năng chống nước"
+    },
+    "minPricePlaceholder": "Giá tối thiểu",
+    "maxPricePlaceholder": "Giá tối đa",
+    "minPriceAriaLabel": "Giá tối thiểu",
+    "maxPriceAriaLabel": "Giá tối đa",
+    "brandPlaceholder": "VD: Rolex, Seiko",
+    "brandAriaLabel": "Lọc theo thương hiệu",
+    "allOptionDefault": "Tất cả", 
+    "filterByAriaLabel": "Lọc theo {{label}}",
+    "waterResistanceNotSpecified": "Không được chỉ định", 
+    "consoleErrorLoadingCategories": "Lỗi tải danh mục cho bộ lọc:",
+    "consoleWarnInvalidPrice": "Giá trị nhập vào cho giá không hợp lệ:"
+  },
+   "invoicePage": {
+    "loadingText": "Đang tải hóa đơn...",
+    "errorInvalidOrderId": "Mã đơn hàng không hợp lệ.",
+    "errorLoadFailed": "Không thể tải dữ liệu hóa đơn. Vui lòng thử lại.",
+    "alertNoInvoiceData": "Không có dữ liệu hóa đơn cho đơn hàng này.",
+    "backToOrderDetailsLink": "Quay lại Chi tiết Đơn hàng",
+    "downloadPdfButton": "Tải Hóa Đơn (PDF)",
+    "printInvoiceButton": "In Hóa Đơn",
+    "backButton": "Quay lại",
+    "mainTitle": "HÓA ĐƠN BÁN HÀNG",
+    "invoiceNumberLabel": "Số HĐ:",
+    "storeNameDefault": "Cửa hàng TimeXpert",
+    "logoAlt": "Logo TimeXpert",
+    "storeInfoTitle": "Thông tin Cửa hàng:",
+    "customerInfoTitle": "Thông tin Khách hàng:",
+    "storeAddressDefault": "39 Phố Thi Sách, P. Phạm Đình Hổ, Q. Hai Bà Trưng, TP Hà Nội",
+    "storePhoneDefault": "028 3456 8899",
+    "storeEmailDefault": "support@timexpert.vn",
+    "customerNameLabel": "Khách hàng:", 
+    "customerAddressLabel": "Địa chỉ:",
+    "customerPhoneLabel": "Điện thoại:",
+    "customerEmailLabel": "Email:",
+    "dataNotAvailable": "Chưa cung cấp",
+    "invoiceDateLabel": "Ngày xuất hóa đơn:",
+    "originalOrderIdLabel": "Mã đơn hàng gốc:",
+    "orderTimeLabel": "Thời gian đặt hàng:",
+    "table": {
+      "headerNumber": "#",
+      "headerProductName": "Tên sản phẩm",
+      "headerQuantity": "SL", 
+      "headerUnitPrice": "Đơn giá",
+      "headerTotalPrice": "Thành tiền"
+    },
+    "grandTotalLabel": "TỔNG CỘNG THANH TOÁN:",
+    "paymentMethodLabel": "Phương thức thanh toán:",
+    "orderNotesLabel": "Ghi chú đơn hàng:",
+    "footerThanks": "Cảm ơn quý khách đã tin tưởng và mua sắm tại {{storeName}}!",
+    "footerGeneratedNote": "(Đây là hóa đơn điện tử được tạo tự động)",
+    "errorFetchingCustomer": "Không thể tải thông tin khách hàng cho hóa đơn này."
   }
 }

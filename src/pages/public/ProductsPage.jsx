@@ -2,14 +2,11 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-// Import Bootstrap components
-import { Row, Col, Pagination as BsPagination, Spinner, Alert, Container, Button } from 'react-bootstrap';
-// Import services
+import { Row, Col, Pagination as BsPagination, Alert, Container, Button } from 'react-bootstrap'; // Spinner không dùng trực tiếp ở đây nữa
 import { getProducts } from '../../services/productService';
 import { getCategoryById } from '../../services/categoryService';
 import { getFavoriteProductIds } from '../../services/favoriteService';
 import { useAuthStore } from '../../store/authStore';
-// Import components
 import ProductCard from '../../components/products/ProductCard';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ProductFilter from '../../components/products/ProductFilter';
@@ -17,12 +14,14 @@ import SortOptionsBar from '../../components/products/SortOptionsBar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FilterCircle, XCircle } from 'react-bootstrap-icons';
 import '../../styles/products-page.css';
+import { useTranslation } from 'react-i18next'; // << THÊM IMPORT
 
-// Animation variants
 const pageVariants = { initial: { opacity: 0, y: 20 }, in: { opacity: 1, y: 0 }, out: { opacity: 0, y: -20 } };
 const pageTransition = { duration: 0.3 };
 const MotionCol = motion(Col);
+
 function ProductsPage() {
+  const { t } = useTranslation(); // << SỬ DỤNG HOOK
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,17 +31,14 @@ function ProductsPage() {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loadingCategory, setLoadingCategory] = useState(false);
+  const [isFilterVisible, setIsFilterVisible] = useState(true); // Mặc định hiển thị filter trên desktop
 
-  const [isFilterVisible, setIsFilterVisible] = useState(true);
-
-  const itemsPerPage = 12; // Số sản phẩm mỗi trang
-
+  const itemsPerPage = 12;
   const { isAuthenticated } = useAuthStore();
   const [favoriteProductIds, setFavoriteProductIds] = useState([]);
 
-  // Đọc các tham số từ URL
-  const categoryId = searchParams.get('categoryId');
-  const searchTerm = searchParams.get('name');
+  const categoryIdFromUrl = searchParams.get('categoryId'); // Đổi tên để tránh trùng lặp
+  const searchTermFromUrl = searchParams.get('name'); // Đổi tên
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -51,14 +47,12 @@ function ProductsPage() {
         const ids = await getFavoriteProductIds();
         setFavoriteProductIds(ids);
       } catch (err) {
-        console.error("Không thể tải sản phẩm yêu thích:", err);
+        console.error(t('productsPage.errorLoadingFavorites'), err); // Dịch log lỗi
       }
     };
-
     fetchFavorites();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, t]);
 
-  // Hàm fetch Category Name
   const fetchCategoryName = useCallback(async () => {
     const catId = searchParams.get('categoryId');
     if (catId && !isNaN(parseInt(catId))) {
@@ -68,17 +62,14 @@ function ProductsPage() {
         setSelectedCategory(response.data);
       } catch (err) {
         console.error(`Error fetching category ${catId}:`, err);
-        setError(`Category ID ${catId} may be invalid.`); // Set lỗi nếu không tìm thấy category
+        setError(t('productsPage.errorLoadingCategory', { categoryId: catId }));
         setSelectedCategory(null);
       } finally { setLoadingCategory(false); }
     } else { setSelectedCategory(null); }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
-  // Hàm fetch Products
   const fetchProducts = useCallback(async () => {
     setLoading(true);
-    // Chỉ reset lỗi fetch product, giữ lỗi fetch category nếu có
-    // setError(null);
     try {
       const pageApiIndex = parseInt(searchParams.get('page') || '0');
       if (currentPage !== pageApiIndex + 1) { setCurrentPage(pageApiIndex + 1); }
@@ -103,31 +94,29 @@ function ProductsPage() {
       const response = await getProducts(filteredParams);
       setProducts(response.data?.content || []);
       setTotalPages(response.data?.totalPages || 0);
-      // Xóa lỗi nếu fetch thành công (chỉ xóa lỗi fetch product)
-      if (error && !error.toLowerCase().includes('category')) setError(null);
+      if (error && !error.toLowerCase().includes(t('productsPage.errorLoadingCategory', { categoryId: '' }).substring(0,10))) setError(null); // Chỉ xóa lỗi fetch product
 
     } catch (err) {
       console.error("Error fetching products:", err);
-      if (!error || !error.toLowerCase().includes('category')) { // Chỉ set lỗi fetch product nếu chưa có lỗi category
-        setError(err.response?.data?.message || 'Failed to load products.');
+      if (!error || !error.toLowerCase().includes(t('productsPage.errorLoadingCategory', { categoryId: '' }).substring(0,10))) {
+        setError(err.response?.data?.message || t('productsPage.errorLoadingProducts'));
       }
       setProducts([]); setTotalPages(0);
     } finally { setLoading(false); }
-  }, [searchParams, currentPage, error]); // Thêm error vào dependency
+  }, [searchParams, currentPage, error, t]);
 
   useEffect(() => { fetchCategoryName(); }, [fetchCategoryName]);
   useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
-  // Hàm xử lý chuyển trang
   const handlePageChange = (newPage) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set('page', String(newPage - 1));
     setSearchParams(newParams);
   };
 
-  // --- Pagination Logic ---
   let paginationItems = [];
   if (totalPages > 1) {
+    // ... (Giữ nguyên logic phân trang của bạn)
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPages, currentPage + 2);
     if (currentPage - 2 <= 0) { endPage = Math.min(totalPages, endPage + (2 - currentPage + 1)); }
@@ -142,15 +131,15 @@ function ProductsPage() {
     paginationItems.push(<BsPagination.Next key="next" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />);
     paginationItems.push(<BsPagination.Last key="last" onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />);
   }
-  // --- End Pagination Logic ---
 
-  // Xác định tiêu đề trang
-  let pageTitle = "Sản phẩm";
-  if (searchTerm) { pageTitle = `Kết quả tìm kiếm cho: "${searchTerm}"`; }
-  else if (selectedCategory) { pageTitle = `Danh mục: ${selectedCategory.name}`; }
-  else if (categoryId && loadingCategory) { pageTitle = "Đang tải danh mục..."; }
-  else if (categoryId && !selectedCategory && !error) { pageTitle = `Mã danh mục: ${categoryId}`; }
-  else if (!categoryId && !searchTerm) { pageTitle = "Sản phẩm"; }
+  let pageTitle = t('productsPage.titleDefault');
+  if (searchTermFromUrl) { pageTitle = t('productsPage.titleSearchResults', { searchTerm: searchTermFromUrl }); }
+  else if (selectedCategory) { pageTitle = t('productsPage.titleByCategory', { categoryName: selectedCategory.name }); }
+  else if (categoryIdFromUrl && loadingCategory) { pageTitle = t('productsPage.loadingCategoryName'); }
+  else if (categoryIdFromUrl && !selectedCategory && !error?.includes(t('productsPage.errorLoadingCategory', { categoryId: '' }).substring(0,10))) {
+      pageTitle = t('productsPage.titleByCategoryId', { categoryId: categoryIdFromUrl });
+  }
+
 
   const toggleFilterSidebar = () => setIsFilterVisible(!isFilterVisible);
 
@@ -158,32 +147,20 @@ function ProductsPage() {
     <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
       <Container fluid className="px-md-5 py-4">
         <Row>
-          {/* FILTER SIDEBAR */}
           <AnimatePresence initial={false}>
             {isFilterVisible && (
               <MotionCol
-                key="filter-sidebar"
-                md={4}
-                lg={3}
-                initial={{ opacity: 0, x: -100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.25 }}
+                key="filter-sidebar" md={4} lg={3}
+                initial={{ opacity: 0, x: -100 }} animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }} transition={{ duration: 0.25 }}
                 className="filter-column"
-                style={{
-                  position: 'sticky',
-                  top: '70px',
-                  height: 'calc(100vh - 70px)',
-                  overflowY: 'auto',
-                  zIndex: 2,
-                }}
+                style={{ position: 'sticky', top: '70px', height: 'calc(100vh - 70px)', overflowY: 'auto', zIndex: 2 }}
               >
-                <ProductFilter />
+                <ProductFilter /> {/* Giả định ProductFilter tự xử lý i18n */}
               </MotionCol>
             )}
           </AnimatePresence>
 
-          {/* MAIN CONTENT */}
           <Col
             md={isFilterVisible ? 8 : 12}
             lg={isFilterVisible ? 9 : 12}
@@ -192,30 +169,31 @@ function ProductsPage() {
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h1 className="h3 mb-0">{pageTitle}</h1>
               <Button
-                variant="outline-secondary"
-                size="sm"
-                className="d-none d-md-inline-block"
+                variant="outline-secondary" size="sm"
+                className="d-md-inline-block" // Luôn hiển thị trên md trở lên, có thể điều chỉnh cho mobile
                 onClick={toggleFilterSidebar}
-                title={isFilterVisible ? "Ẩn Bộ lọc" : "Hiện Bộ lọc"}
+                title={isFilterVisible ? t('productsPage.toggleFilterHideTooltip') : t('productsPage.toggleFilterShowTooltip')}
               >
                 {isFilterVisible ? <XCircle /> : <FilterCircle />}
                 <span className="ms-1 d-none d-lg-inline">
-                  {isFilterVisible ? "Ẩn Bộ lọc" : "Bộ lọc"}
+                  {isFilterVisible ? t('productsPage.filterButtonTextHide') : t('productsPage.filterButtonTextShow')}
                 </span>
               </Button>
             </div>
 
-            <SortOptionsBar />
+            <SortOptionsBar /> {/* Giả định SortOptionsBar tự xử lý i18n */}
 
-            {loading && <LoadingSpinner />}
+            {loading && <LoadingSpinner text={t('common.loading')} />}
             {error && !loading && <Alert variant="danger">{error}</Alert>}
 
             {!loading && !error && (
               <>
                 {products.length === 0 ? (
                   <Alert variant="info" className="text-center">
-                    Không tìm thấy sản phẩm nào phù hợp. <br />
-                    <Button variant="link" size="sm" onClick={() => setSearchParams({})}>Xóa bộ lọc</Button> hoặc <Link to="/">Về trang chủ</Link>.
+                    {t('productsPage.noProductsFound')} <br />
+                    <Button variant="link" size="sm" onClick={() => setSearchParams({})}>{t('productsPage.clearFiltersButton')}</Button>
+                    {t('loginPage.orDividerText').toLowerCase()}{' '} {/* Sử dụng key đã có và chuyển lowercase */}
+                    <Link to="/">{t('productsPage.backToHomeLink')}</Link>.
                   </Alert>
                 ) : (
                   <Row xs={1} sm={2} lg={isFilterVisible ? 3 : 4} className="g-4 mb-4">
@@ -235,11 +213,9 @@ function ProductsPage() {
             )}
           </Col>
         </Row>
-
       </Container>
     </motion.div>
   );
-
 }
 
 export default ProductsPage;

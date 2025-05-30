@@ -11,6 +11,7 @@
     "viewDetails": "View Details",
     "yes": "Yes",
     "no": "No",
+    "confirm": "Confirm",
     "confirmDeletionTitle": "Confirm Deletion",
     "confirmDeletionMessage": "Are you sure you want to delete this item?"
   },
@@ -32,23 +33,41 @@
     "loggedInAs": "Logged in as",
     "myOrders": "My orders"
   },
-  "footer": {
-    "companyName": "Your Company Name",
-    "allRightsReserved": "All rights reserved."
+   "footer": {
+    "aboutUsTitle": "About Us",
+    "aboutUsText": "We are a reputable watch store with over 10 years of experience, providing genuine watches with diverse models, dedicated service, and reasonable prices. Committed to delivering a classy customer experience.",
+    "storeAddressTitle": "Store Address",
+    "storeMapIframeTitle": "Tinh Hoa Thoi Gian Store Location Map",
+    "scrollToTopButton": "↑ Back to Top",
+    "copyrightText": "© {{currentYear}} TimeXpert. All rights reserved.",
+    "projectCreditText": "Graduation project by {{authorName}}"
   },
   "loginPage": {
     "title": "Login",
-    "usernameLabel": "Username or Email",
-    "usernamePlaceholder": "Enter username or email",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Enter your username",
     "passwordLabel": "Password",
-    "passwordPlaceholder": "Enter password",
-    "rememberMe": "Remember me",
-    "forgotPassword": "Forgot password?",
-    "loginButton": "Login",
-    "orDivider": "OR",
-    "loginWithGoogle": "Login with Google",
-    "noAccount": "Don't have an account?",
-    "registerNow": "Register now"
+    "passwordPlaceholder": "Enter your password",
+    "rememberMeLabel": "Remember me",
+    "forgotPasswordLink": "Forgot password?",
+    "loginButtonText": "Login",
+    "loadingButtonText": "Processing...",
+    "orDividerText": "OR",
+    "loginWithGoogleButtonText": "Continue with Google",
+    "noAccountPrompt": "Don't have an account?",
+    "registerLinkText": "Register now!",
+    "tooltips": {
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
+    },
+    "validation": {
+      "usernameRequired": "Username is required.",
+      "passwordRequired": "Password is required."
+    },
+    "toastMessages": {
+      "loginSuccess": "Login successful!",
+      "loginErrorGeneric": "Incorrect username or password. Please try again."
+    }
   },
   "registerPage": {
     "title": "Register",
@@ -80,20 +99,6 @@
       "confirmPasswordRequired": "Please confirm your password",
       "passwordMismatch": "Passwords do not match"
     }
-  },
-  "productsPage": {
-    "title": "All Products",
-    "filter": "Filter",
-    "sortBy": "Sort by",
-    "sortOptions": {
-      "default": "Default",
-      "nameAsc": "Name (A-Z)",
-      "nameDesc": "Name (Z-A)",
-      "priceAsc": "Price (Low to High)",
-      "priceDesc": "Price (High to Low)",
-      "newest": "Newest"
-    },
-    "noProductsFound": "No products found."
   },
   "productDetailPage": {
     "backToList": "Back to List",
@@ -350,7 +355,7 @@
       "actions": "Operation"
     }
   },
-  "orderStatus": { 
+  "orderStatus": {
     "PENDING": "Pending",
     "PAID": "Paid",
     "PROCESSING": "Processing",
@@ -370,15 +375,195 @@
     "highToLow": "High to Low",
     "comingSoon": "Coming soon"
   },
-   "chatWidget": {
+  "chatWidget": {
     "toggleButton": "Chat",
     "title": "Online support",
     "botTyping": "Bot is responding...",
     "inputPlaceholder": "Enter your message..."
   },
-    "notFoundPage": {
+  "notFoundPage": {
     "title": "The page does not exist",
     "message": "Sorry, we couldn't find the page you're looking for. The page may have been removed, renamed, or is temporarily unavailable.",
     "backToHome": " Back to Homepage"
+  },
+  "orderDetailPage": {
+    "title": "Order details #{{orderId}}",
+    "backToHistory": "Order history",
+    "orderTime": "Order time: {{time}}",
+    "totalAmount": "Total: {{amount}}",
+    "paymentInfoTitle": "Payment information",
+    "paymentMethodLabel": "Method:",
+    "transactionIdLabel": "Transaction code:",
+    "statusLabel": "Status:",
+    "shippingInfoTitle": "Recipient information",
+    "receiverNameLabel": "Receiver:",
+    "phoneLabel": "Phone number:",
+    "addressLabel": "Address:",
+    "notesLabel": "Note:",
+    "productsTitle": "Products in the order",
+    "productColumn": "Product",
+    "quantityColumn": "Quantity",
+    "priceColumn": "Price",
+    "subtotalColumn": "Into money",
+    "noProducts": "No products found in this order.",
+    "shippingFeeTitle": "Shipping fee",
+    "finalTotal": "Total payment: {{amount}}",
+    "reorderButton": "Re-order",
+    "reorderLoadingButton": "Processing...",
+    "viewInvoiceButton": "View Invoice",
+    "cancelOrderButton": "Cancel order",
+    "alerts": {
+      "invalidOrderId": "Invalid order code.",
+      "permissionDenied": "You do not have permission to view this order..",
+      "loadFailed": "Unable to load order details.",
+      "notFound": "Order not found.",
+      "cancelSuccess": "Order has been canceled successfully.",
+      "cancelFailed": "Order cancellation failed. Please contact support if problem persists.",
+      "reorderNoItems": "Unable to reorder, no products found in this order.",
+      "reorderSuccess": "{{count}} products from this order have been added back to your cart.",
+      "reorderPartialSuccess": "{{successCount}} product added back to cart. {{failCount}} product failed.",
+      "reorderFailed": "Cannot add any products back to cart."
+    }
+  },
+  "cancellationReasonModal": {
+    "title": "Cancel order #{{orderId}}",
+    "prompt": "Please let us know why you want to cancel this order.:",
+    "reasons": {
+      "changeMind": "Change your mind",
+      "betterPrice": "Found a better price elsewhere",
+      "longDelivery": "Estimated delivery time is too long",
+      "wrongInfo": "Incorrect information entered (address, phone number,...)",
+      "wrongProduct": "Misplaced product",
+      "other": "Other (specify)"
+    },
+    "otherReasonPlaceholder": "Please state your reason...",
+    "submitButton": "Confirm cancellation",
+    "submittingButton": "Canceling...",
+    "cancelButton": "No, go back",
+    "validation": {
+      "reasonRequired": "Please select or provide a reason for cancellation."
+    },
+    "back": "Back",
+    "thisProduct": "this product",
+    "product": "Product"
+  },
+  "categoryPage": {
+    "title": "Explore Product Categories",
+    "loadingError": "Could not load categories. Please try again later.",
+    "noCategoriesFound": "There are currently no categories to display.",
+    "defaultCategoryDescription": "Product category description",
+    "viewProductsButton": "View Products"
+  },
+  "favoritesPage": {
+    "title": "My Favorite Products",
+    "loadingError": "Could not load your favorite products. Please try again later.",
+    "confirmRemoveMessage": "Are you sure you want to remove \"{{productName}}\" from your favorites?",
+    "removedSuccessToast": "\"{{productName}}\" has been removed from favorites.",
+    "removeErrorToast": "Error removing \"{{productName}}\" from favorites. Please try again.",
+    "noFavoritesMessage": "You don't have any favorite products yet.",
+    "exploreProductsLinkText": "Explore now!"
+  },
+  "productsPage": {
+    "titleDefault": "All Products",
+    "titleSearchResults": "Search results for \"{{searchTerm}}\"",
+    "titleByCategory": "Products in Category: {{categoryName}}",
+    "titleByCategoryId": "Products by Category ID: {{categoryId}}",
+    "loadingCategoryName": "Loading category name...",
+    "errorLoadingProducts": "Could not load products. Please try again.",
+    "errorLoadingCategory": "Category ID '{{categoryId}}' may be invalid or not found.",
+    "errorLoadingFavorites": "Could not load favorite products.",
+    "noProductsFound": "No products found matching your criteria.",
+    "clearFiltersButton": "Clear filters",
+    "backToHomeLink": "Back to homepage",
+    "toggleFilterShowTooltip": "Show Filters",
+    "toggleFilterHideTooltip": "Hide Filters",
+    "filterButtonTextShow": "Filters",
+    "filterButtonTextHide": "Hide Filters"
+  },
+  "productCard": {
+    "toasts": {
+      "loginToAddCart": "Please login to add items to your cart.",
+      "outOfStock": "This product is currently out of stock.",
+      "loginToFavorite": "Please login to use the wishlist feature.",
+      "removedFromFavorites": "\"{{productName}}\" has been removed from favorites.",
+      "addedToFavorites": "\"{{productName}}\" has been added to favorites!",
+      "favoriteActionFailed": "Favorite action failed."
+    },
+    "itemAddedToCart": "\"{{itemName}}\" added to cart!",
+    "productImageAlt": "Image of {{productName}}",
+    "buttons": {
+      "removeFromFavoritesTitle": "Remove from Favorites",
+      "unfavoriteTitle": "Unfavorite",
+      "favoriteTitle": "Favorite",
+      "addToCart": "Add to Cart"
+    },
+    "defaultCategoryName": "Uncategorized"
+  },
+  "productFilter": {
+    "title": "Product Filters",
+    "resetButton": "Reset",
+    "applyButton": "Filter",
+    "allCategoriesOption": "All Categories",
+    "sections": {
+      "category": "Category",
+      "priceRange": "Price Range (VND)",
+      "brand": "Brand",
+      "movement": "Movement",
+      "caseMaterial": "Case Material",
+      "strapMaterial": "Strap Material",
+      "dialColor": "Dial Color",
+      "waterResistance": "Water Resistance"
+    },
+    "minPricePlaceholder": "Min price",
+    "maxPricePlaceholder": "Max price",
+    "minPriceAriaLabel": "Minimum price",
+    "maxPriceAriaLabel": "Maximum price",
+    "brandPlaceholder": "e.g., Rolex, Seiko",
+    "brandAriaLabel": "Filter by brand",
+    "allOptionDefault": "All",
+    "filterByAriaLabel": "Filter by {{label}}",
+    "waterResistanceNotSpecified": "Not Specified", 
+    "consoleErrorLoadingCategories": "Failed to fetch categories for filter:",
+    "consoleWarnInvalidPrice": "Invalid price input:"
+  },
+   "invoicePage": {
+    "loadingText": "Loading invoice...",
+    "errorInvalidOrderId": "Invalid Order ID.",
+    "errorLoadFailed": "Could not load invoice data. Please try again.",
+    "alertNoInvoiceData": "No invoice data found for this order.",
+    "backToOrderDetailsLink": "Back to Order Details",
+    "downloadPdfButton": "Download Invoice (PDF)",
+    "printInvoiceButton": "Print Invoice",
+    "backButton": "Back",
+    "mainTitle": "SALES INVOICE",
+    "invoiceNumberLabel": "Invoice No.:",
+    "storeNameDefault": "TimeXpert Store",
+    "logoAlt": "TimeXpert Logo",
+    "storeInfoTitle": "Store Information:",
+    "customerInfoTitle": "Customer Information:",
+    "storeAddressDefault": "39 Thi Sach Street, Pham Dinh Ho Ward, Hai Ba Trung District, Hanoi City",
+    "storePhoneDefault": "028 3456 8899",
+    "storeEmailDefault": "support@timexpert.vn",
+    "customerNameLabel": "Customer:",
+    "customerAddressLabel": "Address:",
+    "customerPhoneLabel": "Phone:",
+    "customerEmailLabel": "Email:",
+    "dataNotAvailable": "Not provided",
+    "invoiceDateLabel": "Invoice Date:",
+    "originalOrderIdLabel": "Original Order ID:",
+    "orderTimeLabel": "Order Time:",
+    "table": {
+      "headerNumber": "#",
+      "headerProductName": "Product Name",
+      "headerQuantity": "Qty",
+      "headerUnitPrice": "Unit Price",
+      "headerTotalPrice": "Total Price"
+    },
+    "grandTotalLabel": "GRAND TOTAL:",
+    "paymentMethodLabel": "Payment Method:",
+    "orderNotesLabel": "Order Notes:",
+    "footerThanks": "Thank you for your trust and shopping at {{storeName}}!",
+    "footerGeneratedNote": "(This is an automatically generated e-invoice)",
+    "errorFetchingCustomer": "Could not load customer information for this invoice."
   }
 }

@@ -1,136 +1,136 @@
-import React, { useState } from 'react';
+// src/components/products/ProductCard.jsx
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Col, Card, Button, Row } from 'react-bootstrap';
-import { CartPlus, Heart, HeartFill } from 'react-bootstrap-icons';
+import { Card, Button } from 'react-bootstrap'; // Bỏ Col, Row
+import { Heart, HeartFill } from 'react-bootstrap-icons'; // Bỏ CartPlus nếu không dùng icon trực tiếp
 import { useCartStore } from '../../store/cartStore';
 import StockBadge from '../common/StockBadge';
 import { addFavorite, removeFavoriteByProductId } from '../../services/favoriteService';
 import { useAuthStore } from '../../store/authStore';
 import { toast } from 'react-toastify';
 import '../../styles/product-card.css';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
+
 function ProductCard({ product, isFavoritePage = false, onRemoveFavorite, favoriteProductIds = [] }) {
-
   const { t } = useTranslation();
-
   const { addItem: addItemToCart } = useCartStore();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
 
-  const initialFavorite = favoriteProductIds.includes(product.productId);
-  const [isFavoriteLocal, setIsFavoriteLocal] = useState(initialFavorite);
+  // Sử dụng VITE_API_URL_IMAGES hoặc fallback
+  const BASE_IMAGE_URL = import.meta.env.VITE_API_URL_IMAGES || 'http://localhost:8080';
 
-  const BASE_IMAGE_URL = 'http://localhost:8080';
+  const [isFavoriteLocal, setIsFavoriteLocal] = useState(
+    () => product && product.productId ? favoriteProductIds.includes(product.productId) : false
+  );
+
+  useEffect(() => {
+    if (product && product.productId) {
+      setIsFavoriteLocal(favoriteProductIds.includes(product.productId));
+    }
+  }, [favoriteProductIds, product]);
 
   if (!product || !product.productId) return null;
 
   const handleAddToCart = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (!isAuthenticated) {
-      toast.info(t('productCard.toasts.loginToAddCart', 'Vui lòng đăng nhập để thêm vào giỏ hàng.'));
+      toast.info(t('productCard.toasts.loginToAddCart'));
       navigate('/login');
       return;
     }
     if (product.stock <= 0) {
-      toast.warn(t('productCard.toasts.outOfStock', 'Sản phẩm hiện đã hết hàng.'));
+      toast.warn(t('productCard.toasts.outOfStock'));
       return;
     }
     addItemToCart({
       productId: product.productId,
       name: product.name,
       price: product.price,
-      imageUrl: product.primaryImageUrl || product.imageUrls?.[0],
+      imageUrl: getImageUrl(product),
       stock: product.stock
     }, 1);
-    toast.success(t('toastMessages.itemAddedToCart', 'Đã thêm "{{itemName}}" vào giỏ hàng!', { itemName: product.name }));
+    toast.success(t('toastMessages.itemAddedToCart', { itemName: product.name }));
   };
 
-
-   const handleToggleFavorite = async (e) => {
+  const handleToggleFavorite = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (!isAuthenticated) {
-      toast.info(t('productCard.toasts.loginToFavorite', 'Vui lòng đăng nhập để sử dụng chức năng yêu thích.'));
+      toast.info(t('productCard.toasts.loginToFavorite'));
       navigate('/login');
       return;
     }
-
     setIsFavoriteLoading(true);
     try {
       if (isFavoriteLocal) {
         await removeFavoriteByProductId(product.productId);
         setIsFavoriteLocal(false);
-        toast.success(t('productCard.toasts.removedFromFavorites', '"{{productName}}" đã được xoá khỏi yêu thích.', { productName: product.name }));
-        if (isFavoritePage && onRemoveFavorite) { // Gọi callback để cập nhật UI trang Favorites
-            onRemoveFavorite(product.productId, product.name);
+        toast.success(t('productCard.toasts.removedFromFavorites', { productName: product.name }));
+        if (isFavoritePage && typeof onRemoveFavorite === 'function') {
+          onRemoveFavorite(product.productId, product.name);
         }
       } else {
         await addFavorite(product.productId);
         setIsFavoriteLocal(true);
-        toast.success(t('productCard.toasts.addedToFavorites', '"{{productName}}" đã được thêm vào yêu thích!', { productName: product.name }));
+        toast.success(t('productCard.toasts.addedToFavorites', { productName: product.name }));
       }
     } catch (err) {
       console.error("Favorite action failed:", err);
-      toast.error(t('productCard.toasts.favoriteActionFailed', 'Thao tác yêu thích thất bại.'));
+      toast.error(t('productCard.toasts.favoriteActionFailed'));
     } finally {
       setIsFavoriteLoading(false);
     }
   };
 
-  const formatPrice = (price) =>
-    new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  const formatPrice = (price) => {
+    if (price === null || price === undefined) return '';
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  }
 
-  const rawUrl = (() => {
-    if (product?.primaryImageUrl && product.primaryImageUrl.trim()) return product.primaryImageUrl.trim();
-    if (Array.isArray(product.imageUrls) && product.imageUrls.length > 0) {
-      const fallback = product.imageUrls.find(url => typeof url === 'string' && url.trim());
-      return fallback?.trim() || null;
-    }
-    return null;
-  })();
-
-  const getImageUrl = (product) => {
+  const getImageUrl = (prod) => {
     const raw =
-      product?.primaryImageUrl?.trim() ||
-      product?.imageUrls?.[0]?.trim() ||
+      prod?.primaryImageUrl?.trim() ||
+      (Array.isArray(prod?.imageUrls) && prod.imageUrls.length > 0 ? prod.imageUrls[0]?.trim() : '') ||
       '';
-
     if (!raw) return '/fallback-image.png';
-
     try {
+      if (raw.startsWith('http://') || raw.startsWith('https://')) {
+        return raw;
+      }
       return new URL(raw, BASE_IMAGE_URL).href;
     } catch (e) {
-      console.error("Invalid image URL:", raw);
+      console.error("Invalid image URL in ProductCard:", raw, e);
       return '/fallback-image.png';
     }
   };
-  const imageUrl = getImageUrl(product);
+  const imageUrlToDisplay = getImageUrl(product);
+
   return (
     <Card className="product-card h-100 position-relative border-0">
-      <Link to={`/products/${product.productId}`} className="text-decoration-none text-dark">
-        <div style={{ height: '200px', overflow: 'hidden' }}>
-
+      <Link to={`/products/${product.productId}`} className="text-decoration-none text-dark product-card-link">
+        <div className="product-card-img-wrapper" style={{ height: '200px', overflow: 'hidden' }}> {/* Giữ style gốc nếu có */}
           <Card.Img
             variant="top"
-            src={imageUrl}
-            alt={product.name}
-            style={{ objectFit: 'contain', height: '100%', width: '100%' }}
+            src={imageUrlToDisplay}
+            alt={t('common.productImageAlt', { productName: product.name })}
+            style={{ objectFit: 'contain', height: '100%', width: '100%' }} // Giữ style gốc
             className="product-card-img"
-
+            onError={(e) => { 
+              e.target.onerror = null; 
+              e.target.src = '/fallback-image.png';
+            }}
           />
-
-
         </div>
       </Link>
 
-      {/* Nút yêu thích hoặc xóa khỏi yêu thích */}
       {isFavoritePage ? (
         <Button
           variant="link"
-          className="position-absolute top-0 end-0"
-          style={{
+          className="position-absolute top-0 end-0" // Giữ class gốc
+          style={{ // Giữ style gốc
             color: 'black',
             fontSize: '1.5rem',
             fontWeight: 'bold',
@@ -143,53 +143,56 @@ function ProductCard({ product, isFavoritePage = false, onRemoveFavorite, favori
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            onRemoveFavorite?.(product.productId, product.name);
+            if (typeof onRemoveFavorite === 'function') {
+              onRemoveFavorite(product.productId, product.name);
+            }
           }}
-           title={t('productCard.buttons.removeFromFavoritesTitle', "Xóa khỏi Yêu thích")}
+          title={t('productCard.buttons.removeFromFavoritesTitle')}
         >
           ✕
         </Button>
       ) : (
         <Button
-          variant="light"
+          variant="light" // Giữ variant gốc
           size="sm"
           onClick={handleToggleFavorite}
-          className="btn-heart position-absolute top-0 end-0 m-2 rounded-circle"
+          className="btn-heart position-absolute top-0 end-0 m-2 rounded-circle" // Giữ class gốc
           disabled={isFavoriteLoading}
-          title={isFavoriteLocal ? t('productCard.buttons.unfavoriteTitle', "Bỏ yêu thích") : t('productCard.buttons.favoriteTitle', "Yêu thích")}
+          title={isFavoriteLocal ? t('productCard.buttons.unfavoriteTitle') : t('productCard.buttons.favoriteTitle')}
         >
           {isFavoriteLocal ? (
-            <HeartFill size={20} color="#0675b1" />
+            <HeartFill size={20} color="#0675b1" /> // Giữ màu gốc
           ) : (
-            <Heart size={20} color="#0675b1" />
+            <Heart size={20} color="#0675b1" /> // Giữ màu gốc
           )}
         </Button>
-
       )}
 
       <Card.Body className="d-flex flex-column product-card-body">
-        <Card.Title className="h6 mb-1 text-truncate">
+        <Card.Title className="h6 mb-1 text-truncate product-card-title"> {/* Giữ class gốc */}
           <Link to={`/products/${product.productId}`} className="text-decoration-none text-dark">
             {product.name}
           </Link>
         </Card.Title>
-        <Card.Subtitle className="mb-2 text-muted small">
-          {product.categoryName || 'Chưa phân loại'}
+        <Card.Subtitle className="mb-2 text-muted small product-card-category"> {/* Giữ class gốc */}
+          {product.categoryName || t('productCard.defaultCategoryName')}
         </Card.Subtitle>
+        {/* Giữ nguyên div và class của StockBadge như file gốc của bạn */}
         <div className="mt-2 mb-2 d-flex justify-content-center align-items-center ps-0">
           <StockBadge stock={product.stock} />
         </div>
-        <div className="mt-2 text-left fw-bold h5">
+        {/* Giữ nguyên div và class của giá như file gốc */}
+        <div className="mt-2 text-left fw-bold h5"> {/* Đảm bảo text-left nếu bạn muốn */}
           {formatPrice(product.price)}
         </div>
         <div className="add-to-cart-wrapper mt-auto text-center">
           <Button
-            variant="danger"
-            className="add-to-cart-btn w-75"
+            variant="danger" // Giữ variant gốc
+            className="add-to-cart-btn w-75" // Giữ class gốc
             onClick={handleAddToCart}
             disabled={product.stock <= 0}
           >
-            Thêm vào giỏ
+            {t('productCard.buttons.addToCart')}
           </Button>
         </div>
       </Card.Body>

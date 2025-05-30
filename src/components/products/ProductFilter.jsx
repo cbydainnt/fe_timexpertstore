@@ -3,46 +3,35 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Form, Button, Card, Accordion, Spinner, ListGroup, Row, Col } from 'react-bootstrap';
 import { getAllCategories } from '../../services/categoryService';
 import { useSearchParams } from 'react-router-dom';
-import { FunnelFill } from 'react-bootstrap-icons'; // Đổi icon nếu muốn
+import { FunnelFill } from 'react-bootstrap-icons';
 import '../../styles/product-filter.css';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
+
 function ProductFilter() {
-
     const { t } = useTranslation();
-    // Hook để đọc và cập nhật URL search params
     const [searchParams, setSearchParams] = useSearchParams();
-
-    // State lưu danh sách categories lấy từ API
     const [categories, setCategories] = useState([]);
-    const [loadingCategories, setLoadingCategories] = useState(false);  
+    const [loadingCategories, setLoadingCategories] = useState(false);
 
-    // Danh sách các key filter sẽ quản lý
     const filterKeys = [
         'categoryId', 'minPrice', 'maxPrice', 'brand',
         'movement', 'caseMaterial', 'strapMaterial',
         'dialColor', 'waterResistance'
-        // Không bao gồm sortBy, sortDir vì chúng được quản lý bởi SortOptionsBar
     ];
 
-    // Hàm helper để lấy giá trị filter hiện tại từ URL
     const getFiltersFromParams = useCallback(() => {
         return filterKeys.reduce((acc, key) => {
-            acc[key] = searchParams.get(key) || ''; // Lấy giá trị hoặc chuỗi rỗng
+            acc[key] = searchParams.get(key) || '';
             return acc;
         }, {});
-    }, [searchParams]); // Phụ thuộc vào searchParams
+    }, [searchParams]);
 
-    // State cục bộ để lưu các lựa chọn filter của người dùng trong form
-    // Khởi tạo bằng giá trị từ URL params
     const [localFilters, setLocalFilters] = useState(getFiltersFromParams);
 
-    // Effect để cập nhật state cục bộ khi URL thay đổi từ bên ngoài
-    // (ví dụ: người dùng bấm back/forward, hoặc click link category từ header)
     useEffect(() => {
         setLocalFilters(getFiltersFromParams());
-    }, [searchParams, getFiltersFromParams]); // Chạy lại khi searchParams thay đổi
+    }, [searchParams, getFiltersFromParams]);
 
-    // Effect để fetch danh sách categories khi component mount
     useEffect(() => {
         const fetchCategories = async () => {
             setLoadingCategories(true);
@@ -50,81 +39,79 @@ function ProductFilter() {
                 const response = await getAllCategories();
                 setCategories(response.data || []);
             } catch (error) {
-                console.error("Failed to fetch categories for filter:", error);
-                // Có thể set lỗi vào state nếu muốn hiển thị
+                console.error(t('productFilter.consoleErrorLoadingCategories'), error);
             } finally {
                 setLoadingCategories(false);
             }
         };
         fetchCategories();
-    }, []); // Chỉ chạy 1 lần
+    }, [t]);
 
-    // Hàm xử lý khi người dùng thay đổi giá trị trong các input/select filter
     const handleLocalFilterChange = (e) => {
         const { name, value } = e.target;
-        // Kiểm tra hợp lệ cho input giá (chỉ cho phép số nguyên không âm hoặc rỗng)
         if ((name === 'minPrice' || name === 'maxPrice') && value !== '' && !/^\d*$/.test(value)) {
-            console.warn("Invalid price input:", value);
-            return; // Không cập nhật state nếu không hợp lệ
+            console.warn(t('productFilter.consoleWarnInvalidPrice'), value);
+            return;
         }
-        // Cập nhật state cục bộ
         setLocalFilters(prev => ({ ...prev, [name]: value }));
     };
 
-    // Hàm xử lý khi nhấn nút "Apply Filters"
     const handleApplyFilters = () => {
-        const newParams = new URLSearchParams(searchParams); // Bắt đầu với params hiện tại (giữ lại name, sort)
-        // Duyệt qua các filter cục bộ và cập nhật URL params
+        const newParams = new URLSearchParams(searchParams);
         filterKeys.forEach(key => {
             const value = localFilters[key];
             if (value) {
-                newParams.set(key, value); // Set nếu có giá trị
+                newParams.set(key, value);
             } else {
-                newParams.delete(key); // Xóa khỏi URL nếu giá trị rỗng
+                newParams.delete(key);
             }
         });
-        newParams.set('page', '0'); // Luôn reset về trang 1 khi áp dụng filter mới
-        setSearchParams(newParams); // Cập nhật URL -> trigger ProductsPage fetch lại
+        newParams.set('page', '0');
+        setSearchParams(newParams);
     };
 
-    // Hàm xử lý khi nhấn nút "Reset Filters"
     const handleResetFilters = () => {
-        const newParams = new URLSearchParams(); // Tạo params mới hoàn toàn
-        // Chỉ giữ lại các tham số không thuộc filter sidebar (ví dụ: name, sortBy, sortDir)
+        const newParams = new URLSearchParams();
         const preservedParams = ['name', 'sortBy', 'sortDir'];
         preservedParams.forEach(key => {
             const value = searchParams.get(key);
             if (value) newParams.set(key, value);
         });
-        setSearchParams(newParams); // Cập nhật URL
-        // Reset state cục bộ về giá trị rỗng
+        setSearchParams(newParams);
         setLocalFilters(filterKeys.reduce((acc, key) => ({ ...acc, [key]: '' }), {}));
     };
 
-    // --- Các tùy chọn lọc ví dụ (Nên lấy từ API nếu có thể) ---
+    // Giữ nguyên các mảng tùy chọn như file gốc của bạn
+    // Các giá trị này sẽ hiển thị trực tiếp trong dropdown, trừ waterResistanceNotSpecified
     const movements = ['Automatic', 'Quartz', 'Manual Winding', 'Eco-Drive', 'Solar'];
     const materials = ['Stainless Steel', 'Titanium', 'Gold Plated', 'Ceramic', 'Leather', 'Rubber', 'Silicone', 'Nylon', 'Resin'];
     const colors = ['Black', 'White', 'Blue', 'Silver', 'Gray', 'Green', 'Brown', 'Gold', 'Rose Gold'];
-    const waterResistances = ['30m (3ATM)', '50m (5ATM)', '100m (10ATM)', '200m (20ATM)', '300m+', 'Không được chỉ định'];
-    // ---
+    // Đối với waterResistances, bạn đã có một mục dùng t()
+    const waterResistances = ['30m (3ATM)', '50m (5ATM)', '100m (10ATM)', '200m (20ATM)', '300m+', t('productFilter.waterResistanceNotSpecified')];
+
+
+    // otherFilterSections sẽ sử dụng key dịch cho nhãn của section (Accordion.Header)
+    // nhưng options sẽ được hiển thị trực tiếp.
+    const otherFilterSections = [
+        { sectionLabelKey: 'productFilter.sections.movement', filterKey: 'movement', options: movements },
+        { sectionLabelKey: 'productFilter.sections.caseMaterial', filterKey: 'caseMaterial', options: materials },
+        { sectionLabelKey: 'productFilter.sections.strapMaterial', filterKey: 'strapMaterial', options: materials },
+        { sectionLabelKey: 'productFilter.sections.dialColor', filterKey: 'dialColor', options: colors },
+        { sectionLabelKey: 'productFilter.sections.waterResistance', filterKey: 'waterResistance', options: waterResistances }
+    ];
 
     return (
-        // Card chứa bộ lọc, thêm class để style và sticky-top
         <Card className="filter-sidebar border h-100 sticky-top" style={{ top: '80px' }}>
             <Card.Header className="filter-header border-bottom py-2 px-3 d-flex justify-content-between align-items-center">
                 <Card.Title as="h6" className="mb-0 fw-semibold">
-                    <FunnelFill className="me-1 custom-filter" /> Bộ lọc
+                    <FunnelFill className="me-1 custom-filter" /> {t('productFilter.title')}
                 </Card.Title>
-                {/* Nút reset nhỏ ở header */}
-                <Button variant="link" size="sm" className="p-0 text-muted" onClick={handleResetFilters}>Đặt lại</Button>
+                <Button variant="link" size="sm" className="p-0 text-muted" onClick={handleResetFilters}>{t('productFilter.resetButton')}</Button>
             </Card.Header>
-            {/* Body cho phép cuộn nếu nội dung filter dài */}
-            <Card.Body className="p-3 filter-accordion-container" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 150px)' }}> {/* Giới hạn chiều cao và cho phép cuộn */}
+            <Card.Body className="p-3 filter-accordion-container" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 150px)' }}>
                 <Accordion defaultActiveKey={['0', '1', '2']} alwaysOpen flush>
-
-                    {/* Filter Category */}
                     <Accordion.Item eventKey="0" className="filter-accordion-item">
-                        <Accordion.Header className="filter-accordion-header">Danh mục</Accordion.Header>
+                        <Accordion.Header className="filter-accordion-header">{t('productFilter.sections.category')}</Accordion.Header>
                         <Accordion.Body className="filter-accordion-body p-0">
                             {loadingCategories ? (
                                 <div className="p-3 text-center"><Spinner size="sm" /></div>
@@ -135,7 +122,7 @@ function ProductFilter() {
                                         onClick={(e) => { e.preventDefault(); setLocalFilters(prev => ({ ...prev, categoryId: '' })); }}
                                         className="filter-list-item"
                                     >
-                                        Tất cả Danh mục
+                                        {t('productFilter.allCategoriesOption')}
                                     </ListGroup.Item>
                                     {categories.map(cat => (
                                         <ListGroup.Item
@@ -144,7 +131,7 @@ function ProductFilter() {
                                             onClick={(e) => { e.preventDefault(); setLocalFilters(prev => ({ ...prev, categoryId: String(cat.categoryId) })); }}
                                             className="filter-list-item"
                                         >
-                                            {cat.name}
+                                            {cat.name} 
                                         </ListGroup.Item>
                                     ))}
                                 </ListGroup>
@@ -152,62 +139,62 @@ function ProductFilter() {
                         </Accordion.Body>
                     </Accordion.Item>
 
-                    {/* Filter Price Range */}
                     <Accordion.Item eventKey="1" className="filter-accordion-item">
-                        <Accordion.Header className="filter-accordion-header">Khoảng giá (VND)</Accordion.Header>
+                        <Accordion.Header className="filter-accordion-header">{t('productFilter.sections.priceRange')}</Accordion.Header>
                         <Accordion.Body className="filter-accordion-body">
                             <Row className="g-2">
                                 <Col>
-                                    <Form.Label htmlFor="minPrice" className="visually-hidden">Tối thiểu</Form.Label>
-                                    <Form.Control id="minPrice" type="number" name="minPrice" size="sm" min="0" step="1000" value={localFilters.minPrice} onChange={handleLocalFilterChange} placeholder="Tối thiểu" aria-label="Giá tối thiểu" />
+                                    <Form.Label htmlFor="minPrice" className="visually-hidden">{t('productFilter.minPricePlaceholder')}</Form.Label>
+                                    <Form.Control id="minPrice" type="number" name="minPrice" size="sm" min="0" step="1000" value={localFilters.minPrice} onChange={handleLocalFilterChange} placeholder={t('productFilter.minPricePlaceholder')} aria-label={t('productFilter.minPriceAriaLabel')} />
                                 </Col>
                                 <Col>
-                                    <Form.Label htmlFor="maxPrice" className="visually-hidden">Tối đa</Form.Label>
-                                    <Form.Control id="maxPrice" type="number" name="maxPrice" size="sm" min="0" step="1000" value={localFilters.maxPrice} onChange={handleLocalFilterChange} placeholder="Tối đa" aria-label="Giá tối đa" />
+                                    <Form.Label htmlFor="maxPrice" className="visually-hidden">{t('productFilter.maxPricePlaceholder')}</Form.Label>
+                                    <Form.Control id="maxPrice" type="number" name="maxPrice" size="sm" min="0" step="1000" value={localFilters.maxPrice} onChange={handleLocalFilterChange} placeholder={t('productFilter.maxPricePlaceholder')} aria-label={t('productFilter.maxPriceAriaLabel')} />
                                 </Col>
                             </Row>
                         </Accordion.Body>
                     </Accordion.Item>
 
-                    {/* Filter Brand */}
                     <Accordion.Item eventKey="2" className="filter-accordion-item">
-                        <Accordion.Header className="filter-accordion-header">Thương hiệu</Accordion.Header>
+                        <Accordion.Header className="filter-accordion-header">{t('productFilter.sections.brand')}</Accordion.Header>
                         <Accordion.Body className="filter-accordion-body">
-                            <Form.Control type="text" name="brand" size="sm" value={localFilters.brand} onChange={handleLocalFilterChange} placeholder="Rolex, Seiko" aria-label="Lọc theo thương hiệu" />
-                            {/* TODO: Thay bằng Select/Checkbox nếu có API lấy list brands */}
+                            <Form.Control type="text" name="brand" size="sm" value={localFilters.brand} onChange={handleLocalFilterChange} placeholder={t('productFilter.brandPlaceholder')} aria-label={t('productFilter.brandAriaLabel')} />
                         </Accordion.Body>
                     </Accordion.Item>
-
-                    {/* Other Dropdown Filters */}
-                    {[
-                        { label: 'Loại máy', key: 'movement', options: movements },
-                        { label: 'Chất liệu vỏ', key: 'caseMaterial', options: materials },
-                        { label: 'Chất liệu dây', key: 'strapMaterial', options: materials },
-                        { label: 'Màu mặt số', key: 'dialColor', options: colors },
-                        { label: 'Khả năng chống nước', key: 'waterResistance', options: waterResistances }
-                    ].map((filter, idx) => (
-                        <Accordion.Item key={filter.key} eventKey={`${idx + 3}`} className="filter-accordion-item">
-                            <Accordion.Header className="filter-accordion-header">{filter.label}</Accordion.Header>
+                    
+                    {otherFilterSections.map((filterSection, idx) => (
+                        <Accordion.Item key={filterSection.filterKey} eventKey={`${idx + 3}`} className="filter-accordion-item">
+                            <Accordion.Header className="filter-accordion-header">{t(filterSection.sectionLabelKey)}</Accordion.Header>
                             <Accordion.Body className="filter-accordion-body">
-                                <Form.Select size="sm" name={filter.key} value={localFilters[filter.key]} onChange={handleLocalFilterChange} aria-label={`Filter by ${filter.label}`}>
-                                    <option value="">Tất cả</option>
-                                    {filter.options.map(opt => (<option key={opt} value={opt}>{opt}</option>))}
+                                <Form.Select 
+                                    size="sm" 
+                                    name={filterSection.filterKey} 
+                                    value={localFilters[filterSection.filterKey]} 
+                                    onChange={handleLocalFilterChange} 
+                                    aria-label={t('productFilter.filterByAriaLabel', { label: t(filterSection.sectionLabelKey) })}
+                                >
+                                    <option value="">{t('productFilter.allOptionDefault')}</option>
+                                    {/* Hiển thị trực tiếp các giá trị trong options, ngoại trừ trường hợp đặc biệt nếu bạn muốn xử lý riêng */}
+                                    {filterSection.options.map(opt => (
+                                        <option key={opt} value={opt}>
+                                            {opt} 
+                                        </option>
+                                    ))}
                                 </Form.Select>
                             </Accordion.Body>
                         </Accordion.Item>
                     ))}
                 </Accordion>
             </Card.Body>
-            {/* Footer với nút Apply Filters */}
             <Card.Footer className="bg-light border-top p-2">
-                <div className="d-grid"> {/* d-grid để nút chiếm hết chiều rộng */}
+                <div className="d-grid">
                     <Button
                         variant="custom"
                         size="m"
                         className="custom-filter-button"
                         onClick={handleApplyFilters}
                     >
-                        Lọc
+                        {t('productFilter.applyButton')}
                     </Button>
                 </div>
             </Card.Footer>

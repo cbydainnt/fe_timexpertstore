@@ -1,3 +1,4 @@
+// src/components/profile/ChangePasswordModal.jsx
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -10,12 +11,10 @@ import {
 } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { changePassword } from '../../services/authService';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 function ChangePasswordModal({ show, onHide }) {
-
     const { t } = useTranslation();
-    
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -48,7 +47,7 @@ function ChangePasswordModal({ show, onHide }) {
                 currentPassword: data.currentPassword,
                 newPassword: data.newPassword
             });
-            setSuccess('Đổi mật khẩu thành công!');
+            setSuccess(t('changePasswordModal.successMessage')); // Dịch thông báo
             reset();
             setTimeout(() => {
                 onHide();
@@ -56,9 +55,9 @@ function ChangePasswordModal({ show, onHide }) {
             }, 2000);
         } catch (err) {
             setError(
-                err.response?.data?.message ||
+                err.response?.data?.message || // Ưu tiên lỗi từ backend nếu có
                 err.message ||
-                'Đổi mật khẩu thất bại. Vui lòng thử lại.'
+                t('changePasswordModal.errorMessageDefault') // Dịch thông báo lỗi mặc định
             );
         } finally {
             setLoading(false);
@@ -72,17 +71,18 @@ function ChangePasswordModal({ show, onHide }) {
         setShowPassword({ current: false, new: false, confirm: false });
     };
 
-    const renderPasswordField = (id, label, registerProps, errorMsg, show, toggleFn) => (
+    // Hàm renderPasswordField giờ đây sẽ nhận label đã được dịch
+    const renderPasswordField = (id, translatedLabel, registerProps, errorMsg, showState, toggleFn) => (
         <Form.Group className="mb-3" controlId={id}>
-            <Form.Label>{label}</Form.Label>
+            <Form.Label>{translatedLabel}</Form.Label>
             <InputGroup>
                 <Form.Control
-                    type={show ? 'text' : 'password'}
+                    type={showState ? 'text' : 'password'}
                     isInvalid={!!errorMsg}
                     {...registerProps}
                 />
-                <InputGroup.Text style={{ cursor: 'pointer' }} onClick={toggleFn}>
-                    {show ? <EyeSlashFill /> : <EyeFill />}
+                <InputGroup.Text style={{ cursor: 'pointer' }} onClick={toggleFn} title={showState ? t('loginPage.tooltips.hidePassword') : t('loginPage.tooltips.showPassword')}>
+                    {showState ? <EyeSlashFill /> : <EyeFill />}
                 </InputGroup.Text>
                 <Form.Control.Feedback type="invalid">
                     {errorMsg}
@@ -94,7 +94,7 @@ function ChangePasswordModal({ show, onHide }) {
     return (
         <Modal show={show} onHide={onHide} centered onExited={handleExited}>
             <Modal.Header closeButton>
-                <Modal.Title>Đổi mật khẩu</Modal.Title>
+                <Modal.Title>{t('changePasswordModal.title')}</Modal.Title>
             </Modal.Header>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Modal.Body>
@@ -103,8 +103,8 @@ function ChangePasswordModal({ show, onHide }) {
 
                     {renderPasswordField(
                         'currentPassword',
-                        'Mật khẩu hiện tại',
-                        register('currentPassword', { required: 'Mật khẩu hiện tại là bắt buộc' }),
+                        t('changePasswordModal.currentPasswordLabel'),
+                        register('currentPassword', { required: t('changePasswordModal.validation.currentPasswordRequired') }),
                         errors.currentPassword?.message,
                         showPassword.current,
                         () => togglePassword('current')
@@ -112,12 +112,12 @@ function ChangePasswordModal({ show, onHide }) {
 
                     {renderPasswordField(
                         'newPassword',
-                        'Mật khẩu mới',
+                        t('changePasswordModal.newPasswordLabel'),
                         register('newPassword', {
-                            required: 'Cần có mật khẩu mới',
+                            required: t('changePasswordModal.validation.newPasswordRequired'),
                             minLength: {
                                 value: 6,
-                                message: 'Mật khẩu phải có ít nhất 6 ký tự'
+                                message: t('changePasswordModal.validation.newPasswordMinLength')
                             }
                         }),
                         errors.newPassword?.message,
@@ -127,11 +127,11 @@ function ChangePasswordModal({ show, onHide }) {
 
                     {renderPasswordField(
                         'confirmPassword',
-                        'Nhập lại mật khẩu mới',
+                        t('changePasswordModal.confirmPasswordLabel'),
                         register('confirmPassword', {
-                            required: 'Vui lòng xác nhận mật khẩu mới',
+                            required: t('changePasswordModal.validation.confirmPasswordRequired'),
                             validate: (value) =>
-                                value === newPasswordValue || 'Mật khẩu mới không khớp'
+                                value === newPasswordValue || t('changePasswordModal.validation.passwordMismatch')
                         }),
                         errors.confirmPassword?.message,
                         showPassword.confirm,
@@ -140,10 +140,17 @@ function ChangePasswordModal({ show, onHide }) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onHide} disabled={loading}>
-                        Hủy
+                        {t('common.cancel')}
                     </Button>
                     <Button variant="primary" type="submit" disabled={loading}>
-                        {loading ? <Spinner as="span" animation="border" size="sm" /> : 'Xác nhận'}
+                        {loading ? (
+                            <>
+                                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                                <span className="ms-1">{t('common.processing')}</span>
+                            </>
+                        ) : (
+                            t('common.confirm')
+                        )}
                     </Button>
                 </Modal.Footer>
             </Form>
