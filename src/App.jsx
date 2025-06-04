@@ -83,6 +83,8 @@ const AdminStaffDetailPage = lazy(() => import('./pages/admin/AdminStaffDetailPa
 const AdminStatisticsPage = lazy(() => import('./pages/admin/AdminStatisticsPage'));
 const AdminUserListPage = lazy(() => import('./pages/admin/AdminUserListPage'));
 const AdminUserCreatePage = lazy(() => import('./pages/admin/AdminUserCreatePage'));
+const AdminInvoicePage = lazy(() => import('./pages/admin/AdminInvoicePage'));
+// const AdminReviewListPage = lazy(() => import('./pages/admin/AdminReviewListPage')); 
 
 // Not Found Page
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
@@ -208,6 +210,8 @@ function App() {
             <Route path="users/create" element={<AdminUserCreatePage />} />
             <Route path="users" element={<AdminUserListPage />} /> {/* Danh sách tất cả user */}
             <Route path="users/:userId" element={<AdminUserDetailPage />} /> {/* Chi tiết user bất kỳ */}
+            <Route path="orders/:orderId/invoice" element={<AdminInvoicePage />} /> 
+            {/* <Route path="reviews" element={<AdminReviewListPage />} /> */}
 
             {/* Route Staff (nếu tách riêng khỏi Users) */}
             <Route path="staff" element={<AdminStaffListPage />} /> {/* Danh sách Staff */}

@@ -1,0 +1,393 @@
+// // src/pages/public/ProductDetailPage.jsx
+// import React, { useState, useEffect, useCallback } from 'react';
+// import { useParams, Link, useNavigate } from 'react-router-dom';
+// import { Container, Row, Col, Image, Button, Form, Spinner, Alert, Table, Card, Pagination as BsPagination } from 'react-bootstrap';
+// import { CartPlus, Heart, HeartFill, ArrowLeft, StarFill, Star } from 'react-bootstrap-icons';
+// import { getProductById } from '../../services/productService';
+// import { getVisibleProductReviews, submitProductReview } from '../../services/reviewService'; // << IMPORT SERVICE MỚI
+// import { addFavorite, removeFavoriteByProductId, getFavoriteProductIds } from '../../services/favoriteService';
+// import { useCartStore } from '../../store/cartStore';
+// import { useAuthStore } from '../../store/authStore';
+// import LoadingSpinner from '../../components/common/LoadingSpinner';
+// import StockBadge from '../../components/common/StockBadge';
+// import { motion } from 'framer-motion';
+// import { toast } from 'react-toastify';
+// import { useTranslation } from 'react-i18next';
+// import '../../styles/products-detail.css';
+// import '../../styles/product-review.css'; // Tạo file này nếu cần style riêng
+
+// const pageVariants = { initial: { opacity: 0 }, in: { opacity: 1 }, out: { opacity: 0 } };
+// const pageTransition = { duration: 0.4 };
+
+// // Component StarRating để hiển thị và chọn sao
+// const StarRatingInput = ({ rating, setRating, disabled = false }) => {
+//   const { t } = useTranslation();
+//   const [hoverRating, setHoverRating] = useState(0);
+//   return (
+//     <div>
+//       {[1, 2, 3, 4, 5].map((star) => (
+//         <StarFill
+//           key={star}
+//           onClick={() => !disabled && setRating(star)}
+//           onMouseEnter={() => !disabled && setHoverRating(star)}
+//           onMouseLeave={() => !disabled && setHoverRating(0)}
+//           style={{
+//             cursor: disabled ? 'default' : 'pointer',
+//             color: (hoverRating || rating) >= star ? '#ffc107' : '#e4e5e9',
+//             fontSize: '1.8rem', // Kích thước sao lớn hơn chút
+//             marginRight: '4px'
+//           }}
+//           title={!disabled ? `${star} ${t(star > 1 ? 'productDetailPage.stars' : 'productDetailPage.star')}` : undefined}
+//         />
+//       ))}
+//     </div>
+//   );
+// };
+
+// const StarRatingDisplay = ({ rating, size = '1rem' }) => {
+//   return (
+//     <span className="star-rating-display">
+//       {[...Array(5)].map((_, index) => {
+//         const starValue = index + 1;
+//         return (
+//           <StarFill
+//             key={starValue}
+//             style={{
+//               color: starValue <= Math.round(rating) ? '#ffc107' : '#e0e0e0', // Làm tròn đến sao gần nhất
+//               fontSize: size,
+//               marginRight: '2px',
+//             }}
+//           />
+//         );
+//       })}
+//     </span>
+//   );
+// };
+
+
+// function ProductDetailPage() {
+//   const { t } = useTranslation();
+//   const { productId } = useParams();
+//   const navigate = useNavigate();
+//   const { addItem: addItemToCart } = useCartStore();
+//   const { isAuthenticated, user } = useAuthStore();
+
+//   const [product, setProduct] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [quantity, setQuantity] = useState(1);
+//   const [stockWarning, setStockWarning] = useState('');
+//   const [selectedImage, setSelectedImage] = useState('');
+//   const [isFavorite, setIsFavorite] = useState(false);
+//   const [imageLoading, setImageLoading] = useState(true);
+
+//   // States cho đánh giá
+//   const [reviews, setReviews] = useState([]);
+//   const [reviewCurrentPage, setReviewCurrentPage] = useState(0); // API dùng 0-based
+//   const [reviewTotalPages, setReviewTotalPages] = useState(0);
+//   const [loadingReviews, setLoadingReviews] = useState(false);
+//   const [showReviewForm, setShowReviewForm] = useState(false);
+//   const [reviewRating, setReviewRating] = useState(0); // Điểm sao người dùng chọn (0-5)
+//   const [reviewComment, setReviewComment] = useState('');
+//   const [submittingReview, setSubmittingReview] = useState(false);
+//   const [reviewError, setReviewError] = useState('');
+
+//   const BASE_IMAGE_URL = import.meta.env.VITE_API_URL_IMAGES || 'http://localhost:8080'; // Sửa lại key biến môi trường nếu cần
+
+//   const fetchProduct = useCallback(async () => {
+//     if (!productId) { setError(t('productDetailPage.invalidId', "Mã sản phẩm không hợp lệ.")); setLoading(false); return; }
+//     setLoading(true); setError(null);
+//     try {
+//       const response = await getProductById(productId);
+//       setProduct(response.data); // ProductDTO đã có averageRating, reviewCount
+//       const primaryImg = response.data.primaryImageUrl ? getFullImageUrl(response.data.primaryImageUrl) : (response.data.imageUrls?.[0] ? getFullImageUrl(response.data.imageUrls[0]) : '');
+//       setSelectedImage(primaryImg);
+//     } catch (err) {
+//       const errorMsg = err.response?.data?.message || err.message || t('toastMessages.errorFetchingProductDetail');
+//       setError(errorMsg);
+//       if (err.response?.status === 404) {
+//         setTimeout(() => navigate('/products', { replace: true }), 3000);
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   }, [productId, navigate, t]); // Thêm t
+
+//   const fetchReviewsForPage = useCallback(async (pageToFetch) => {
+//     if (!productId) return;
+//     setLoadingReviews(true);
+//     try {
+//       const response = await getVisibleProductReviews(productId, { page: pageToFetch, size: 5 }); // Lấy 5 review mỗi trang
+//       setReviews(response.data.content || []);
+//       setReviewCurrentPage(response.data.currentPage); // API trả về currentPage (0-based)
+//       setReviewTotalPages(response.data.totalPages);
+//     } catch (err) {
+//       console.error("Error fetching reviews:", err);
+//       toast.error(t('toastMessages.errorFetchingReviews', "Lỗi tải đánh giá!"));
+//     } finally {
+//       setLoadingReviews(false);
+//     }
+//   }, [productId, t]);
+  
+//   // Gọi fetchReviews khi productId thay đổi hoặc khi reviewCurrentPage thay đổi (nếu không phải trang đầu)
+//   useEffect(() => {
+//     if(productId) {
+//         fetchProduct();
+//         fetchReviewsForPage(0); // Luôn tải trang đầu tiên khi component mount hoặc productId thay đổi
+//     }
+//   }, [productId, fetchProduct]); // Chỉ fetchProduct, fetchReviewsForPage sẽ được gọi bên trong khi cần
+
+
+//   const handleReviewPageChange = (page) => {
+//     fetchReviewsForPage(page - 1); // Component Pagination dùng 1-based, API dùng 0-based
+//   };
+
+
+//   useEffect(() => {
+//     const fetchFavs = async () => {
+//       if (!isAuthenticated || !productId) return;
+//       try {
+//         const ids = await getFavoriteProductIds();
+//         setIsFavorite(ids.includes(Number(productId)));
+//       } catch (err) { console.error('Lỗi tải yêu thích:', err); }
+//     };
+//     fetchFavs();
+//   }, [isAuthenticated, productId]);
+
+//   const handleReviewSubmit = async (e) => {
+//     e.preventDefault();
+//     if (!isAuthenticated) {
+//         toast.info(t('productDetailPage.loginToReview'));
+//         navigate('/login');
+//         return;
+//     }
+//     if (reviewRating === 0) {
+//       setReviewError(t('productDetailPage.validation.ratingRequired'));
+//       return;
+//     }
+//     if (reviewComment.trim().length < 10) {
+//         setReviewError(t('productDetailPage.validation.commentMinLength', {count: 10}));
+//         return;
+//     }
+//     if (reviewComment.trim().length > 1000) {
+//         setReviewError(t('productDetailPage.validation.commentMaxLength', {count: 1000}));
+//         return;
+//     }
+
+//     setSubmittingReview(true); setReviewError('');
+//     try {
+//       const reviewData = {
+//         productId: parseInt(productId),
+//         rating: reviewRating,
+//         comment: reviewComment.trim()
+//         // orderId sẽ được backend tự xử lý
+//       };
+//       await submitProductReview(reviewData);
+//       toast.success(t('productDetailPage.reviewSuccessToast'));
+//       setReviewRating(0);
+//       setReviewComment('');
+//       setShowReviewForm(false); // Đóng form sau khi gửi
+//       fetchReviewsForPage(0); // Tải lại trang đầu của reviews
+//       fetchProduct();   // Tải lại thông tin sản phẩm để cập nhật điểm trung bình
+//     } catch (err) {
+//       const errMsg = err.response?.data?.message || t('toastMessages.errorGeneric');
+//       setReviewError(errMsg); 
+//       toast.error(t('productDetailPage.reviewErrorToast', { message: errMsg }));
+//     } finally {
+//       setSubmittingReview(false);
+//     }
+//   };
+
+//   // ... (giữ nguyên các hàm handleQuantityChange, handleAddToCart, handleToggleFavorite, formatPrice, getFullImageUrl)
+//   const handleQuantityChange = (e) => { /* ... giữ nguyên ... */};
+//   const handleQuantityBlur = () => { /* ... giữ nguyên ... */};
+//   const handleAddToCart = () => { /* ... giữ nguyên ... */};
+//   const handleToggleFavorite = async () => { /* ... giữ nguyên ... */};
+//   const getFullImageUrl = (url) => (!url ? '' : url.startsWith('http') ? url : `${BASE_IMAGE_URL}${url}`);
+  
+//   if (loading) return <Container className="text-center py-5"><LoadingSpinner text={t('common.loading')} /></Container>;
+//   if (error && !product) return <Container className="py-5"><Alert variant="danger">{error}</Alert><div className="text-center mt-3"><Link to="/products" className="btn btn-sm btn-outline-secondary"><ArrowLeft /> {t('productDetailPage.backToList')}</Link></div></Container>;
+//   if (!product) return <Container className="text-center py-5"><Alert variant="warning">{t('productDetailPage.notFound')}</Alert><div className="text-center mt-3"><Link to="/products" className="btn btn-sm btn-outline-secondary"><ArrowLeft /> {t('productDetailPage.backToList')}</Link></div></Container>;
+
+//   const primaryImageUrl = getFullImageUrl(product.primaryImageUrl);
+//   const allImages = [primaryImageUrl, ...(product.imageUrls?.map(getFullImageUrl).filter(url => url !== primaryImageUrl) || [])].filter(Boolean);
+
+
+//   return (
+//     <motion.div initial="initial" animate="in" exit="out" variants={pageVariants} transition={pageTransition}>
+//       <Container className="py-4 product-detail-page">
+//         <Link to="/products" className="btn btn-outline-secondary btn-sm mb-3">
+//           <ArrowLeft className="me-1" /> {t('productDetailPage.backToList')}
+//         </Link>
+
+//         <Row className="g-4 g-lg-5">
+//           {/* Phần ảnh sản phẩm - giữ nguyên hoặc tùy chỉnh theo ý bạn */}
+//           <Col md={6} className="text-center">
+//             {/* ... (Code hiển thị ảnh chính và ảnh thumbnail của bạn) ... */}
+//              <div className="mb-3 border rounded position-relative bg-light shadow-sm" style={{ aspectRatio: '1 / 1', overflow: 'hidden', minHeight: '400px', borderRadius: '12px' }}>
+//               {imageLoading && (
+//                 <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+//                   <Spinner animation="border" variant="secondary" />
+//                 </div>
+//               )}
+//               <Image
+//                 src={selectedImage || 'https://via.placeholder.com/600x600?text=No+Image'}
+//                 alt={product.name}
+//                 className="d-block w-100 h-100"
+//                 style={{ objectFit: 'contain', opacity: imageLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}
+//                 onLoad={() => setImageLoading(false)}
+//                 onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Image+Error'; setImageLoading(false); }}
+//               />
+//             </div>
+//              {allImages.length > 1 && (
+//               <Row xs={5} sm={6} md={4} lg={5} className="g-2">
+//                 {allImages.map((url, index) => (
+//                   <Col key={index}>
+//                     <Image
+//                       src={url}
+//                       alt={`${product.name} thumb ${index + 1}`}
+//                       fluid
+//                       thumbnail
+//                       onClick={() => { setImageLoading(true); setSelectedImage(url); }}
+//                       style={{ cursor: 'pointer', border: selectedImage === url ? '2px solid var(--bs-primary)' : '1px solid #ddd', borderRadius: '8px', height: '80px', objectFit: 'cover', transition: 'border 0.2s ease-in-out' }}
+//                       onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/80x80?text=Image+Error'; }}
+//                     />
+//                   </Col>
+//                 ))}
+//               </Row>
+//             )}
+//           </Col>
+
+//           {/* Phần thông tin sản phẩm - giữ nguyên hoặc tùy chỉnh */}
+//           <Col md={6}>
+//             {/* ... (Code hiển thị tên, giá, stock, mô tả, form số lượng, nút AddToCart, Yêu thích của bạn) ... */}
+//              <h1 className="h3 fw-semibold mb-2 text-dark">{product.name}</h1>
+//             {/* Hiển thị điểm đánh giá trung bình */}
+//             {product.reviewCount != null && product.reviewCount > 0 && product.averageRating != null && (
+//                 <div className="mb-2 d-flex align-items-center product-average-rating">
+//                     <StarRatingDisplay rating={product.averageRating} size="1.1rem" />
+//                     <span className="ms-2 text-muted small">
+//                         ({product.averageRating.toFixed(1)}/5 - {t('productDetailPage.totalReviews', { count: product.reviewCount })})
+//                     </span>
+//                 </div>
+//             )}
+//             <p className="h4 mb-3 fw-bold text-primary">{formatPrice(product.price)}</p>
+//             {/* ... (các phần khác) ... */}
+//             <p className="text-muted mb-4" style={{ lineHeight: '1.6', textAlign: 'justify' }}>{product.description || t('productDetailPage.noDescription')}</p>
+//             {/* ... (form thêm vào giỏ) ... */}
+//           </Col>
+//         </Row>
+
+//         {/* === PHẦN ĐÁNH GIÁ SẢN PHẨM MỚI === */}
+//         <Row className="mt-5">
+//           <Col>
+//             <Card className="product-reviews-section shadow-sm">
+//               <Card.Header>
+//                 <h4 className="mb-0">{t('productDetailPage.reviewsSectionTitle')}</h4>
+//               </Card.Header>
+//               <Card.Body>
+//                 {/* Nút/Form để viết đánh giá */}
+//                 {isAuthenticated ? (
+//                   !showReviewForm ? (
+//                     <Button variant="primary" onClick={() => {setShowReviewForm(true); setReviewError(''); setReviewRating(0); setReviewComment('');}} className="mb-4">
+//                       {t('productDetailPage.writeYourReviewTitle')}
+//                     </Button>
+//                   ) : (
+//                     <Card className="mb-4 shadow-sm review-form-card">
+//                       <Card.Body>
+//                         <h5 className="mb-3">{t('productDetailPage.writeYourReviewTitle')}</h5>
+//                         {reviewError && <Alert variant="danger" onClose={() => setReviewError('')} dismissible className="py-2 small">{reviewError}</Alert>}
+//                         <Form onSubmit={handleReviewSubmit}>
+//                           <Form.Group className="mb-3">
+//                             <Form.Label className="fw-medium">{t('productDetailPage.yourRatingLabel')}</Form.Label>
+//                             <div><StarRatingInput rating={reviewRating} setRating={setReviewRating} disabled={submittingReview} /></div>
+//                             {/* Có thể thêm error message cho rating nếu cần, ví dụ khi reviewError chứa lỗi rating */}
+//                           </Form.Group>
+//                           <Form.Group className="mb-3">
+//                             <Form.Label className="fw-medium">{t('productDetailPage.yourCommentLabel')}</Form.Label>
+//                             <Form.Control
+//                               as="textarea" rows={4}
+//                               value={reviewComment}
+//                               onChange={(e) => setReviewComment(e.target.value)}
+//                               placeholder={t('productDetailPage.commentPlaceholder')}
+//                               disabled={submittingReview}
+//                               isInvalid={!!reviewError.includes("Bình luận")} {/* Ví dụ kiểm tra lỗi comment */}
+//                             />
+//                             <Form.Control.Feedback type="invalid">{reviewError.includes("Bình luận") ? reviewError : ""}</Form.Control.Feedback>
+//                           </Form.Group>
+//                           <Button type="submit" disabled={submittingReview || reviewRating === 0}>
+//                             {submittingReview ? 
+//                                 <><Spinner as="span" animation="border" size="sm" /> {t('productDetailPage.submittingReviewButton')}</> : 
+//                                 t('productDetailPage.submitReviewButton')}
+//                           </Button>
+//                           <Button variant="outline-secondary" onClick={() => {setShowReviewForm(false); setReviewError('');}} className="ms-2" disabled={submittingReview}>
+//                             {t('common.cancel')}
+//                           </Button>
+//                         </Form>
+//                       </Card.Body>
+//                     </Card>
+//                   )
+//                 ) : (
+//                   <Alert variant="info" className="mb-4">
+//                     <Link to="/login" state={{ from: location }}>{t('productDetailPage.loginToReview')}</Link>
+//                   </Alert>
+//                 )}
+
+//                 {/* Danh sách đánh giá */}
+//                 {loadingReviews && reviews.length === 0 && <div className="text-center"><Spinner animation="border" size="sm" /></div>}
+//                 {!loadingReviews && reviews.length === 0 && product.reviewCount === 0 && (
+//                   <p className="text-muted fst-italic">{t('productDetailPage.noReviewsYet')}</p>
+//                 )}
+
+//                 {reviews.map((review) => (
+//                   <Card key={review.reviewId} className="mb-3 review-item">
+//                     <Card.Body className="py-2 px-3">
+//                       <div className="d-flex justify-content-between align-items-center mb-1">
+//                         <Card.Title as="h6" className="mb-0 review-user">
+//                           {review.userFirstName || t('common.anonymousUser', 'Người dùng ẩn danh')} {review.userLastName || ''}
+//                         </Card.Title>
+//                         <StarRatingDisplay rating={review.rating} size="0.9rem" />
+//                       </div>
+//                       <Card.Subtitle className="mb-2 text-muted small review-date">
+//                         {new Date(review.reviewDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour:'2-digit', minute: '2-digit' })}
+//                       </Card.Subtitle>
+//                       <Card.Text className="review-comment" style={{ whiteSpace: 'pre-line' }}>{review.comment}</Card.Text>
+//                     </Card.Body>
+//                   </Card>
+//                 ))}
+                
+//                 {/* Phân trang cho reviews */}
+//                 {reviewTotalPages > 1 && (
+//                     <div className="d-flex justify-content-center mt-3">
+//                         <BsPagination size="sm">
+//                             {[...Array(reviewTotalPages).keys()].map(pageNumber => (
+//                                 <BsPagination.Item 
+//                                     key={pageNumber + 1} 
+//                                     active={pageNumber === reviewCurrentPage} 
+//                                     onClick={() => handleReviewPageChange(pageNumber + 1)}
+//                                     disabled={loadingReviews}
+//                                 >
+//                                     {pageNumber + 1}
+//                                 </BsPagination.Item>
+//                             ))}
+//                         </BsPagination>
+//                     </div>
+//                 )}
+//                 {reviewPage < reviewTotalPages - 1 && !loadingReviews && reviews.length > 0 && ( // Nút "Load more" đơn giản hơn
+//                      <div className="text-center mt-3 d-none"> {/* Tạm ẩn nếu dùng Pagination đầy đủ */}
+//                          <Button variant="outline-secondary" size="sm" onClick={() => fetchReviewsForPage(reviewCurrentPage + 1)} disabled={loadingReviews}>
+//                              {loadingReviews ? <Spinner size="sm"/> : t('productDetailPage.loadMoreReviews')}
+//                          </Button>
+//                      </div>
+//                  )}
+
+//               </Card.Body>
+//             </Card>
+//           </Col>
+//         </Row>
+//       </Container>
+//     </motion.div>
+//   );
+// }
+
+// export default ProductDetailPage;

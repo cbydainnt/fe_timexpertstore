@@ -36,6 +36,7 @@ function AdminCustomerListPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { user: adminUser } = useAuthStore();
 
+
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const itemsPerPage = 15;
@@ -50,25 +51,16 @@ function AdminCustomerListPage() {
         setLoading(true);
         setError(null);
         try {
-            const page = parseInt(searchParams.get('page') || '0');
-            const currentSearch = searchParams.get('search') || undefined;
-            const currentRole = searchParams.get('role') || ''; // Nếu role không có thì để là chuỗi trống
-
-            setCurrentPage(page + 1);
-
             const params = {
-                page,
+                page: currentPage - 1, // backend 0-based
                 size: itemsPerPage,
-                sortBy: searchParams.get('sortBy') || 'userId',
-                sortDir: searchParams.get('sortDir') || 'asc',
-                ...(currentSearch && { search: currentSearch }),
-                ...(currentRole && currentRole !== '' && { role: currentRole }) // Chỉ thêm role khi nó không phải là chuỗi trống
+                sortBy: 'userId',
+                sortDir: 'asc',
+                ...(searchTerm && { search: searchTerm.trim() }),
+                ...(roleFilter && { role: roleFilter })
             };
 
-            // Lọc bỏ các tham số undefined hoặc null
-            const filteredParams = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== ''));
-
-            const response = await getAllCustomersAdmin(filteredParams); // Gọi API với các tham số đã lọc
+            const response = await getAllCustomersAdmin(params);
             setCustomers(response.data?.content || []);
             setTotalPages(response.data?.totalPages || 0);
         } catch (err) {
@@ -79,7 +71,7 @@ function AdminCustomerListPage() {
         } finally {
             setLoading(false);
         }
-    }, [searchParams]);
+    }, [currentPage, searchTerm, roleFilter]);
 
 
 
@@ -104,9 +96,8 @@ function AdminCustomerListPage() {
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
-            const newParams = new URLSearchParams(searchParams);
-            newParams.set('page', String(newPage - 1));
-            setSearchParams(newParams);
+            setCurrentPage(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll lên khi đổi trang
         }
     };
 
@@ -259,9 +250,19 @@ function AdminCustomerListPage() {
                     </Card>
                 )}
 
-                {totalPages > 1 && !loading && (
+                {totalPages > 1 && (
                     <div className="d-flex justify-content-center mt-4">
-                        <BsPagination>{paginationItems}</BsPagination>
+                        <BsPagination size="sm">
+                            <BsPagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+                            <BsPagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter(p => Math.abs(currentPage - p) <= 2)
+                                .map(p => (
+                                    <BsPagination.Item key={p} active={p === currentPage} onClick={() => handlePageChange(p)}>{p}</BsPagination.Item>
+                                ))}
+                            <BsPagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+                            <BsPagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+                        </BsPagination>
                     </div>
                 )}
                 <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>

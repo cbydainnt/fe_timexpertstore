@@ -1,42 +1,67 @@
-/* style/sort-options-bar.css */
-
+/* src/styles/sort-options-bar.css */
 .sort-options-bar {
-  background-color: #faf9f6;
-  border: 1px solid #ddd4be;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
-
-.sort-options-bar .btn,
-.sort-options-bar .dropdown-toggle {
-  background-color: #ffffff;
-  border-color: #dcd2b8;
-  color: #333;
-  font-weight: 500;
+  background-color: var(--color-bg-subtle, #f8f9fa); /* Nền nhạt hơn một chút, có thể định nghĩa --color-bg-subtle trong theme.css */
+  padding: 0.5rem 0.75rem;
   border-radius: 0.375rem;
-  transition: all 0.3s ease;
+  /* box-shadow: 0 1px 3px rgba(0,0,0,0.05); */ /* Bỏ shadow nếu muốn phẳng hơn */
 }
 
-.sort-options-bar .btn:hover,
-.sort-options-bar .dropdown-toggle:hover {
-  background-color: #f5f0e6;
-  color: var(--bs-primary);
+.sort-options-bar .text-muted {
+  color: var(--color-secondary, #555555) !important; /* Đảm bảo màu chữ phụ */
 }
 
-.sort-options-bar .btn-primary {
-  background-color: var(--bs-primary);
-  border-color: var(--bs-primary);
-  color: white;
+.sort-options-bar .btn-group .btn,
+.sort-options-bar .dropdown-toggle {
+  font-size: 0.8rem; /* Cỡ chữ nhỏ hơn cho các nút sort */
+  padding: 0.3rem 0.6rem;
+  border-color: var(--color-primary-light, #a1c4d6); /* Màu border nhạt hơn, định nghĩa --color-primary-light nếu cần */
+  color: var(--color-secondary);
 }
 
-.sort-options-bar .btn-primary:hover {
-  background-color: var(--bs-primary-hover);
-  border-color: var(--bs-primary-hover);
+/* Nút active */
+.sort-options-bar .btn-group .btn.active, /* Cho ButtonGroup */
+.sort-options-bar .btn-group .btn:active, /* Cho ButtonGroup */
+.sort-options-bar .dropdown-toggle.active, /* Cho DropdownButton khi có lựa chọn active */
+.sort-options-bar .dropdown-item.active,
+.sort-options-bar .dropdown-item:active {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-btn-text) !important;
+  box-shadow: none; /* Bỏ shadow khi active */
+}
+
+.btn-custom-primary {
+  background-color: var(--color-primary) !important;
+  color: var(--color-btn-text, #fff) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.btn-custom-outline-primary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-custom-outline-primary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-btn-text, #fff);
+}
+
+/* Hover cho nút không active */
+.sort-options-bar .btn-group .btn:not(.active):hover,
+.sort-options-bar .dropdown-toggle:not(.active):hover {
+  background-color: var(--color-primary-bg-subtle, #e0f0ff); /* Màu nền hover rất nhạt, định nghĩa --color-primary-bg-subtle */
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .sort-options-bar .dropdown-menu {
-  border-radius: 0.5rem;
-  border-color: #e0d7c3;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  border-color: var(--color-primary-light, #a1c4d6);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.sort-options-bar .dropdown-item:hover {
+  background-color: var(--color-primary-bg-subtle, #e0f0ff);
+  color: var(--color-primary);
 }

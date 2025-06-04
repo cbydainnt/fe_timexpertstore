@@ -1,0 +1,14 @@
+/* src/styles/product-review.css */
+.product-reviews-section .card-header h4 {
+  font-size: 1.25rem;
+  color: var(--bs-primary); /* Hoặc màu bạn muốn */
+}
+
+.review-item {
+  border-left: 3px solid var(--bs-info); /* Ví dụ: Thêm một đường kẻ màu bên trái */
+  margin-bottom: 1rem !important;
+}
+
+.review-item .card-title {
+  font-weight: 600;
+}

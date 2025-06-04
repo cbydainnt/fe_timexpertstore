@@ -3,25 +3,34 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 // Import services
-import { getAllCategories, deleteCategory } from '../../services/categoryService';
+import { getAllCategories, getAllCategoriesAdmin, toggleCategoryVisibilityAdmin, deleteCategory } from '../../services/categoryService';
 // Import Bootstrap components
-import { Container, Table, Modal, Button, Spinner, Alert, Card, InputGroup, FormControl, Row, Col } from 'react-bootstrap';
+import { Container, Table, Modal, Button, Spinner, Alert, Card, InputGroup, FormControl, Row, Col, Badge, OverlayTrigger, Tooltip  } from 'react-bootstrap';
 // Import icons
-import { PencilSquare, Trash, PlusCircle, Search } from 'react-bootstrap-icons';
+import { PencilSquare, Trash, PlusCircle, Search, EyeSlashFill, EyeFill   } from 'react-bootstrap-icons';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion'; // Animation
 import '../../styles/cate-admin.css';
+
+import { useTranslation } from 'react-i18next';
 
 // Animation variants
 const pageVariants = { initial: { opacity: 0, y: 20 }, in: { opacity: 1, y: 0 }, out: { opacity: 0, y: -20 } };
 const pageTransition = { duration: 0.3 };
 
 function AdminCategoryListPage() {
+
+    const { t } = useTranslation();
+
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState(''); // State cho tìm kiếm
+
+    const [showToggleModal, setShowToggleModal] = useState(false);
+    const [categoryToToggle, setCategoryToToggle] = useState(null);
+    const [actionToConfirm, setActionToConfirm] = useState('');
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState(null);
@@ -31,7 +40,7 @@ function AdminCategoryListPage() {
         setLoading(true);
         setError(null);
         try {
-            const response = await getAllCategories(); // API này có thể public
+            const response = await getAllCategoriesAdmin(); // API này có thể public
             setCategories(response.data || []);
         } catch (err) {
             console.error("Error fetching admin categories:", err);
@@ -67,6 +76,28 @@ function AdminCategoryListPage() {
         }
     };
 
+     const handleToggleVisibilityClick = (category) => {
+        setCategoryToToggle(category);
+        setActionToConfirm(category.visible ? 'hide' : 'show');
+        setShowToggleModal(true);
+    };
+
+    const confirmToggleVisibility = async () => {
+        if (!categoryToToggle) return;
+        try {
+            await toggleCategoryVisibilityAdmin(categoryToToggle.categoryId);
+            toast.success(t(categoryToToggle.visible ? 'adminCategoryListPage.hideSuccessToast' : 'adminCategoryListPage.showSuccessToast', 
+                            { categoryName: categoryToToggle.name })
+            );
+            setShowToggleModal(false);
+            setCategoryToToggle(null);
+            fetchAdminCategories(); // Tải lại danh sách
+        } catch (err) {
+            toast.error(err.response?.data?.message || t('adminCategoryListPage.errorUpdatingVisibility'));
+            setShowToggleModal(false);
+        }
+    };
+
     // Lọc danh sách categories dựa trên searchTerm
     const filteredCategories = categories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -95,7 +126,7 @@ function AdminCategoryListPage() {
                         <InputGroup size="sm">
                             <InputGroup.Text><Search /></InputGroup.Text>
                             <FormControl
-                                placeholder="Tìm theo tên hoặc mô tả..."
+                                placeholder="Tìm theo tên danh mục..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -116,7 +147,8 @@ function AdminCategoryListPage() {
                                         <th className='text-center' style={{ width: '5%' }}>ID</th>
                                         <th style={{ width: '15%' }}>Tên</th>
                                         <th style={{ width: '50%' }}>Mô tả</th>
-                                        <th style={{ width: '10%' }} className="text-center">Thao tác</th>
+                                        <th style={{ width: '10%', textAlign: 'center' }}>Trạng thái</th>
+                                        <th style={{ width: '30%' }} className="text-center">Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -127,21 +159,35 @@ function AdminCategoryListPage() {
                                                 <td className="fw-medium">{category.name}</td>
                                                 <td className="text-muted small">{category.description || '-'}</td>
                                                 <td className="text-center">
+                                                    <Badge bg={category.visible ? "success" : "secondary"}>
+                                                        {category.visible ? t('adminCategoryListPage.status.visible', 'Hiện') : t('adminCategoryListPage.status.hidden', 'Ẩn')}
+                                                    </Badge>
+                                                </td>
+                                                <td className="text-center">
                                                     <Link
                                                         to={`/admin/categories/edit/${category.categoryId}`}
-                                                        className="category-action-button edit"
-                                                        title="Chỉnh sửa"
+                                                        className="btn btn-sm btn-outline-primary me-1 px-2 py-1" // Sử dụng class Bootstrap chuẩn
+                                                        title={t('common.edit')}
                                                     >
-                                                        <PencilSquare size={18} />
+                                                        <PencilSquare />
                                                     </Link>
-                                                    <Link
-                                                        className="category-action-button delete"
-                                                        onClick={() => handleDeleteCategoryClick(category)}
-                                                        title="Xoá"
+                                                    {/* << NÚT ẨN/HIỆN MỚI >> */}
+                                                    <OverlayTrigger
+                                                        placement="top"
+                                                        overlay={
+                                                            <Tooltip id={`tooltip-cat-toggle-${category.categoryId}`}>
+                                                                {category.visible ? t('adminCategoryListPage.actions.hide', 'Ẩn danh mục') : t('adminCategoryListPage.actions.show', 'Hiện danh mục')}
+                                                            </Tooltip>
+                                                        }
                                                     >
-                                                        <Trash size={18} />
-                                                    </Link>
-
+                                                        <Button 
+                                                            variant={category.visible ? "outline-warning" : "outline-success"} 
+                                                            size="sm" className="px-2 py-1" 
+                                                            onClick={() => handleToggleVisibilityClick(category)}
+                                                        >
+                                                            {category.visible ? <EyeSlashFill /> : <EyeFill />}
+                                                        </Button>
+                                                    </OverlayTrigger>
                                                 </td>
                                             </tr>
                                         ))
@@ -157,20 +203,31 @@ function AdminCategoryListPage() {
                         </Card.Body>
                     </Card>
                 )}
-                <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+                <Modal show={showToggleModal} onHide={() => setShowToggleModal(false)} centered size="sm">
                     <Modal.Header closeButton>
-                        <Modal.Title>Xác nhận xoá</Modal.Title>
+                        <Modal.Title>
+                            {actionToConfirm === 'hide' ? 
+                                t('adminCategoryListPage.confirmHideTitle', 'Xác nhận Ẩn Danh mục') : 
+                                t('adminCategoryListPage.confirmShowTitle', 'Xác nhận Hiện Danh mục')}
+                        </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {categoryToDelete ? (
-                            <p>Bạn có chắc chắn muốn xoá danh mục <strong>{categoryToDelete.name}</strong> (ID: {categoryToDelete.categoryId}) không?</p>
-                        ) : (
-                            <p>Đang xử lý...</p>
+                        {categoryToToggle && (
+                            <p>
+                                {actionToConfirm === 'hide' ? 
+                                    t('adminCategoryListPage.confirmHideMessage', 'Bạn có chắc muốn ẩn danh mục "{{categoryName}}"? Các sản phẩm thuộc danh mục này có thể không còn hiển thị với người dùng.', { categoryName: categoryToToggle.name }) : 
+                                    t('adminCategoryListPage.confirmShowMessage', 'Bạn có chắc muốn hiện lại danh mục "{{categoryName}}"?', { categoryName: categoryToToggle.name })
+                                }
+                            </p>
                         )}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>Huỷ</Button>
-                        <Button variant="danger" onClick={confirmDeleteCategory}>Ok</Button>
+                        <Button variant="secondary" onClick={() => setShowToggleModal(false)}>{t('common.cancel')}</Button>
+                        <Button 
+                            variant={actionToConfirm === 'hide' ? "warning" : "success"} 
+                            onClick={confirmToggleVisibility}>
+                            {actionToConfirm === 'hide' ? t('adminCategoryListPage.hideButton', 'Ẩn') : t('adminCategoryListPage.showButton', 'Hiện')}
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </Container>

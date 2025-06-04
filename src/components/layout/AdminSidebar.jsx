@@ -1,8 +1,9 @@
 import React from 'react';
 import { Nav, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
-import { Speedometer2, BoxSeam, Tags, ReceiptCutoff, PeopleFill, BarChartLineFill, GearFill, Building, List } from 'react-bootstrap-icons';
+import { Speedometer2, BoxSeam, Tags, ReceiptCutoff, PeopleFill, BarChartLineFill, GearFill, Building, List, ChatQuoteFill  } from 'react-bootstrap-icons';
 import { useAuthStore } from '../../store/authStore';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Component Sidebar cho khu vực Admin.
@@ -10,6 +11,9 @@ import { useAuthStore } from '../../store/authStore';
  * - Hỗ trợ trạng thái thu gọn/mở rộng.
  */
 function AdminSidebar({ isCollapsed, onToggle }) {
+
+  const { t } = useTranslation();
+  
   const location = useLocation();
   const { user } = useAuthStore();
 
@@ -72,8 +76,9 @@ function AdminSidebar({ isCollapsed, onToggle }) {
     { to: '/admin/products', icon: BoxSeam, text: 'Sản phẩm', roles: ['ADMIN'] },
     { to: '/admin/orders', icon: ReceiptCutoff, text: 'Đơn hàng', roles: ['ADMIN'] },
     { to: '/admin/users', icon: PeopleFill, text: 'Tài khoản', roles: ['ADMIN'] },
+    //  { to: '/admin/reviews', icon: ChatQuoteFill, text: t('adminSidebar.reviews', 'Đánh giá'), roles: ['ADMIN'] },
     { to: '/admin/statistics', icon: BarChartLineFill, text: 'Thống kê', roles: ['ADMIN'] },
-    { to: '/admin/settings', icon: GearFill, text: 'Cài đặt', roles: ['ADMIN'] },
+    // { to: '/admin/settings', icon: GearFill, text: 'Cài đặt', roles: ['ADMIN'] },
   ].filter(item => item.roles.includes(user?.role));
 
   return (

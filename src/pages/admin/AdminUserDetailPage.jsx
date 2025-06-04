@@ -205,9 +205,9 @@ function AdminCustomerDetailPage() {
                             </Tab>
 
                             {/* Tab Yêu thích (Placeholder - Cần API backend) */}
-                            <Tab eventKey="favorites" title="Favorites">
+                            {/* <Tab eventKey="favorites" title="Favorites">
                                 <Card className="shadow-sm"><Card.Body><p className="text-muted">Sản phẩm yêu thích (Feature coming soon).</p></Card.Body></Card>
-                            </Tab>
+                            </Tab> */}
 
                             {/* Tab Đánh giá (Placeholder - Cần API backend) */}
                             {/* <Tab eventKey="reviews" title="Reviews">

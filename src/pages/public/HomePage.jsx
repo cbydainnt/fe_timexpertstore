@@ -21,6 +21,9 @@ import banner3 from '../../assets/images/banner3.png';
 import banner from '../../assets/images/banner.jpg';
 import bannerRight1 from '../../assets/images/banner-right1.jpg';
 import bannerRight2 from '../../assets/images/banner-right2.jpg';
+import bst from '../../assets/images/bst.avif';
+import { color } from 'chart.js/helpers';
+
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -118,11 +121,6 @@ function HomePage() {
                     <Carousel.Item key={idx} className="h-100">
                       <div className="hero-banner-container no-radius h-100" style={{ backgroundImage: `url('${slide.image}')` }}>
                         <div className="hero-banner-overlay"></div>
-                        {/* <div className="hero-banner-content">
-                          <h1>{slide.title}</h1>
-                          <p>{slide.subtitle}</p>
-                          <Link to={slide.link}><Button>{slide.buttonText}</Button></Link>
-                        </div> */}
                       </div>
                     </Carousel.Item>
                   ))}
@@ -159,7 +157,7 @@ function HomePage() {
         {/* --- Phần Sản phẩm nổi bật / Mới nhất --- */}
          <section className="featured-products-section mb-5 pb-3">
           <h2 className="text-center fw-bold mb-4 section-title">
-            {t('homePage.featuredProducts', 'SẢN PHẨM NỔI BẬT')}
+            {t('homePage.featuredProducts', 'SẢN PHẨM MỚI NHẤT')}
           </h2>
           {loading && <LoadingSpinner />}
           {error && <Alert variant="warning" className="text-center">{error}</Alert>}
@@ -195,7 +193,7 @@ function HomePage() {
               <Col md={4}>
                 <Card className="border-0 bg-transparent">
                   <Card.Body>
-                    <ShieldCheck size={40} className="text-primary mb-3" />
+                    <ShieldCheck size={40} className="text mb-3" />
                     <Card.Title as="h5" className="fw-semibold mb-2">{t('homePage.whyChooseUs.item1.title', 'Chính Hãng')}</Card.Title>
                     <Card.Text className="small text-muted">
                       {t('homePage.whyChooseUs.item1.text', 'Cam kết 100% sản phẩm chính hãng, nguồn gốc rõ ràng.')}
@@ -206,7 +204,7 @@ function HomePage() {
               <Col md={4}>
                 <Card className="border-0 bg-transparent">
                   <Card.Body>
-                    <Award size={40} className="text-primary mb-3" />
+                    <Award size={40} className="text mb-3" />
                     <Card.Title as="h5" className="fw-semibold mb-2">{t('homePage.whyChooseUs.item2.title', 'Bảo Hành 2 Năm')}</Card.Title>
                     <Card.Text className="small text-muted">
                       {t('homePage.whyChooseUs.item2.text', 'An tâm sử dụng với chính sách bảo hành dài hạn, uy tín.')}
@@ -217,7 +215,7 @@ function HomePage() {
               <Col md={4}>
                 <Card className="border-0 bg-transparent">
                   <Card.Body>
-                    <Truck size={40} className="text-primary mb-3" />
+                    <Truck size={40} className="text mb-3" />
                     <Card.Title as="h5" className="fw-semibold mb-2">{t('homePage.whyChooseUs.item3.title', 'Miễn Phí Vận Chuyển')}</Card.Title>
                     <Card.Text className="small text-muted">
                       {t('homePage.whyChooseUs.item3.text', 'Giao hàng nhanh chóng, miễn phí trên toàn quốc.')}
@@ -239,12 +237,18 @@ function HomePage() {
               <p className="text-muted mb-4">
                 {t('homePage.luxuryPromo.subtitle', 'Những ưu đãi đặc biệt và bộ sưu tập giới hạn dành riêng cho khách hàng thân thiết của TimeXpert.')}
               </p>
-              <Link to="/collections/special">
+              {/* <Link to="/collections/special">
                 <Button variant="dark">{t('homePage.luxuryPromo.button', 'Xem Ngay')}</Button>
-              </Link>
+              </Link> */}
             </Col>
             <Col md={6} className="text-center">
-              <Image src="https://via.placeholder.com/500x350?text=Luxury+Promo" fluid rounded alt={t('homePage.luxuryPromo.alt', 'Luxury Collection')} />
+              <img
+                          src={bst} // Logo của bạn
+                          style={{ height: '350px', width: '600px', objectFit: 'contain' }}
+                          className="me-2"
+                           alt={t('homePage.luxuryPromo.alt', 'Luxury Collection')}
+                        />
+              {/* <Image src="https://via.placeholder.com/500x350?text=Luxury+Promo" fluid rounded alt={t('homePage.luxuryPromo.alt', 'Luxury Collection')} /> */}
             </Col>
           </Row>
         </section>

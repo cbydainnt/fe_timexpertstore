@@ -7,11 +7,14 @@ import { getUserById } from '../../services/userService';
 // Import Bootstrap
 import { Container, Row, Col, Card, ListGroup, Button, Spinner, Alert, Badge, Form, Image } from 'react-bootstrap';
 // Import icons
-import { ArrowLeft, BoxSeam, CalendarWeek, CashCoin, CreditCard2Back, TagFill, Person, GeoAlt, Telephone, CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
+import { ArrowLeft, BoxSeam, CalendarWeek, CashCoin, CreditCard2Back, TagFill, Person, GeoAlt, Telephone, Receipt, CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { OrderStatus, getStatusVariant, getStatusLabel } from '../../utils/orderUtils';
+
+import { useTranslation } from 'react-i18next';
+
 // Animation variants
 const pageVariants = { initial: { opacity: 0, y: 20 }, in: { opacity: 1, y: 0 }, out: { opacity: 0, y: -20 } };
 const pageTransition = { duration: 0.3 };
@@ -30,8 +33,10 @@ const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 };
 
-
 function AdminOrderDetailPage() {
+
+    const { t } = useTranslation();
+
     const { orderId } = useParams();
     const navigate = useNavigate();
     const [order, setOrder] = useState(null); // OrderDTO
@@ -43,36 +48,32 @@ function AdminOrderDetailPage() {
     const [selectedStatus, setSelectedStatus] = useState('');
     const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
-    // Fetch chi tiết đơn hàng và thông tin khách hàng
+    const BASE_IMAGE_URL = 'http://localhost:8080';
+
     const fetchOrderAndCustomer = useCallback(async () => {
-        if (!orderId) { setError("Invalid Order ID."); setLoading(false); return; }
+        if (!orderId) { setError(t('adminOrderDetailPage.error.invalidId', "Mã đơn hàng không hợp lệ.")); setLoading(false); return; }
         setLoading(true); setError(null);
         try {
-            // Lấy chi tiết đơn hàng
             const orderResponse = await getOrderDetails(orderId);
             const orderData = orderResponse.data;
             setOrder(orderData);
-            setSelectedStatus(orderData.status); // Set trạng thái ban đầu
+            setSelectedStatus(orderData.status);
 
-            // Lấy thông tin khách hàng dựa vào userId từ đơn hàng
             if (orderData.userId) {
                 try {
-                    // *** Backend cần API GET /api/admin/users/{userId} ***
-                    const userResponse = await getUserById(orderData.userId); // Gọi API lấy user
-                    setCustomer(userResponse.data); // Lưu UserDTO
+                    const userResponse = await getUserById(orderData.userId);
+                    setCustomer(userResponse.data);
                 } catch (userErr) {
-                    console.error(`Error fetching customer details for userId ${orderData.userId}:`, userErr);
-                    // Không set lỗi chính, chỉ log hoặc hiển thị thông báo nhỏ
-                    setCustomer({ userId: orderData.userId, firstName: 'N/A', lastName: '', email: 'N/A', phone: 'N/A', address: 'N/A' }); // Dữ liệu tạm
+                    console.error(`Lỗi tải thông tin khách hàng cho userId ${orderData.userId}:`, userErr);
+                    setCustomer({ userId: orderData.userId, firstName: t('common.notAvailable', 'N/A'), lastName: '', email: 'N/A', phone: 'N/A', address: 'N/A' });
                 }
             }
-
         } catch (err) {
-            console.error("Error fetching order details (admin):", err);
-            setError(err.response?.data?.message || 'Failed to load order details.');
+            console.error("Lỗi tải chi tiết đơn hàng (admin):", err);
+            setError(err.response?.data?.message || t('adminOrderDetailPage.error.loadFailed', 'Không tải được chi tiết đơn hàng.'));
             if (err.response?.status === 404) { setTimeout(() => navigate('/admin/orders', { replace: true }), 3000); }
         } finally { setLoading(false); }
-    }, [orderId, navigate]);
+    }, [orderId, navigate, t]);
 
     useEffect(() => { fetchOrderAndCustomer(); }, [fetchOrderAndCustomer]);
 
@@ -96,6 +97,9 @@ function AdminOrderDetailPage() {
         } finally { setIsUpdatingStatus(false); }
     };
 
+    //Logic nút xem hóa đơn
+    const canViewInvoice = order && (order.status === OrderStatus.PAID || order.status === OrderStatus.COMPLETED);
+
     // --- Render UI ---
     if (loading) return <LoadingSpinner />;
     if (error && !order) return (<Container><Alert variant="danger">{error}</Alert><Link to="/admin/orders">Quay lại</Link></Container>);
@@ -111,6 +115,16 @@ function AdminOrderDetailPage() {
                         <Link to="/admin/orders" className="btn btn-outline-secondary btn-sm"> <ArrowLeft /> Quay lại </Link>
                     </Col>
                     <Col> <h1 className="h4 mb-0 text-gray-800">Chi tiết đơn hàng #{order.orderId}</h1> </Col>
+                    {canViewInvoice && order && ( // Thêm kiểm tra order tồn tại
+                        <Col xs="auto" className="text-end">
+                            {/* Link đến route admin invoice mới */}
+                            <Link to={`/admin/orders/${order.orderId}/invoice`}>
+                                <Button variant="outline-info" size="sm">
+                                    <Receipt className="me-1" /> {t('adminOrderDetailPage.viewInvoiceButton', 'Xem Hóa Đơn')}
+                                </Button>
+                            </Link>
+                        </Col>
+                    )}
                 </Row>
 
                 <Row>
@@ -150,7 +164,11 @@ function AdminOrderDetailPage() {
                             <ListGroup variant="flush">
                                 {order.orderItems?.map((item) => (
                                     <ListGroup.Item key={item.orderItemId} className="d-flex align-items-center">
-                                        <Image src={item.productImageUrl || '...'} style={{ width: '50px', height: '50px' }} className="me-3 rounded" />
+                                        <Image
+                                            src={item.productImageUrl ? `${BASE_IMAGE_URL}${item.productImageUrl}` : 'https://via.placeholder.com/50?text=N/A'}
+                                            style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                                            className="me-3 rounded"
+                                        />
                                         <div className="flex-grow-1">
                                             <Link to={`/products/${item.productId}`} target="_blank">{item.productName}</Link>
                                             <div className="small text-muted">Giá: {formatPrice(item.price)} x {item.quantity}</div>
@@ -199,7 +217,7 @@ function AdminOrderDetailPage() {
                                                 {allowedNextStatuses
                                                     .filter(status => status !== order.status) // Bỏ trạng thái hiện tại khỏi lựa chọn
                                                     .map(status => <option key={status} value={status}>{getStatusLabel(status)}</option>
-)}
+                                                    )}
                                             </Form.Select>
                                         </Form.Group>
                                         <Button variant="primary" type="submit" size="sm" className="w-100" disabled={isUpdatingStatus || selectedStatus === order.status}>

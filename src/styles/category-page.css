@@ -36,3 +36,6 @@
   color: #000;
 }
 
+.grd3 {
+  color: var(--color-primary);
+}

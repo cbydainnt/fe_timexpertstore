@@ -38,3 +38,21 @@ export const uploadProductImagesAPI = (files) => {
     },
   });
 };
+
+/**
+ * [ADMIN] Lấy danh sách TẤT CẢ sản phẩm (bao gồm cả ẩn/hiện) cho admin.
+ * @param {object} params - Các tham số lọc và phân trang.
+ * @returns {Promise<object>}
+ */
+export const getAllProductsAdmin = (params) => {
+  const filteredParams = Object.fromEntries(
+    Object.entries(params).filter(([_, v]) => v !== null && v !== undefined && v !== '')
+  );
+  // API: GET /api/admin/products (Backend ProductController.getAllProductsForAdmin)
+  return apiClient.get('/products/admin', { params: filteredParams });
+};
+
+export const toggleProductVisibilityAdmin = (id) => {
+  // API: PUT /api/admin/products/{id}/toggle-visibility (Backend ProductController.toggleProductVisibility)
+  return apiClient.put(`/products/admin/toggle-visibility/${id}`);
+};

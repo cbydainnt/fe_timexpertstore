@@ -59,7 +59,7 @@ function CategoryPage() {
     >
       <Container className="py-4">
         <div className="d-flex align-items-center mb-4">
-          <Grid3x3GapFill size={28} className="me-2 text-primary" />
+          <Grid3x3GapFill size={28} className="me-2 text grd3" />
           {/* Dịch tiêu đề trang */}
           <h1 className="h3 fw-bold mb-0">{t('categoryPage.title')}</h1>
         </div>

@@ -23,6 +23,11 @@ export const getCategoryById = (id) => {
   return apiClient.get(`/categories/${id}`);
 };
 
+export const getAllCategoriesAdmin = () => {
+  // API: GET /api/admin/categories
+  return apiClient.get('/categories/admin');
+};
+
 /**
  * [ADMIN] Tạo một danh mục mới.
  * Yêu cầu JWT token của Admin.
@@ -46,6 +51,16 @@ export const updateCategory = (id, categoryData) => {
   return apiClient.put(`/categories/${id}`, categoryData);
 };
 
+
+/**
+ * [ADMIN] Thay đổi trạng thái hiển thị (ẩn/hiện) của danh mục.
+ */
+export const toggleCategoryVisibilityAdmin = (id) => {
+  // API: PUT /api/admin/categories/{id}/toggle-visibility (Backend CategoryController.toggleCategoryVisibility)
+  return apiClient.put(`/categories/admin/toggle-visibility/${id}`);
+};
+
+
 /**
  * [ADMIN] Xóa một danh mục.
  * Yêu cầu JWT token của Admin.
@@ -57,3 +72,4 @@ export const deleteCategory = (id) => {
   // apiClient sẽ tự động thêm token (cần token của Admin)
   return apiClient.delete(`/categories/${id}`);
 };
+

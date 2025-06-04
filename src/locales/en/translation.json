@@ -129,7 +129,31 @@
     "loginForFavorite": "Please login to use the wishlist feature.",
     "removedFromFavorites": "Removed from favorites.",
     "addedToFavorites": "Added to favorites!",
-    "favoriteActionFailed": "Favorite action failed."
+    "favoriteActionFailed": "Favorite action failed.",
+    "reviewsSectionTitle": "Reviews",
+    "averageRating": "Average Rating:",
+    "totalReviews": "{{count}} evaluate",
+    "noReviewsYet": "There are no reviews for this product yet.",
+    "beTheFirstToReview": "Be the first to review!",
+    "writeYourReviewTitle": "Write your review",
+    "yourRatingLabel": "Your review:",
+    "yourCommentLabel": "Your comments:",
+    "commentPlaceholder": "Share your thoughts about the product...",
+    "submitReviewButton": "Submit a review",
+    "submittingReviewButton": "Sending...",
+    "reviewSuccessToast": "Thank you for submitting your review.!",
+    "reviewErrorToast": "Submit review failed: {{message}}",
+    "loginToReview": "You need to login to rate this product.",
+    "mustPurchaseToReview": "You need to purchase and complete an order containing this product in order to be able to rate it.",
+    "alreadyReviewedForEligibleOrders": "You have rated this product for all valid orders.",
+    "loadMoreReviews": "Xem thêm đánh giá",
+    "star": "star",
+    "stars": "stars",
+    "validation": {
+      "ratingRequired": "Please select star rating.",
+      "commentTooShort": "Comments must be at least {{count}} characters long.",
+      "commentTooLong": "Comments cannot exceed {{count}} characters."
+    }
   },
   "cartPage": {
     "title": "Cart",
@@ -565,5 +589,36 @@
     "footerThanks": "Thank you for your trust and shopping at {{storeName}}!",
     "footerGeneratedNote": "(This is an automatically generated e-invoice)",
     "errorFetchingCustomer": "Could not load customer information for this invoice."
+  },
+  "adminSidebar": {
+    "reviews": "Reviews"
+  },
+   "adminReviewListPage": {
+    "title": "Product Review Management",
+    "table": {
+      "reviewId": "ID",
+      "product": "Product",
+      "user": "Reviewer",
+      "rating": "Rating",
+      "comment": "Comment",
+      "date": "Date",
+      "visibility": "Show",
+      "actions": "Action"
+    },
+    "noReviews": "There are no reviews in the system.",
+    "confirmDeleteTitle": "Confirm Delete Review",
+    "confirmDeleteMessage": "Are you sure you want to delete this review? This action cannot be undone.",
+    "visible": "Showing",
+    "hidden": "Hidden",
+    "toggleVisibilityShow": "Show this review",
+    "toggleVisibilityHide": "Hide this review",
+    "deleteButton": "Delete",
+    "showButton": "Show",
+    "hideButton": "Hide",
+    "errorLoadingReviews": "Error loading review list.",
+    "errorDeletingReview": "Error deleting review.",
+    "errorUpdatingVisibility": "Error updating display status.",
+    "deleteSuccessToast": "Review deleted successfully!",
+    "visibilityUpdateSuccessToast": "Display status updated successfully!"
   }
 }

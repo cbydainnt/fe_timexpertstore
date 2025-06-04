@@ -127,7 +127,31 @@
     "loginForFavorite": "Vui lòng đăng nhập để sử dụng chức năng yêu thích.",
     "removedFromFavorites": "Đã xoá khỏi sản phẩm yêu thích.",
     "addedToFavorites": "Đã thêm vào sản phẩm yêu thích!",
-    "favoriteActionFailed": "Thao tác yêu thích thất bại."
+    "favoriteActionFailed": "Thao tác yêu thích thất bại.",
+    "reviewsSectionTitle": "Đánh giá Sản phẩm",
+    "averageRating": "Đánh giá Trung bình:",
+    "totalReviews": "{{count}} đánh giá",
+    "noReviewsYet": "Chưa có đánh giá nào cho sản phẩm này.",
+    "beTheFirstToReview": "Hãy là người đầu tiên đánh giá!",
+    "writeYourReviewTitle": "Viết đánh giá của bạn",
+    "yourRatingLabel": "Đánh giá của bạn:",
+    "yourCommentLabel": "Bình luận của bạn:",
+    "commentPlaceholder": "Chia sẻ cảm nhận của bạn về sản phẩm...",
+    "submitReviewButton": "Gửi đánh giá",
+    "submittingReviewButton": "Đang gửi...",
+    "reviewSuccessToast": "Cảm ơn bạn đã gửi đánh giá!",
+    "reviewErrorToast": "Gửi đánh giá thất bại: {{message}}",
+    "loginToReview": "Bạn cần đăng nhập để đánh giá sản phẩm.",
+    "mustPurchaseToReview": "Bạn cần mua và hoàn thành đơn hàng chứa sản phẩm này để có thể đánh giá.",
+    "alreadyReviewedForEligibleOrders": "Bạn đã đánh giá sản phẩm này cho tất cả các đơn hàng hợp lệ.",
+    "loadMoreReviews": "Xem thêm đánh giá",
+    "star": "sao",
+    "stars": "sao",
+    "validation": {
+      "ratingRequired": "Vui lòng chọn số sao đánh giá.",
+      "commentTooShort": "Bình luận cần ít nhất {{count}} ký tự.",
+      "commentTooLong": "Bình luận không vượt quá {{count}} ký tự."
+    }
   },
   "cartPage": {
     "title": "Giỏ Hàng",
@@ -564,5 +588,36 @@
     "footerThanks": "Cảm ơn quý khách đã tin tưởng và mua sắm tại {{storeName}}!",
     "footerGeneratedNote": "(Đây là hóa đơn điện tử được tạo tự động)",
     "errorFetchingCustomer": "Không thể tải thông tin khách hàng cho hóa đơn này."
+  },
+  "adminSidebar": {
+    "reviews": "Đánh giá"
+  },
+   "adminReviewListPage": {
+    "title": "Quản lý Đánh giá Sản phẩm",
+    "table": {
+      "reviewId": "ID Đ.giá",
+      "product": "Sản phẩm",
+      "user": "Người đánh giá",
+      "rating": "Điểm",
+      "comment": "Bình luận",
+      "date": "Ngày",
+      "visibility": "Hiển thị",
+      "actions": "Hành động"
+    },
+    "noReviews": "Không có đánh giá nào trong hệ thống.",
+    "confirmDeleteTitle": "Xác nhận Xóa Đánh giá",
+    "confirmDeleteMessage": "Bạn có chắc chắn muốn xóa đánh giá này không? Hành động này không thể hoàn tác.",
+    "visible": "Đang hiển thị",
+    "hidden": "Đang ẩn",
+    "toggleVisibilityShow": "Hiện đánh giá này",
+    "toggleVisibilityHide": "Ẩn đánh giá này",
+    "deleteButton": "Xóa",
+    "showButton": "Hiện",
+    "hideButton": "Ẩn",
+    "errorLoadingReviews": "Lỗi tải danh sách đánh giá.",
+    "errorDeletingReview": "Lỗi xóa đánh giá.",
+    "errorUpdatingVisibility": "Lỗi cập nhật trạng thái hiển thị.",
+    "deleteSuccessToast": "Đã xóa đánh giá thành công!",
+    "visibilityUpdateSuccessToast": "Đã cập nhật trạng thái hiển thị thành công!"
   }
 }

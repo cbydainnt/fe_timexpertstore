@@ -1,0 +1,11 @@
+/* styles/admin-review-page.css */
+.admin-table td, .admin-table th {
+    vertical-align: middle;
+}
+.admin-table .text-truncate {
+    display: inline-block; /* Hoặc block tùy layout */
+    max-width: 200px; /* Điều chỉnh cho phù hợp */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
