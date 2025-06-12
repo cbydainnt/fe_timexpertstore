@@ -1,4 +1,3 @@
-// src/services/chatBotService.js
 import apiClient from '../config/axiosConfig'; // Sử dụng apiClient đã cấu hình
 
 /**

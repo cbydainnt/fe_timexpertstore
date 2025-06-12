@@ -1,4 +1,3 @@
-// src/components/layout/Footer.jsx
 import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import { Watch } from 'react-bootstrap-icons';

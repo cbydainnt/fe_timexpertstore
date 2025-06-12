@@ -1,4 +1,3 @@
-// src/services/userService.js
 import apiClient from '../config/axiosConfig';
 
 // --- User Functions ---

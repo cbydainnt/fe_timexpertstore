@@ -160,15 +160,6 @@ function AdminOrderListPage() {
                                         />
                                     </Form.Group>
                                 </Col>
-                                {/* <Col xs={12} md={4} lg={3}>
-                                    <Form.Group controlId="orderSearch">
-                                        <Form.Label className="small mb-1">Tìm kiếm</Form.Label>
-                                        <InputGroup size="sm">
-                                            <FormControl placeholder="Mã đơn hàng, Khách hàng..." name="search" />
-                                            <Button variant="outline-secondary"><Search /></Button>
-                                        </InputGroup>
-                                    </Form.Group>
-                                </Col> */}
                                 <Col xs={12} md="auto">
                                     <Button variant="outline-secondary" size="sm" className="w-100" onClick={() => setSearchParams({})}>Đặt lại</Button>
                                 </Col>

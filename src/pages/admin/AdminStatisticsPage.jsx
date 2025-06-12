@@ -1,4 +1,3 @@
-// Redesigned AdminStatisticsPage with layout refinements and better top lists
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   getDailyRevenueStatistics,

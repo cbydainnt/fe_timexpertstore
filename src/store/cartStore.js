@@ -1,37 +1,8 @@
-// src/store/cartStore.js
-
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import apiClient from '../config/axiosConfig'; // Import apiClient
 import { useAuthStore } from './authStore'; // Import authStore để lấy userId
 import { removeItemsFromCart } from '../services/cartService';
-// --- Định nghĩa cấu trúc dữ liệu cho một item trong giỏ hàng (dùng trong state) ---
-// interface CartItemState {
-//   productId: number;
-//   name?: string;
-//   imageUrl?: string;
-//   price: number;
-//   quantity: number;
-//   selected: boolean; // Cờ để đánh dấu item có được chọn để checkout hay không
-//   stock: number;     // Số lượng tồn kho của sản phẩm
-// }
-
-// --- Định nghĩa toàn bộ state và actions của cart store ---
-// interface CartState {
-//   items: CartItemState[];
-//   fetchCart: () => Promise<void>;
-//   addItem: (product: ProductDTO, quantity?: number) => Promise<void>; // Cần ProductDTO có stock
-//   removeItem: (productId: number) => Promise<void>;
-//   updateQuantity: (productId: number, quantity: number) => Promise<boolean>; // Trả về boolean báo thành công/thất bại
-//   clearCart: (syncWithApi?: boolean) => Promise<void>;
-//   toggleItemSelected: (productId: number) => void;
-//   toggleSelectAll: (isSelected: boolean) => void;
-//   getDistinctItemCount: () => number;
-//   getTotalSelectedItemsQuantity: () => number;
-//   getTotalSelectedPrice: () => number;
-//   areAllItemsSelected: () => boolean;
-//   getSelectedItems: () => CartItemState[];
-// }
 
 export const useCartStore = create(
     persist(

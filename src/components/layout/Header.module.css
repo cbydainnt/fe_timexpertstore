@@ -1,6 +1,3 @@
-/* Ví dụ hiệu ứng hover cho NavLink trong Header */
-/* Sử dụng class 'custom-nav-link' đã thêm vào NavLink */
-
 .custom-nav-link {
     padding-bottom: 0.3rem; /* Thêm chút padding dưới để có chỗ cho gạch chân */
     position: relative; /* Cần thiết cho pseudo-element */

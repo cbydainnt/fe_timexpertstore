@@ -1,4 +1,3 @@
-// src/layouts/AdminLayout.jsx
 import React, { useState } from 'react'; // Import useState
 import { Outlet } from 'react-router-dom';
 import AdminSidebar from '../components/layout/AdminSidebar'; // Đảm bảo AdminSidebar đã có prop isCollapsed, onToggle
@@ -6,10 +5,7 @@ import AdminHeader from '../components/layout/AdminHeader'; // Đảm bảo Admi
 import { ToastContainer } from 'react-toastify'; // Thêm ToastContainer cho admin area nếu cần thông báo riêng
 import 'react-toastify/dist/ReactToastify.css';
 
-// Thêm class CSS cho layout để điều chỉnh dựa vào trạng thái sidebar
-// Ví dụ: admin-layout--collapsed
 const AdminLayout = () => {
-  // State để quản lý trạng thái thu gọn của sidebar
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Hàm toggle trạng thái sidebar
@@ -20,12 +16,7 @@ const AdminLayout = () => {
   return (
     // Thêm class dựa vào state isSidebarCollapsed để CSS có thể điều chỉnh layout
     <div className={`d-flex vh-100 admin-layout ${isSidebarCollapsed ? 'admin-layout--collapsed' : ''}`} style={{ overflow: 'hidden' }}>
-      {/* Container cho Toast Notifications (có thể đặt ở App.jsx) */}
-      {/* Nếu bạn muốn Toast riêng cho Admin, bỏ comment dòng dưới */}
-      {/* <ToastContainer position="top-right" autoClose={3000} theme="colored"/> */}
 
-      {/* Sidebar */}
-      {/* Truyền state và action toggle cho Sidebar */}
       <AdminSidebar isCollapsed={isSidebarCollapsed} onToggle={toggleSidebar} />
 
       {/* Vùng nội dung chính */}

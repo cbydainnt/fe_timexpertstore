@@ -1,4 +1,3 @@
-// src/services/reviewService.js (ví dụ)
 import apiClient from '../config/axiosConfig';
 
 /**

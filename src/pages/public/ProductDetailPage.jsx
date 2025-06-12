@@ -42,17 +42,6 @@ const StarRatingInput = ({ rating, setRating, disabled = false }) => {
 
 const StarRatingDisplay = ({ rating, size = '1rem', count = 0 }) => {
   const { t } = useTranslation();
-  // Nếu không có review count, hiển thị 5 sao rỗng
-  // if (count === 0 || count == null) {
-  //   return (
-  //     <span className="star-rating-display d-flex align-items-center">
-  //       {[...Array(5)].map((_, index) => (
-  //         <StarFill key={index} style={{ color: '#e0e0e0', fontSize: size, marginRight: '2px' }} />
-  //       ))}
-  //       <span className="ms-2 text-muted small">{t('productDetailPage.noReviewsYet')}</span>
-  //     </span>
-  //   );
-  // }
   return (
     <span className="star-rating-display d-flex align-items-center">
       {[...Array(5)].map((_, index) => {

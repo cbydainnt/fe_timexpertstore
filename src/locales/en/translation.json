@@ -196,6 +196,7 @@
     "orderSummary": {
       "title": "Order summary",
       "quantity": "Quantity",
+      "productsLabel": "Products ({{count}}) ",
       "noItemsSelected": "No products selected",
       "subtotal": "Total product",
       "shippingFee": "Shipping fee",

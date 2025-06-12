@@ -86,14 +86,14 @@ function AdminCategoryListPage() {
         if (!categoryToToggle) return;
         try {
             await toggleCategoryVisibilityAdmin(categoryToToggle.categoryId);
-            toast.success(t(categoryToToggle.visible ? 'adminCategoryListPage.hideSuccessToast' : 'adminCategoryListPage.showSuccessToast', 
+            toast.success(t(categoryToToggle.visible ? ('adminCategoryListPage.hideSuccessToast', "Ẩn thành công") : ('adminCategoryListPage.showSuccessToast', "Hiện thành công"), 
                             { categoryName: categoryToToggle.name })
             );
             setShowToggleModal(false);
             setCategoryToToggle(null);
             fetchAdminCategories(); // Tải lại danh sách
         } catch (err) {
-            toast.error(err.response?.data?.message || t('adminCategoryListPage.errorUpdatingVisibility'));
+            toast.error(err.response?.data?.message || t('adminCategoryListPage.errorUpdatingVisibility'), "Lỗi cập nhật trạng thái");
             setShowToggleModal(false);
         }
     };

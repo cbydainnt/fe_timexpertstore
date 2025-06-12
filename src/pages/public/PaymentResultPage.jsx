@@ -1,5 +1,3 @@
-// src/pages/public/PaymentResultPage.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useLocation, useSearchParams, Link } from 'react-router-dom';
 import { Container, Card, Alert, Button, Spinner, Badge } from 'react-bootstrap';

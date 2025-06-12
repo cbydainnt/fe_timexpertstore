@@ -1,4 +1,3 @@
-// src/pages/admin/AdminProductFormPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form'; // Thêm Controller nếu dùng component phức tạp

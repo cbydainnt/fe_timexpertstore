@@ -194,6 +194,7 @@
     "orderSummary": {
       "title": "Tóm tắt đơn hàng",
       "quantity": "Số lượng",
+      "productsLabel": "Sản phẩm ({{count}})",
       "noItemsSelected": "Không có sản phẩm nào được chọn",
       "subtotal": "Tổng sản phẩm",
       "shippingFee": "Phí giao hàng",

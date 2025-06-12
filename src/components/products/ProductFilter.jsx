@@ -1,4 +1,3 @@
-// src/components/products/ProductFilter.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { Form, Button, Card, Accordion, Spinner, ListGroup, Row, Col } from 'react-bootstrap';
 import { getAllCategories } from '../../services/categoryService';

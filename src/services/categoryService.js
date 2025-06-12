@@ -1,5 +1,3 @@
-// src/services/categoryService.js
-
 import apiClient from '../config/axiosConfig'; // Import apiClient đã cấu hình
 
 /**

@@ -105,63 +105,63 @@ function AdminProductListPage() {
     };
 
     // Hàm fetch products dựa trên searchParams hiện tại
-    // const fetchAdminProducts = useCallback(async () => {
-    //     setLoading(true);
-    //     setError(null);
-    //     try {
+    const fetchAdminProducts = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
 
-    //         const page = parseInt(searchParams.get('page') || '0');
-    //         const params = {
-    //             page: page,
-    //             size: itemsPerPage,
-    //             name: searchParams.get('name') || undefined,
-    //             categoryId: searchParams.get('categoryId') || undefined,
-    //             // Thêm các filter khác nếu cần lấy từ searchParams
-    //             sortBy: searchParams.get('sortBy') || 'createdAt', // Mặc định
-    //             sortDir: searchParams.get('sortDir') || 'desc',
-    //         };
-    //         const filteredParams = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== ''));
+            const page = parseInt(searchParams.get('page') || '0');
+            const params = {
+                page: page,
+                size: itemsPerPage,
+                name: searchParams.get('name') || undefined,
+                categoryId: searchParams.get('categoryId') || undefined,
+                // Thêm các filter khác nếu cần lấy từ searchParams
+                sortBy: searchParams.get('sortBy') || 'createdAt', // Mặc định
+                sortDir: searchParams.get('sortDir') || 'desc',
+            };
+            const filteredParams = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== ''));
 
-    //         const response = await getAllProductsAdmin(filteredParams); // Gọi API getProducts đã cập nhật
-    //         setProducts(response.data?.content || []);
-    //         setTotalPages(response.data?.totalPages || 0);
-    //         // setCurrentPage(page + 1); // Cập nhật trang hiện tại (UI từ 1)
-    //         setCurrentPage(response.data?.currentPage + 1 || 1);
-    //     } catch (err) {
-    //         console.error("Error fetching admin products:", err);
-    //         setError(err.response?.data?.message || 'Failed to load products.');
-    //         setProducts([]); setTotalPages(0);
-    //     } finally { setLoading(false); }
-    // }, [searchParams]); // Phụ thuộc vào searchParams
+            const response = await getAllProductsAdmin(filteredParams); // Gọi API getProducts đã cập nhật
+            setProducts(response.data?.content || []);
+            setTotalPages(response.data?.totalPages || 0);
+            // setCurrentPage(page + 1); // Cập nhật trang hiện tại (UI từ 1)
+            setCurrentPage(response.data?.currentPage + 1 || 1);
+        } catch (err) {
+            console.error("Error fetching admin products:", err);
+            setError(err.response?.data?.message || 'Failed to load products.');
+            setProducts([]); setTotalPages(0);
+        } finally { setLoading(false); }
+    }, [searchParams]); // Phụ thuộc vào searchParams
 
-     const fetchAdminProducts = useCallback(async () => {
-            setLoading(true);
-            setError(null);
-            try {
+    //  const fetchAdminProducts = useCallback(async () => {
+    //         setLoading(true);
+    //         setError(null);
+    //         try {
     
-                const page = parseInt(searchParams.get('page') || '0');
-                const params = {
-                    page: page,
-                    size: itemsPerPage,
-                    name: searchParams.get('name') || undefined,
-                    categoryId: searchParams.get('categoryId') || undefined,
-                    // Thêm các filter khác nếu cần lấy từ searchParams
-                    sortBy: searchParams.get('sortBy') || 'productId', // Sắp xếp theo ID mặc định cho admin
-                    sortDir: searchParams.get('sortDir') || 'asc',
-                };
-                const filteredParams = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== ''));
+    //             const page = parseInt(searchParams.get('page') || '0');
+    //             const params = {
+    //                 page: page,
+    //                 size: itemsPerPage,
+    //                 name: searchParams.get('name') || undefined,
+    //                 categoryId: searchParams.get('categoryId') || undefined,
+    //                 // Thêm các filter khác nếu cần lấy từ searchParams
+    //                 sortBy: searchParams.get('sortBy') || 'productId', // Sắp xếp theo ID mặc định cho admin
+    //                 sortDir: searchParams.get('sortDir') || 'asc',
+    //             };
+    //             const filteredParams = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== ''));
     
-                const response = await getProducts(filteredParams); // Gọi API getProducts đã cập nhật
-                setProducts(response.data?.content || []);
-                setTotalPages(response.data?.totalPages || 0);
-                setCurrentPage(page + 1); // Cập nhật trang hiện tại (UI từ 1)
+    //             const response = await getProducts(filteredParams); // Gọi API getProducts đã cập nhật
+    //             setProducts(response.data?.content || []);
+    //             setTotalPages(response.data?.totalPages || 0);
+    //             setCurrentPage(page + 1); // Cập nhật trang hiện tại (UI từ 1)
     
-            } catch (err) {
-                console.error("Error fetching admin products:", err);
-                setError(err.response?.data?.message || 'Failed to load products.');
-                setProducts([]); setTotalPages(0);
-            } finally { setLoading(false); }
-        }, [searchParams]); // Phụ thuộc vào searchParams
+    //         } catch (err) {
+    //             console.error("Error fetching admin products:", err);
+    //             setError(err.response?.data?.message || 'Failed to load products.');
+    //             setProducts([]); setTotalPages(0);
+    //         } finally { setLoading(false); }
+    //     }, [searchParams]); // Phụ thuộc vào searchParams
 
     const applyFiltersAndSearch = () => {
         const newParams = new URLSearchParams();

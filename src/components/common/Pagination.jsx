@@ -1,5 +1,3 @@
-// src/components/common/Pagination.jsx
-
 import React from 'react';
 import { Pagination as BsPagination } from 'react-bootstrap'; // Import component Pagination của React-Bootstrap
 import { motion } from 'framer-motion';
@@ -10,19 +8,7 @@ const pageVariants = {
   out: { opacity: 0 }
 };
 const pageTransition = { duration: 0.4 };
-/**
- * Component hiển thị phân trang.
- * Sử dụng component Pagination của React-Bootstrap.
- * Lưu ý: React-Bootstrap Pagination thường làm việc với số trang bắt đầu từ 1.
- * Trong khi API Spring Data Pageable thường dùng số trang bắt đầu từ 0.
- * Component cha cần xử lý việc chuyển đổi này khi truyền props và xử lý callback.
- *
- * @param {object} props - Props của component.
- * @param {number} props.currentPage - Số trang hiện tại (BẮT ĐẦU TỪ 1).
- * @param {number} props.totalPages - Tổng số trang.
- * @param {function(number): void} props.onPageChange - Callback function được gọi khi người dùng chọn trang mới, truyền vào số trang mới (BẮT ĐẦU TỪ 1).
- * @param {number} [props.maxDisplayedPages=5] - Số lượng nút trang tối đa hiển thị xung quanh trang hiện tại.
- */
+
 function Pagination({ currentPage, totalPages, onPageChange, maxDisplayedPages = 5 }) {
 
   // Không hiển thị gì nếu chỉ có 1 trang hoặc không có trang nào

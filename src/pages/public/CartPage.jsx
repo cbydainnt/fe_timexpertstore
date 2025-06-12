@@ -1,5 +1,3 @@
-// src/pages/public/CartPage.jsx
-
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { useCartStore } from '../../store/cartStore';

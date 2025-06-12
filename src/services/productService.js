@@ -1,4 +1,3 @@
-// src/services/productService.js
 import apiClient from '../config/axiosConfig';
 
 export const getProducts = (params) => {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// *** THÊM useLocation ***
 import { useSearchParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { resetPassword } from '../../services/authService'; // API service này nhận { email, otp, newPassword }

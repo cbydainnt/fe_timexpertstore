@@ -1,5 +1,3 @@
-// src/pages/public/ProductsPage.jsx
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import {

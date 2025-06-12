@@ -1,5 +1,3 @@
-// src/pages/user/OrderDetailPage.jsx
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getOrderDetails, cancelOrder } from '../../services/orderService';

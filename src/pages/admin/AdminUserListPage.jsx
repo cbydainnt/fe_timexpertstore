@@ -1,4 +1,3 @@
-// src/pages/admin/AdminCustomerListPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getAllCustomersAdmin, deleteUserAdmin } from '../../services/userService';

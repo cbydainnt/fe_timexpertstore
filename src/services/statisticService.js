@@ -1,4 +1,3 @@
-// src/services/statisticService.js
 import apiClient from '../config/axiosConfig';
 
 /**

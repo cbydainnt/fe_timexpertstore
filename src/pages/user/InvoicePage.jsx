@@ -1,4 +1,3 @@
-// src/pages/user/InvoicePage.jsx
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getOrCreateInvoiceForOrder } from '../../services/invoiceService';

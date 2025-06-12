@@ -1,4 +1,3 @@
-// src/components/products/ProductCard.jsx
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap'; // Bỏ Col, Row

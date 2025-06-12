@@ -197,7 +197,7 @@ function CheckoutPage() {
             <Card className="shadow-sm position-sticky" style={{ top: '20px' }}>
               <Card.Header><Card.Title as="h5">{t('checkoutPage.orderSummary.title', 'Tóm tắt đơn hàng')}</Card.Title></Card.Header>
               <Card.Body>
-                <div className="fw-medium mb-2">{t('checkoutPage.orderSummary.productsLabel', 'Sản phẩm ({{count}}):', { count: selectedItems.length })}</div>
+                <div className="fw-medium mb-2">{t('checkoutPage.orderSummary.productsLabel','Sản phẩm ({{count}}):', { count: selectedItems.length })}</div>
                 <ListGroup variant="flush" style={{ maxHeight: '250px', overflowY: 'auto' }} className="mb-3 border-top border-bottom">
                   {selectedItems.map(item => (
                     <ListGroup.Item key={item.productId} className="d-flex justify-content-between align-items-center px-0 py-2 text-sm">

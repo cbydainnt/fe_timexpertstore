@@ -1,4 +1,3 @@
-// src/pages/user/FavoritesPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Alert } from 'react-bootstrap';
